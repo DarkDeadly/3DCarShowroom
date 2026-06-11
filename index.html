@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/assets/css/styles.css">
+  <title>CarSphere</title>
+</head>
+<body>
+  <div id="app">
+
+    <nav>
+      <!-- Brand -->
+      <a class="navbar-brand" href="#">
+        <img src="/src/assets/Screenshot from 2026-06-10 20-14-50.png" alt="CarSphere logo">
+        <span class="brand-name">Car<span class="accent">Sphere</span></span>
+      </a>
+
+      <!-- Nav links -->
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#" class="active">Cars</a></li>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Reports</a></li>
+      </ul>
+
+      <!-- Auth buttons -->
+      <div class="nav-actions">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Register</button>
+      </div>
+    </nav>
+    <main>
+      <div class="search__cars">
+
+      </div>
+      <div class="car__container">
+        <aside>
+
+        </aside>
+        <div class="car__content">
+
+        </div>
+      </div>
+    </main>
+
+  </div>
+  <script type="module" src="/src/main.js"></script>
+  <script type="module" src="/src/config/firebase.js"></script>
+</body>
+</html>

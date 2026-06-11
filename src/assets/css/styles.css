@@ -1,0 +1,378 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: #0D0E12;
+
+}
+
+
+/* ── Navbar ── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 0 40px;
+  height: 68px;
+  background: #16181F;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── Brand ── */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.navbar-brand img {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(230, 57, 70, 0.4);
+}
+
+.brand-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.brand-name .accent {
+  color: #E63946;
+}
+
+/* ── Nav links ── */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-links li a {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8B8FA8;
+  padding: 7px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+  position: relative;
+}
+
+.nav-links li a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-links li a.active {
+  color: #ffffff;
+  background: rgba(230, 57, 70, 0.12);
+}
+
+.nav-links li a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2px;
+  background: #E63946;
+  border-radius: 2px;
+}
+
+/* ── Auth buttons ── */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-login {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #CACDE0;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-login:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-register {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #E63946;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-register:hover {
+  background: #C8303C;
+  transform: translateY(-1px);
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/*  --- Search feature ---  */
+.search__cars {
+  width: 100%;
+  min-height: 150px;
+  background: #16181F;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+/*  --- Car Content --- */
+.car__container {
+  display: flex;
+  height: 100%;
+  max-height: 100vh;
+  gap: 12px;
+}
+.car__container > aside {
+ width: 220px;
+  flex-shrink: 0;
+  background: #16181F;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.car__content {
+  flex: 1;
+  background: #16181F;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.07);
+  height: 100%;
+
+}
+/* ==========================================================================
+   1. SHOWROOM GRID CONTAINER
+   ========================================================================== */
+.cars__grid {
+    display: grid;
+    /* Automatically handles columns without needing hard media queries */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Loading & Error Status Center Alignment */
+.loading-state,
+.error-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    width: 100%;
+    color: #64748b;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.error-state {
+    color: #ef4444;
+}
+
+/* ==========================================================================
+   2. CAR CARD CONTAINER & INTERACTIVE EFFECTS
+   ========================================================================== */
+.car__card {
+    background-color: #1F222C; /* Smooth elevated dark grey */
+    border-radius: 24px; /* Organic modern rounded bounding framing box */
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Rich depth drop shadow */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Premium crisp dark border */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.2s ease;
+}
+
+.car__card:hover {
+    transform: translateY(-5px); /* Clean upward premium floating lift interaction */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+    border-color: rgba(230, 57, 70, 0.3); /* Subtle brand color glow outline on hover */
+}
+
+/* ==========================================================================
+   3. VISUAL DISPLAY LAYER (IMAGE & FAVORITE BADGE)
+   ========================================================================== */
+.product-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 190px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.15); /* Soft backing anchor for image transparency */
+    border-radius: 14px;
+}
+
+.product-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Interactive zoom layer on image when full card is hovered */
+.car__card:hover .product-card__img {
+    transform: scale(1.04);
+}
+
+/* Absolute Positioned Wishlist Heart Controller */
+.product-card__wishlist-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(13, 14, 18, 0.6); /* Frosted dark background backing for contrast */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.6); /* Clean subtle gray baseline visibility */
+    width: 34px;
+    height: 34px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.product-card__wishlist-btn:hover {
+    color: #ef4444; /* Snaps to sharp warning red on direct action */
+    background: rgba(13, 14, 18, 0.85);
+    transform: scale(1.08);
+}
+
+/* ==========================================================================
+   4. CONTENT BODY DETAILS SECTIONS
+   ========================================================================== */
+.product-card__body {
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Pushes the main actions cleanly to the baseline */
+}
+
+/* Meta Data Context Rows */
+.product-card__header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.product-card__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #F3F4F6; /* Crisp off-white text readability */
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Gracefully truncates overly long car models */
+}
+
+/* The Brand Tags (FORD, BMW, CHEVROLET) updated to match the system red */
+.rating-value {
+    font-size: 11px;
+    font-weight: 700;
+    color: #E63946; /* Matching the main brand identity red */
+    background-color: rgba(230, 57, 70, 0.12); /* Clean, premium translucent backdrop */
+    border: 1px solid rgba(230, 57, 70, 0.2);
+    padding: 4px 10px;
+    border-radius: 8px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Price Currency Styling */
+.product-card__price-row {
+    margin-bottom: 16px;
+}
+
+.product-card__price {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   5. VIEW INSPECTION MAIN CALL-TO-ACTION BUTTON
+   ========================================================================== */
+.product-card__btn-cart {
+    width: 100%;
+    background-color: #16181F; /* Integrates smoothly inside the card element */
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: auto; /* Solid alignment anchor */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card__btn-cart:hover {
+    background-color: #E63946; /* Shifting layout signature to vibrant crimson accent on hover */
+    color: #ffffff;
+    border-color: #E63946;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+}
+
+.product-card__btn-cart:active {
+    transform: scale(0.97);
+}
