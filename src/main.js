@@ -159,6 +159,12 @@ const getCarDetail = async() => {
 
 }
 
-getAllCars()
-addClickListener()
-getCarDetail()
+if (document.querySelector('.car__content')) {
+    getAllCars()
+    addClickListener()
+}
+
+// Only runs on car.html (has #car__content)
+if (document.getElementById('car__content')) {
+    getCarDetail()
+}

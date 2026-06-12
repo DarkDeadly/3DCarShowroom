@@ -376,3 +376,145 @@ nav {
 .product-card__btn-cart:active {
     transform: scale(0.97);
 }
+
+/* ==========================================================================
+   MODERN SYSTEM CONTROL DECK (SEARCH & CREATION BAR)
+   ========================================================================== */
+.search__cars {
+  width: 100%;
+  min-height: auto !important; /* Overriding your old 150px baseline constraint */
+  background: #16181F;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  margin-bottom: 20px;
+  margin-top: 20px;
+  padding: 16px;
+}
+
+.control-deck {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+/* Responsive collapse pattern for smaller tablet viewports */
+@media (max-width: 768px) {
+  .control-deck {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* --- Inline Input Text Component --- */
+.search-field {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-field__icon {
+  position: absolute;
+  left: 16px;
+  color: #8B8FA8;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.search-field__input {
+  width: 100%;
+  height: 48px;
+  background: #0D0E12;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0 16px 0 48px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth Brand Focus State Glow Outline */
+.search-field__input:focus {
+  border-color: #E63946;
+  background: #11131a;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
+}
+
+.search-field__input:focus + .search-field__icon {
+  color: #E63946;
+}
+
+/* --- Custom Styled Minimal Dropdown Select --- */
+.filter-dropdown {
+  position: relative;
+}
+
+.filter-dropdown__select {
+  height: 48px;
+  min-width: 180px;
+  background: #0D0E12;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0 36px 0 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #CACDE0;
+  cursor: pointer;
+  outline: none;
+  appearance: none; /* Strip standard native operating system arrows */
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238B8FA8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: all 0.2s ease;
+}
+
+.filter-dropdown__select:focus {
+  border-color: #E63946;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
+  color: #ffffff;
+}
+
+/* --- The Crimson Call-To-Action Insertion Button --- */
+.btn-add-car {
+  font-family: 'Inter', sans-serif;
+  height: 48px;
+  background: #E63946;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-add-car:hover {
+  background: #C8303C;
+  box-shadow: 0 6px 20px rgba(230, 57, 70, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-add-car:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(230, 57, 70, 0.2);
+}
+
+.btn-add-car__icon {
+  transition: transform 0.2s ease;
+}
+
+.btn-add-car:hover .btn-add-car__icon {
+  transform: rotate(90deg); /* Subtle playful micro-interaction logic */
+}
