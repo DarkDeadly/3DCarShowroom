@@ -1,0 +1,251 @@
+/* ==========================================================================
+   CAR DETAIL SPLIT-SCREEN VIEWPORT SYSTEM (FLOATING VARIANT - NO HTML CHANGES)
+   ========================================================================== */
+
+/* Main Container Layout Area */
+#car__container.detail-view {
+    display: flex;
+    height: calc(100vh - 68px); /* Locks exactly under your sticky navbar */
+    max-height: calc(100vh - 68px);
+    width: 100%;
+    gap: 0; 
+    overflow: hidden;
+}
+
+/* ── Left Column: Responsive 3D Asset Canvas Area ── */
+.car-3D {
+    flex: 1.2; 
+    background: radial-gradient(circle at center, #1F222C 0%, #0D0E12 100%); 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.canvas-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-3d-badge {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: rgba(22, 24, 31, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #8B8FA8;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+/* ── Right Column: Floating Specification Detail Side Panel ── */
+.car-content {
+    width: 480px; /* Adjusted to 480px to account for margins and internal layout breathing room */
+    flex-shrink: 0;
+    background: #16181F; 
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    
+    /* Floating & Rounded Corner Properties Applied Directly Here */
+    margin: 15px 15px 15px 0;   /* Creates the top, right, and bottom spacing gaps */
+    border-radius: 16px;         /* Gives the panel beautiful premium rounded corners */
+    
+    /* Important: Recalculates height to prevent layout from leaking out below the screen */
+    height: calc(100% - 30px); 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Internal body layout setup to house scrollbars cleanly inside the rounded panel */
+.detail-panel__body {
+    padding: 35px 28px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto; /* Contains scrollbars strictly inside the rounded window layer */
+}
+
+/* Custom premium scrollbar styling to match the CarSphere dark aesthetic */
+.detail-panel__body::-webkit-scrollbar {
+    width: 6px;
+}
+.detail-panel__body::-webkit-scrollbar-track {
+    background: transparent;
+}
+.detail-panel__body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+/* Breadcrumbs Navigator Elements */
+.detail__breadcrumb {
+    font-size: 13px;
+    color: #64748B;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+.detail__breadcrumb a {
+    color: #8B8FA8;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.detail__breadcrumb a:hover {
+    color: #E63946;
+}
+
+.detail__breadcrumb .current-car {
+    color: #CACDE0;
+}
+
+/* Title Panel Elements */
+.detail__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.detail__title {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.detail__id {
+    font-size: 12px;
+    color: #64748B;
+    font-family: monospace;
+}
+
+.detail__id span {
+    color: #8B8FA8;
+}
+
+/* Premium Visual Content Divider Line */
+.detail__divider {
+    border: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 24px 0;
+    width: 100%;
+}
+
+/* Pricing Presentation Box */
+.detail__price-tier {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.price-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #8B8FA8;
+    font-weight: 600;
+}
+
+.price-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -1px;
+}
+
+/* Technical Specification Performance Parameter Grid Architecture */
+.specs__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.spec__pill {
+    background: #1F222C;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.spec__label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #64748B;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.spec__data {
+    font-size: 15px;
+    font-weight: 600;
+    color: #F3F4F6;
+}
+
+/* Primary Execution Interaction Buttons Block */
+.detail__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto; /* Snaps action anchors down seamlessly to the foot of the layout */
+    padding-top: 24px;
+}
+
+.btn-primary__action {
+    flex: 1;
+    background: #E63946; 
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    padding: 16px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(230, 57, 70, 0.25);
+}
+
+.btn-primary__action:hover {
+    background: #C8303C;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(230, 57, 70, 0.4);
+}
+
+.btn-primary__action:active {
+    transform: translateY(0);
+}
+
+.btn-secondary__wishlist {
+    width: 54px;
+    height: 54px;
+    background: #1F222C;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #CACDE0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary__wishlist:hover {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.05);
+}

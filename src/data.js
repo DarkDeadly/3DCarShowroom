@@ -1,6 +1,6 @@
 // data.js
 import { db } from "./config/firebase.js"
-import { getDocs, collection } from "firebase/firestore"
+import { getDocs, collection, getDoc, doc } from "firebase/firestore"
 
 /**
  * Fetches all cars from Firestore
@@ -21,4 +21,25 @@ const getCars = async () => {
     }
 }
 
-export { getCars }
+/**
+ * Fetch a specific car based on the ID
+ * @param {string} id - The car specific id
+ * @return {Promise<{success: boolean, car: <Object>, error?: string}>} 
+ */
+
+const getCarDetail = async(id) => {
+    try {
+        if (!id) return {success : false , car : null , error : 'Invalid ID'}
+        const querySnapshot = await getDoc(doc(db ,"cars", id))
+        if (!querySnapshot.exists()) {
+            return {success : false , car : null , error : "no such car is available"}
+        }
+        return {success : true , car : {id : querySnapshot.id , ...querySnapshot.data()} }
+        
+    } catch (error) {
+        console.error('getCars failed:', error)
+        return { success: false, cars: null, error: error.message }  
+    }
+}
+
+export { getCars , getCarDetail}
