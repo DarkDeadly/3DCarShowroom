@@ -53,7 +53,8 @@ const getCarDetail = async (id) => {
  */
 
 const searchCars = async (query, limit = 10) => {
-    // 1. Type check first
+    try {
+        // 1. Type check first
     if (typeof query !== "string")
         return { success: false, cars: [], error: 'Invalid search query' }
 
@@ -77,6 +78,9 @@ const searchCars = async (query, limit = 10) => {
         .slice(0, limit)
 
     return { success: true, cars: result }
+    } catch (error) {
+       return {success : false , cars : [] , error : error.message} 
+    }
 }
 
 

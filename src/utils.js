@@ -43,3 +43,16 @@ export const createImage = (src, alt = '', classNames = [], fallbackSrc = '') =>
     
     return img;
 };
+/**
+ * Debounce function in order to optimise the search functionality
+ * @param {function} func - the function that the debounce will be applied on
+ * @param {number} timer - the timer set for the delay
+ * @returns {Function} - The debounced function
+ */
+export const debounce = (func , wait) => {
+    let timeout ; 
+    return function(...args) {
+        clearTimeout(timeout) ;
+        timeout = setTimeout(() => func.apply(this , args) , wait) ;
+    }
+}
