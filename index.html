@@ -1,15 +1,18 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/src/assets/css/styles.css">
   <title>CarSphere</title>
 </head>
+
 <body>
   <div id="app">
 
@@ -35,34 +38,35 @@
       </div>
     </nav>
     <main>
-     <div class="search__cars">
-  <div class="control-deck">
-    
-    <div class="search-field">
-      <svg class="search-field__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-      </svg>
-      <input type="text" id="carSearchInput" class="search-field__input" placeholder="Search by vehicle name, model, brand or keywords...">
-    </div>
+      <div class="search__cars">
+        <div class="control-deck">
 
-    <div class="filter-dropdown">
-      <select id="brandSortSelect" class="filter-dropdown__select">
-        <option value="all">All Manufacturers</option>
-        <option value="bmw">BMW</option>
-        <option value="ford">Ford</option>
-        <option value="chevrolet">Chevrolet</option>
-      </select>
-    </div>
+          <div class="search-field">
+            <svg class="search-field__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            <input type="text" id="carSearchInput" class="search-field__input"
+              placeholder="Search by vehicle name, model, brand or keywords...">
+          </div>
 
-    <button class="btn-add-car" id="openAddModalBtn">
-      <svg class="btn-add-car__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14M12 5v14"/>
-      </svg>
-      <span>List a Vehicle</span>
-    </button>
+          <div class="filter-dropdown">
+            <select id="brandSortSelect" class="filter-dropdown__select">
+            
+            </select>
+          </div>
 
-  </div>
-</div>
+          <button class="btn-add-car" id="openAddModalBtn">
+            <svg class="btn-add-car__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5v14" />
+            </svg>
+            <span>List a Vehicle</span>
+          </button>
+
+        </div>
+      </div>
       <div class="car__container">
         <aside>
 
@@ -77,4 +81,5 @@
   <script type="module" src="/src/main.js"></script>
   <script type="module" src="/src/config/firebase.js"></script>
 </body>
+
 </html>

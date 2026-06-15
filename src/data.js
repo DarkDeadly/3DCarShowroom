@@ -1,6 +1,6 @@
 // data.js
 import { db } from "./config/firebase.js"
-import { getDocs, collection, getDoc, doc } from "firebase/firestore"
+import { getDocs, collection, getDoc, doc, query } from "firebase/firestore"
 // Single Source of Truth 
 let allCars = []
 /**
@@ -46,42 +46,30 @@ const getCarDetail = async (id) => {
 }
 
 /**
- * Search for a car based on the following search parameter (name , brand )
+ * Search for a car based on the following search parameter 
  * @param {string} query - search query
- * @param {number} limit - search limit
  * @return {{success : boolean , cars: Array<Object> , error?:string}}
  */
+const searchCars = (query , cars = allCars) => {
+    if (!query || query.trim() === '') return cars  // array
+    const q = query.toLowerCase()
+    return cars.filter((car) => car.name.toLowerCase().includes(q))  // array
+}
 
-const searchCars = async (query, limit = 10) => {
-    try {
-        // 1. Type check first
-    if (typeof query !== "string")
-        return { success: false, cars: [], error: 'Invalid search query' }
+/**
+ * 
+ */
 
-    // 2. Empty string → show all cars
-    if (query.trim() === "")
-        return { success: true, cars: allCars }
+const filterCarsByBrand = (brand , cars = allCars) => {
+    if (!brand) return cars
+    return cars.filter(car => 
+        car.brand.toLowerCase() === brand.toLowerCase().trim()
+    )
+}
 
-    const searchQuery = query.toLowerCase().trim()
-
-    // ensure cache is populated
-    if (allCars.length === 0) {
-        const fetched = await getCars()
-        if (!fetched.success) return { success: false, cars: [], error: fetched.error }
-    }
-
-    const result = allCars
-        .filter(car =>
-            car.name.toLowerCase().includes(searchQuery) ||
-            car.brand.toLowerCase().includes(searchQuery)
-        )
-        .slice(0, limit)
-
-    return { success: true, cars: result }
-    } catch (error) {
-       return {success : false , cars : [] , error : error.message} 
-    }
+const getCachedCars = () => {
+    return [...allCars]
 }
 
 
-export { getCars, getCarDetail , searchCars}
+export { getCars, getCarDetail , searchCars , getCachedCars , filterCarsByBrand}

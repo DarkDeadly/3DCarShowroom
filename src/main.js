@@ -1,6 +1,12 @@
 import { debounce } from "./utils.js"
 import * as Data from "./data.js"
 import { createElements, createImage } from "./utils.js"
+
+let currentBrand 
+let currentSearch 
+
+
+
 /**
  * this function will initialise the functions needed
  */
@@ -8,7 +14,7 @@ const getAllCars = async (cars = null) => {
     const carContent = document.querySelector(".car__content")
     if (!carContent) return
 
-    
+
 
     // if cars array passed directly, use it — otherwise fetch
     let carList
@@ -17,7 +23,7 @@ const getAllCars = async (cars = null) => {
     } else {
         carContent.innerHTML = `<div class="loading-state"><p>Loading cars...</p></div>`
         const result = await Data.getCars()
-        
+
         if (!result.success) {
             carContent.innerHTML = `<div class="error-state"><p>Failed to load cars. Try again.</p></div>`
             return
@@ -66,31 +72,31 @@ const getAllCars = async (cars = null) => {
 const addClickListener = () => {
     const container = document.querySelector('.car__content')
     if (!container) return
-    container.addEventListener("click"  , async(e) => {
-            const viewBtn = e.target.closest(".product-card__btn-cart")
-            if (!viewBtn || !viewBtn.dataset.id) return
-            // using the dataset.id to pass it to the newpage
-            window.location.href = `car.html?id=${viewBtn.dataset.id}`
+    container.addEventListener("click", async (e) => {
+        const viewBtn = e.target.closest(".product-card__btn-cart")
+        if (!viewBtn || !viewBtn.dataset.id) return
+        // using the dataset.id to pass it to the newpage
+        window.location.href = `car.html?id=${viewBtn.dataset.id}`
 
-    })    
+    })
 }
 
-const getCarDetail = async() => {
+const getCarDetail = async () => {
     const params = new URLSearchParams(window.location.search)
     const id = params.get("id")
-    if (!id) {window.location.href="index.html"}
+    if (!id) { window.location.href = "index.html" }
     const result = await Data.getCarDetail(id)
     if (!result.success) {
-        console.log(result.error) 
+        console.log(result.error)
         return;
     }
-  const carContent = document.getElementById("car__content");
-  if (!carContent) return
+    const carContent = document.getElementById("car__content");
+    if (!carContent) return
     // Clear out any existing placeholder elements before appending fresh dynamic database contents
-    carContent.innerHTML = ""; 
+    carContent.innerHTML = "";
 
     const carDetailBody = createElements("div", ['detail-panel__body']);
-    
+
     // 1. Breadcrumb Setup
     const carDetailCrumb = createElements("div", ['detail__breadcrumb']);
     const carsSlash = createElements('a', [], 'Cars');
@@ -147,43 +153,92 @@ const getCarDetail = async() => {
 
     // 6. Master Layout Render Assembly Chain
     carDetailBody.append(
-        carDetailCrumb, 
-        detailHeader, 
-        priceContainer, 
-        divider1, 
-        specsGrid, 
-        divider2, 
+        carDetailCrumb,
+        detailHeader,
+        priceContainer,
+        divider1,
+        specsGrid,
+        divider2,
         buttonContainer
     );
-    
+
     carContent.appendChild(carDetailBody);
 
 }
 
-const handleSearch = () => {
+
+
+const applyFilter = async() => {
+    if (Data.getCachedCars().length===0) {
+        const fetchedCars = await Data.getCars()
+        if (!fetchedCars.success) {
+            getAllCars([])
+            return
+        }
+    }
+    let Cars = Data.getCachedCars()
+
+    if (currentBrand)  Cars=  Data.filterCarsByBrand(currentBrand , Cars)
+    if (currentSearch) Cars=  Data.searchCars(currentSearch , Cars)
+    getAllCars(Cars)    
+}
+const initSearch = () => {
     const searchContainer = document.querySelector('.search-field')
     if (!searchContainer) return
     const searchInput = document.getElementById("carSearchInput")
-    searchInput.addEventListener('input', debounce(async (e) => {
-    const query = e.target.value.trim()
+    searchInput.addEventListener('input', debounce( (e) => {
+        currentSearch = e.target.value.trim()
+        applyFilter()        
+    }, 300))
+}
 
-    const result = await Data.searchCars(query)
+const initFilter = () => {
+    const filterContainer  = document.getElementById("brandSortSelect")
+    if (!filterContainer) return
+    filterContainer.addEventListener('change' , (e) => {
+        currentBrand = e.target.value.trim()
+        applyFilter()
+    })
+}
 
-    if (result.success) {
-        getAllCars(result.cars)
+const AddManifacture = async (manifactors = null) => {
+    const manifactureContainer = document.querySelector('.filter-dropdown')
+    if (!manifactureContainer) return
+    const manifactureSelector = document.getElementById('brandSortSelect')
+    if (!manifactureSelector) return
+
+    let manifactorList
+    if (manifactors !== null) {
+        manifactorList = manifactors
     } else {
-        getAllCars([])
+        const result = await Data.getCars()
+        if (!result.success) return
+        manifactorList = result.cars
     }
 
-}, 300))
+    // get unique brands only
+    const uniqueBrands = [...new Set(manifactorList.map(car => car.brand))]
+
+    // reset and add default option
+    manifactureSelector.innerHTML = '<option value="">All brands</option>'
+
+    // render one option per unique brand
+    uniqueBrands.forEach(brand => {
+        const option = document.createElement('option')
+        option.value = brand
+        option.textContent = brand  // ← this is what shows in the dropdown
+        manifactureSelector.appendChild(option)
+    })
 }
 
 if (document.querySelector('.car__content')) {
     getAllCars()
     addClickListener()
-    handleSearch()
-}
+    initSearch()
+    initFilter()
+    AddManifacture()
 
+}
 // Only runs on car.html (has #car__content)
 if (document.getElementById('car__content')) {
     getCarDetail()
