@@ -1,7 +1,10 @@
 # Car e-commerce 3D
 
+
 Feature 1  ✅  Fetch cars from Firebase
 Feature 2  ✅  Display car cards
 Feature 3  ✅  Car detail page
-Feature 4  ✅  Search functionality and the Correspondant UI for it
-Feature 5  ✅  Connecting the search functionality with the DOM
+Feature 4  ✅  Search by name
+Feature 5  ✅  Filter by brand
+Feature 6  ✅  Combined search + filter
+Feature 7  [ in progress ] Authentication process

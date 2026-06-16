@@ -84,7 +84,11 @@ const addClickListener = () => {
 const getCarDetail = async () => {
     const params = new URLSearchParams(window.location.search)
     const id = params.get("id")
-    if (!id) { window.location.href = "index.html" }
+    if (!id ) { 
+        window.location.href = "index.html" 
+        return
+    }
+    
     const result = await Data.getCarDetail(id)
     if (!result.success) {
         console.log(result.error)
@@ -95,6 +99,14 @@ const getCarDetail = async () => {
     // Clear out any existing placeholder elements before appending fresh dynamic database contents
     carContent.innerHTML = "";
 
+    const car = {
+    name: result.car.name || 'Unnamed Vehicle',
+    brand: result.car.brand || 'Unknown Brand',
+    price: Number(result.car.price || 0).toLocaleString() + ' DT',
+    horsepower: result.car.horspower || 'N/A',  // fixed typo
+    transmission: result.car.transmission || 'N/A'
+}
+
     const carDetailBody = createElements("div", ['detail-panel__body']);
 
     // 1. Breadcrumb Setup
@@ -102,19 +114,19 @@ const getCarDetail = async () => {
     const carsSlash = createElements('a', [], 'Cars');
     carsSlash.href = "index.html"; // Make the navigation functional
     const breadcrumbDivider = document.createTextNode(" / ");
-    const carSlashName = createElements('span', ["current-car"], result.car.name);
+    const carSlashName = createElements('span', ["current-car"], car.name);
     carDetailCrumb.append(carsSlash, breadcrumbDivider, carSlashName);
 
     // 2. Header Structural Element Block
     const detailHeader = createElements('div', ["detail__header"]);
-    const brandName = createElements('span', ["rating-value"], result.car.brand);
-    const detailName = createElements('h1', ['detail__title'], result.car.name);
+    const brandName = createElements('span', ["rating-value"], car.brand);
+    const detailName = createElements('h1', ['detail__title'], car.name);
     detailHeader.append(brandName, detailName);
 
     // 3. Pricing Display Tier (Fixed Class Typo: Changed from 'detail__price-tie' to 'detail__price-tier')
     const priceContainer = createElements('div', ['detail__price-tier']);
     const market = createElements('span', ['price-label'], 'Market Value');
-    const priceValue = createElements('span', ['price-value'], Number(result.car.price).toLocaleString() + " DT");
+    const priceValue = createElements('span', ['price-value'], car.price);
     priceContainer.append(market, priceValue);
 
     // Dividers
@@ -127,13 +139,13 @@ const getCarDetail = async () => {
     // Horsepower Structural Pill Container
     const specPill1 = createElements('div', ['spec__pill']);
     const hpLabel = createElements('span', ['spec__label'], 'Performance Power');
-    const performance = createElements('span', ['spec__data'], result.car.horspower);
+    const performance = createElements('span', ['spec__data'], car.horsepower);
     specPill1.append(hpLabel, performance);
 
     // Transmission Structural Pill Container
     const specPill2 = createElements('div', ['spec__pill']);
     const transLabel = createElements('span', ['spec__label'], 'Transmission Unit');
-    const transmission = createElements('span', ['spec__data'], result.car.transmission);
+    const transmission = createElements('span', ['spec__data'], car.transmission);
     specPill2.append(transLabel, transmission);
 
     specsGrid.append(specPill1, specPill2);
