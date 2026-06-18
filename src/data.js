@@ -1,11 +1,11 @@
 // data.js
 import { db } from "./config/firebase.js"
-import { getDocs, collection, getDoc, doc, query } from "firebase/firestore"
+import { getDocs, collection, getDoc, doc } from "firebase/firestore"
 // Single Source of Truth 
 let allCars = []
 /**
  * Fetches all cars from Firestore
- * @returns {Promise<{success: boolean, cars: Array<Object>, error?: string}>}
+ * @returns {Promise<{success: boolean, data: Array<Object>, error?: string}>}
  */
 const getCars = async () => {
     try {
@@ -17,32 +17,32 @@ const getCars = async () => {
 
         }))
         allCars = [...cars]
-        return { success: true, cars }
+        return { success: true, data : cars }
 
     } catch (error) {
-        console.error('getCars failed:', error)
-        return { success: false, cars: [], error: error.message }
+        console.error('[getCars] failed : ', error)
+        return { success: false, data: null, error: error.message }
     }
 }
 
 /**
  * Fetch a specific car based on the ID
  * @param {string} id - The car specific id
- * @return {Promise<{success: boolean, car: <Object>, error?: string}>} 
+ * @return {Promise<{success: boolean, data: <Object>, error?: string}>} 
  */
 
 const getCarDetail = async (id) => {
     try {
-        if (!id || typeof(id) !== "string") return { success: false, car: null, error: 'Invalid ID' }
+        if (!id || typeof(id) !== "string") return { success: false, data: null, error: 'Invalid ID' }
         const querySnapshot = await getDoc(doc(db, "cars", id))
         if (!querySnapshot.exists()) {
-            return { success: false, car: null, error: "no such car is available" }
+            return { success: false, data: null, error: "no such car is available" }
         }
-        return { success: true, car: { id: querySnapshot.id, ...querySnapshot.data() } }
+        return { success: true, data: { id: querySnapshot.id, ...querySnapshot.data() } }
 
     } catch (error) {
-        console.error('getCarDetail failed:', error)
-        return { success: false, car: null, error: error.message }
+        console.error('[getCarDetail] failed:', error)
+        return { success: false, data: null, error: error.message }
     }
 }
 
@@ -99,5 +99,17 @@ const getCachedCars = () => {
     return [...allCars]
 }
 
+/**
+ * Single entry point for all filtering and searching
+ * @param {Object} filterState - { currentBrand, currentSearch }
+ * @returns {Array<Object>}
+ */
+const getFilteredCars = ({ currentBrand = '', currentSearch = '' } = {}) => {
+    let cars = getCachedCars()
+    if (currentBrand)  cars = filterCarsByBrand(currentBrand, cars)
+    if (currentSearch) cars = searchCars(currentSearch, cars)
+    return cars
+}
 
-export { getCars, getCarDetail , searchCars , getCachedCars , filterCarsByBrand}
+
+export { getCars, getCarDetail , searchCars , getCachedCars , filterCarsByBrand , getFilteredCars}

@@ -1,37 +1,25 @@
-import { debounce } from "./utils.js"
+import { debounce , createElements, createImage} from "./utils.js"
 import * as Data from "./data.js"
-import { createElements, createImage } from "./utils.js"
 
-let currentBrand 
-let currentSearch 
+let filterState = {
+     currentBrand : '' ,
+     currentSearch : ''
+}
 
 
 
 /**
- * this function will initialise the functions needed
+ * this function will only render all cars
+ * @param {Array} carList
  */
-const getAllCars = async (cars = null) => {
-    const carContent = document.querySelector(".car__content")
-    if (!carContent) return
-
-
-
-    // if cars array passed directly, use it — otherwise fetch
-    let carList
-    if (cars !== null) {
-        carList = cars  // already an array
-    } else {
-        carContent.innerHTML = `<div class="loading-state"><p>Loading cars...</p></div>`
-        const result = await Data.getCars()
-
-        if (!result.success) {
-            carContent.innerHTML = `<div class="error-state"><p>Failed to load cars. Try again.</p></div>`
-            return
-        }
-        carList = result.cars
+const renderCars = (carList) => {
+    if (!Array.isArray(carList)) {
+        console.error('[renderCars] expected array, got:', typeof carList)
+        return   
     }
-
-    carContent.innerHTML = ''
+    const carContent = document.querySelector('.car__content')
+    if (!carContent) return
+     carContent.innerHTML = ''
 
     if (carList.length === 0) {
         carContent.innerHTML = `<p>No cars found.</p>`
@@ -69,6 +57,20 @@ const getAllCars = async (cars = null) => {
     })
 }
 
+const getAllCars = async () => {
+    const carContent = document.querySelector(".car__content")
+    if (!carContent) return
+    carContent.innerHTML = `<div class="loading-state"><p>Loading...</p></div>`
+    const result = await Data.getCars()
+    if (!result.success) {
+        carContent.innerHTML = `<div class="error-state"><p>Failed to load cars. Try again.</p></div>`
+        return  
+    }
+    renderCars(result.data)
+}
+
+
+
 const addClickListener = () => {
     const container = document.querySelector('.car__content')
     if (!container) return
@@ -81,31 +83,27 @@ const addClickListener = () => {
     })
 }
 
-const getCarDetail = async () => {
-    const params = new URLSearchParams(window.location.search)
-    const id = params.get("id")
-    if (!id ) { 
-        window.location.href = "index.html" 
+
+/**
+ * this function only render Car Details
+ * @param {object} car - car object
+ */
+
+const renderCar = (car) => {
+    if (!car || typeof car !== 'object' || Array.isArray(car)) {
+        console.error('[renderCar] expected a car object, got:', car)
         return
     }
-    
-    const result = await Data.getCarDetail(id)
-    if (!result.success) {
-        console.log(result.error)
-        return;
+    const carContent = document.getElementById('car__content')
+    if (!carContent) return 
+    carContent.innerHTML= '';
+    const data = {
+        name: car.name || 'Unnamed Vehicle',
+        brand: car.brand || 'Unknown Brand',
+        price: Number(car.price || 0).toLocaleString() + ' DT',
+        horsepower: car.horspower || 'N/A',  // fixed typo
+        transmission: car.transmission || 'N/A' 
     }
-    const carContent = document.getElementById("car__content");
-    if (!carContent) return
-    // Clear out any existing placeholder elements before appending fresh dynamic database contents
-    carContent.innerHTML = "";
-
-    const car = {
-    name: result.car.name || 'Unnamed Vehicle',
-    brand: result.car.brand || 'Unknown Brand',
-    price: Number(result.car.price || 0).toLocaleString() + ' DT',
-    horsepower: result.car.horspower || 'N/A',  // fixed typo
-    transmission: result.car.transmission || 'N/A'
-}
 
     const carDetailBody = createElements("div", ['detail-panel__body']);
 
@@ -114,19 +112,19 @@ const getCarDetail = async () => {
     const carsSlash = createElements('a', [], 'Cars');
     carsSlash.href = "index.html"; // Make the navigation functional
     const breadcrumbDivider = document.createTextNode(" / ");
-    const carSlashName = createElements('span', ["current-car"], car.name);
+    const carSlashName = createElements('span', ["current-car"], data.name);
     carDetailCrumb.append(carsSlash, breadcrumbDivider, carSlashName);
 
     // 2. Header Structural Element Block
     const detailHeader = createElements('div', ["detail__header"]);
-    const brandName = createElements('span', ["rating-value"], car.brand);
-    const detailName = createElements('h1', ['detail__title'], car.name);
+    const brandName = createElements('span', ["rating-value"], data.brand);
+    const detailName = createElements('h1', ['detail__title'], data.name);
     detailHeader.append(brandName, detailName);
 
     // 3. Pricing Display Tier (Fixed Class Typo: Changed from 'detail__price-tie' to 'detail__price-tier')
     const priceContainer = createElements('div', ['detail__price-tier']);
     const market = createElements('span', ['price-label'], 'Market Value');
-    const priceValue = createElements('span', ['price-value'], car.price);
+    const priceValue = createElements('span', ['price-value'], data.price);
     priceContainer.append(market, priceValue);
 
     // Dividers
@@ -139,13 +137,13 @@ const getCarDetail = async () => {
     // Horsepower Structural Pill Container
     const specPill1 = createElements('div', ['spec__pill']);
     const hpLabel = createElements('span', ['spec__label'], 'Performance Power');
-    const performance = createElements('span', ['spec__data'], car.horsepower);
+    const performance = createElements('span', ['spec__data'], data.horsepower);
     specPill1.append(hpLabel, performance);
 
     // Transmission Structural Pill Container
     const specPill2 = createElements('div', ['spec__pill']);
     const transLabel = createElements('span', ['spec__label'], 'Transmission Unit');
-    const transmission = createElements('span', ['spec__data'], car.transmission);
+    const transmission = createElements('span', ['spec__data'], data.transmission);
     specPill2.append(transLabel, transmission);
 
     specsGrid.append(specPill1, specPill2);
@@ -178,28 +176,37 @@ const getCarDetail = async () => {
 
 }
 
-
+const getCarDetail = async () => {
+    const params = new URLSearchParams(window.location.search)
+    const id = params.get("id")
+    if (!id ) { 
+        window.location.href = "index.html" 
+        return
+    }
+    const result = await Data.getCarDetail(id)
+    if (!result.success) {
+        console.error('[getCarDetail] failed:', result.error)
+        return;
+    }
+    renderCar(result.data) 
+}
 
 const applyFilter = async() => {
     if (Data.getCachedCars().length===0) {
         const fetchedCars = await Data.getCars()
         if (!fetchedCars.success) {
-            getAllCars([])
+            renderCars([])
             return
         }
     }
-    let Cars = Data.getCachedCars()
-
-    if (currentBrand)  Cars=  Data.filterCarsByBrand(currentBrand , Cars)
-    if (currentSearch) Cars=  Data.searchCars(currentSearch , Cars)
-    getAllCars(Cars)    
+    const cars = Data.getFilteredCars(filterState)
+    renderCars(cars)   
 }
 const initSearch = () => {
-    const searchContainer = document.querySelector('.search-field')
-    if (!searchContainer) return
     const searchInput = document.getElementById("carSearchInput")
+    if (!searchInput) return
     searchInput.addEventListener('input', debounce( (e) => {
-        currentSearch = e.target.value.trim()
+        filterState.currentSearch = e.target.value.trim()
         applyFilter()        
     }, 300))
 }
@@ -208,24 +215,21 @@ const initFilter = () => {
     const filterContainer  = document.getElementById("brandSortSelect")
     if (!filterContainer) return
     filterContainer.addEventListener('change' , (e) => {
-        currentBrand = e.target.value.trim()
+        filterState.currentBrand = e.target.value.trim()
         applyFilter()
     })
 }
 
-const AddManifacture = async (manifactors = null) => {
-    const manifactureContainer = document.querySelector('.filter-dropdown')
-    if (!manifactureContainer) return
+const addManufacturer = async () => {
     const manifactureSelector = document.getElementById('brandSortSelect')
     if (!manifactureSelector) return
 
-    let manifactorList
-    if (manifactors !== null) {
-        manifactorList = manifactors
-    } else {
+    let manifactorList = Data.getCachedCars()
+
+    if (manifactorList.length === 0) {
         const result = await Data.getCars()
         if (!result.success) return
-        manifactorList = result.cars
+        manifactorList = result.data
     }
 
     // get unique brands only
@@ -243,15 +247,23 @@ const AddManifacture = async (manifactors = null) => {
     })
 }
 
-if (document.querySelector('.car__content')) {
-    getAllCars()
+const initIndexPage = async () => {
+    const carContent = document.querySelector('.car__content')
+    if (!carContent) return
+
+    await getAllCars()
+    await addManufacturer()
     addClickListener()
     initSearch()
     initFilter()
-    AddManifacture()
-
 }
-// Only runs on car.html (has #car__content)
-if (document.getElementById('car__content')) {
+
+const initCarPage = () => {
+    const carDetailContainer = document.getElementById('car__content')
+    if (!carDetailContainer) return
     getCarDetail()
 }
+
+initIndexPage()
+initCarPage()
+
