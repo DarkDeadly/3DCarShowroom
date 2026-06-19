@@ -1,5 +1,6 @@
 import { debounce , createElements, createImage} from "./utils.js"
 import * as Data from "./data.js"
+import { initNavAuth } from "./uiChanges.js"
 
 let filterState = {
      currentBrand : '' ,
@@ -266,4 +267,5 @@ const initCarPage = () => {
 
 initIndexPage()
 initCarPage()
+initNavAuth({isAuthPage : false})
 

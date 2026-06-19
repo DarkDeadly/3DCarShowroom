@@ -7,4 +7,4 @@ Feature 3  ✅  Car detail page
 Feature 4  ✅  Search by name
 Feature 5  ✅  Filter by brand
 Feature 6  ✅  Combined search + filter
-Feature 7  [ in progress ] Authentication process
+Feature 7  ✅  Authentication process + logout functionality

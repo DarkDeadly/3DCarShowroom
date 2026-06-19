@@ -129,7 +129,7 @@ nav {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.btn-register {
+.btn-register , .btn-logout {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -142,7 +142,7 @@ nav {
   transition: background 0.2s, transform 0.15s;
 }
 
-.btn-register:hover {
+.btn-register:hover , .btn-logout:hover {
   background: #C8303C;
   transform: translateY(-1px);
 }

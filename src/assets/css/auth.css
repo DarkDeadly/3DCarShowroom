@@ -207,8 +207,35 @@
   text-decoration: underline;
   color: #C8303C;
 }
+/* ==========================================================================
+   DYNAMIC AUTH FEEDBACK NOTIFICATIONS
+   ========================================================================== */
+.auth-feedback {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    line-height: 1.4;
+    transition: all 0.2s ease-in-out;
+}
 
-/* Visibility State togglers */
+/* Red Error Theme Glow Alert */
+.auth-feedback--error {
+    background: rgba(230, 57, 70, 0.1);
+    color: #E63946;
+    border: 1px solid rgba(230, 57, 70, 0.2);
+}
+
+/* Green Success Theme Glow Alert */
+.auth-feedback--success {
+    background: rgba(52, 168, 83, 0.1);
+    color: #34A853;
+    border: 1px solid rgba(52, 168, 83, 0.2);
+}
+
+/* Utility Hidden Toggle */
 .d-none {
-  display: none !important;
+    display: none !important;
 }

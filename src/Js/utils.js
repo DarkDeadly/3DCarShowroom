@@ -56,3 +56,30 @@ export const debounce = (func , wait) => {
         timeout = setTimeout(() => func.apply(this , args) , wait) ;
     }
 }
+/**
+ * Validates an email address format
+ * @param {string} email
+ * @returns {{ valid: boolean, error: string }}
+ */
+export const validateEmail = (email) => {
+    if (!email || typeof email !== 'string') {
+        return { valid: false, error: 'Email is required' }
+    }
+
+    const trimmed = email.trim()
+
+    if (trimmed.length === 0) {
+        return { valid: false, error: 'Email cannot be empty' }
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!emailRegex.test(trimmed)) {
+        return { valid: false, error: 'Please enter a valid email address' }
+    }
+
+    return { valid: true, error: '' }
+}
+
+
+
