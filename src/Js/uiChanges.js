@@ -84,4 +84,20 @@ const handleLoggedOut = (container, isAuthPage) => {
     })
 }
 
-export { initNavAuth }
+
+const initAdminAddCarBtn = () => {
+    const addBtn = document.getElementById('openAddModalBtn')
+    if (!addBtn) return
+    // we call onAuthStateCheck anc check the user and user.role 
+    onAuthStateCheck((user) => {
+        if (user && user.role ==='admin') {
+            addBtn.style.display ='flex'
+        }else {
+            addBtn.style.display='none'
+        }
+    })
+}
+
+
+
+export { initNavAuth , initAdminAddCarBtn}

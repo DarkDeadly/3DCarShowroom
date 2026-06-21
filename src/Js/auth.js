@@ -103,8 +103,10 @@ const initAuthPage = () => {
 
         // Success — only reaches here when result.success === true
         showFeedback(
-            isLoginState ? 'Access granted! Redirecting...' : 'Registration successful!',
-            'success'
+            isLoginState
+                ? 'Access granted! Redirecting...'
+                : 'Registration successful! Redirecting...',
+            'success'   // ← second argument required
         )
         form.reset()
         setLoadingState(false)

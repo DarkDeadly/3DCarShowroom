@@ -2,11 +2,12 @@
 import { db } from "../config/firebase.js"
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { validateEmail } from "./utils.js"
-import { getDocs, collection, getDoc, doc } from "firebase/firestore"
+import { getDocs, collection, getDoc, doc, setDoc } from "firebase/firestore"
 // Single Source of Truth 
 let allCars = []
 const auth = getAuth()
-
+let currentUser = null   // one name, used everywhere
+let isRegistering = false
 /**
  * Fetches all cars from Firestore
  * @returns {Promise<{success: boolean, data: Array<Object>, error?: string}>}
@@ -76,7 +77,10 @@ const searchCars = (query, cars = allCars) => {
 }
 
 /**
- * 
+ * Filter cars by brand name
+ * @param {string} brand - brand name to filter by
+ * @param {Array<Object>} [cars=allCars] - array to filter within
+ * @returns {Array<Object>} filtered cars
  */
 
 const filterCarsByBrand = (brand, cars = allCars) => {
@@ -114,7 +118,27 @@ const getFilteredCars = ({ currentBrand = '', currentSearch = '' } = {}) => {
     if (currentSearch) cars = searchCars(currentSearch, cars)
     return cars
 }
-
+/**
+ * Register a user role to Firestore
+ * @param {string} id - Firebase Auth uid
+ * @param {string} role - the user role
+ * @returns {Promise<{success: boolean, data: null, error?: string}>}
+ */
+const addUserDb = async (id, role = 'buyer') => {
+    try {
+        if (typeof id !== 'string' || typeof role !== 'string') {
+            return { success: false, data: null, error: 'Invalid property types' }
+        }
+        if (!id.trim() || !role.trim()) {
+            return { success: false, data: null, error: 'ID and role are required' }
+        }
+        await setDoc(doc(db, 'users', id), { role })
+        return { success: true, data: null }
+    } catch (error) {
+        console.error('[addUserDb] failed:', error)
+        return { success: false, data: null, error: error.message }
+    }
+}
 
 /**
  * Authentication using the password and email 
@@ -125,33 +149,45 @@ const getFilteredCars = ({ currentBrand = '', currentSearch = '' } = {}) => {
  */
 const emailPasswordAuthentication = async ({ email = '', password = '', username = '' }) => {
     try {
-        // Layer 1 — type checks (before touching the values)
         if (typeof email !== 'string' || typeof password !== 'string' || typeof username !== 'string') {
             return { success: false, data: null, error: 'Invalid input types' }
         }
 
-        // Layer 2 — normalize (safe now, we know they're strings)
         const cleanEmail = email.trim()
         const cleanPassword = password.trim()
         const cleanUsername = username.trim()
-
-        // Layer 3 — existence after trim
         if (!cleanEmail || !cleanPassword || !cleanUsername) {
             return { success: false, data: null, error: 'All fields are required' }
         }
-
-        // Layer 4 — format
+        
         const emailResult = validateEmail(cleanEmail)
         if (!emailResult.valid) {
+            console.log('[DEBUG] failed email format')
             return { success: false, data: null, error: emailResult.error }
         }
-
-        // All clean — do the work
+        isRegistering = true 
         const authResult = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPassword)
         await updateProfile(authResult.user, { displayName: cleanUsername })
+
+
+        const dbResult = await addUserDb(authResult.user.uid, 'buyer')
+
+        if (!dbResult.success) {
+            // Rollback Auth user — prevent stuck state
+            await authResult.user.delete()
+            isRegistering = false
+            return { success: false, data: null, error: 'Registration failed. Please try again.' }
+        }
+         // populate cache immediately
+        currentUser = {
+            uid      : authResult.user.uid,
+            role     : 'buyer'
+        }
+        isRegistering = false
         return { success: true, data: authResult.user }
 
     } catch (error) {
+        isRegistering = false
         const errorCode = error.code
         let userFriendlyMessage = 'An unexpected error occurred. Please try again.'
 
@@ -184,92 +220,152 @@ const emailPasswordAuthentication = async ({ email = '', password = '', username
     }
 }
 
+
 /**
- * Login an existant user 
- * @param {string} email - the provided Email
- * @param {string} password - the provided Password
- * @returns {{success : boolean , data : object , error?:string}}
+ * Fetch user role document from Firestore
+ * @param {string} id - Firebase Auth uid
+ * @returns {Promise<{success: boolean, data: Object|null, error?: string}>}
  */
-const loginWithEmailAndPassword = async({email = "" , password = "" }) => {
+const getUser = async (id) => {
     try {
-        // Layer 1 — type checks (before touching the values)
+        if (typeof id !== 'string') {
+            return { success: false, data: null, error: 'Invalid ID type' }
+        }
+        if (!id.trim()) {
+            return { success: false, data: null, error: 'ID is required' }
+        }
+        const snapshot = await getDoc(doc(db, 'users', id))
+        if (!snapshot.exists()) {
+            return { success: false, data: null, error: 'User not found' }
+        }
+        return { success: true, data: { id: snapshot.id, ...snapshot.data() } }
+    } catch (error) {
+        console.error('[getUser] failed:', error)
+        return { success: false, data: null, error: error.message }
+    }
+}
+
+/**
+ * Returns a copy of the cached user
+ * @returns {Object|null}
+ */
+const getCachedUser = () => {
+    return currentUser ? { ...currentUser } : null
+}
+/**
+ * Login existing user with email and password
+ * @returns {Promise<{success: boolean, data: Object|null, error?: string}>}
+ */
+const loginWithEmailAndPassword = async ({ email = '', password = '' }) => {
+    try {
         if (typeof email !== 'string' || typeof password !== 'string') {
             return { success: false, data: null, error: 'Invalid input types' }
         }
-
-        // Layer 2 — normalize (safe now, we know they're strings)
-        
         const cleanEmail = email.trim()
         const cleanPassword = password.trim()
-
-        // Layer 3 — existence after trim
-        
-        if (!cleanEmail || !cleanPassword ) {
+        if (!cleanEmail || !cleanPassword) {
             return { success: false, data: null, error: 'All fields are required' }
         }
-
-        // Layer 4 — format
         const emailResult = validateEmail(cleanEmail)
         if (!emailResult.valid) {
             return { success: false, data: null, error: emailResult.error }
         }
-
-        const result = await signInWithEmailAndPassword(auth , cleanEmail , cleanPassword)
-        return {success:true , data : result.user}
+        const result = await signInWithEmailAndPassword(auth, cleanEmail, cleanPassword)
+        return { success: true, data: result.user }
     } catch (error) {
         const errorCode = error.code
         let userFriendlyMessage = 'An unexpected error occurred. Please try again.'
         switch (errorCode) {
-        case 'auth/invalid-email':
-           userFriendlyMessage= 'Please enter a valid email address.'
-           break
-        case 'auth/missing-email':
-            userFriendlyMessage= 'Email is required.'
-            break
-        case 'auth/invalid-credential':
-            userFriendlyMessage= 'Incorrect email or password.'
-            break
-        case 'auth/user-disabled':
-            userFriendlyMessage= 'This account has been disabled.'
-            break
-        case 'auth/too-many-requests':
-            userFriendlyMessage= 'Too many attempts. Please try again later.'
-            break
-        case 'auth/network-request-failed':
-            userFriendlyMessage= 'Network error. Check your connection.'
-            break
-        default:
-            userFriendlyMessage= 'An unexpected error occurred.'
-            break
-    }
-    return {success : false , data : null , error:userFriendlyMessage}
+            case 'auth/invalid-email':
+                userFriendlyMessage = 'Please enter a valid email address.'
+                break
+            case 'auth/missing-email':
+                userFriendlyMessage = 'Email is required.'
+                break
+            case 'auth/invalid-credential':
+                userFriendlyMessage = 'Incorrect email or password.'
+                break
+            case 'auth/user-disabled':
+                userFriendlyMessage = 'This account has been disabled.'
+                break
+            case 'auth/too-many-requests':
+                userFriendlyMessage = 'Too many attempts. Please try again later.'
+                break
+            case 'auth/network-request-failed':
+                userFriendlyMessage = 'Network error. Check your connection.'
+                break
+            default:
+                console.warn('[loginWithEmailAndPassword] unhandled error:', errorCode, error.message)
+                userFriendlyMessage = 'An unexpected error occurred.'
+                break
+        }
+        return { success: false, data: null, error: userFriendlyMessage }
     }
 }
 
+
 /**
  * Subscribe to auth state changes
- * @param {Function} callback - receives user object or null
+ * Assembles full user profile from Auth + Firestore
+ * @param {Function} callback - receives assembled user object or null
  * @returns {Function} unsubscribe function
  */
 const onAuthStateCheck = (callback) => {
-    return onAuthStateChanged(auth , callback)
+    return onAuthStateChanged(auth, async (user) => {
+
+        // registration in progress — ignore this fire
+        if (isRegistering) return
+
+        // user logged out
+        if (!user) {
+            currentUser = null
+            callback(null)
+            return
+        }
+
+        // cache hit — same user already assembled, no Firestore call
+        if (currentUser && currentUser.uid === user.uid) {
+            callback(currentUser)
+            return
+        }
+
+        // cache miss — fetch role from Firestore
+        const result = await getUser(user.uid)
+
+        const assembledUser = {
+            uid      : user.uid,
+            role     : result.success ? result.data.role : null
+        }
+
+        if (!result.success) {
+            console.warn('[onAuthStateCheck] could not get role:', result.error)
+        }
+
+        // populate cache
+        currentUser = assembledUser
+
+        callback(assembledUser)
+    })
 }
+
+
 
 /**
  * Logout the user
  * @returns {Promise<{success: boolean, error?: string}>}
  */
-const logoutUser = async() => {
-   try {
+const logoutUser = async () => {
+    try {
         await signOut(auth)
-        return {success : true , data : null}
-   } catch (error) {
+        return { success: true, data: null }
+    } catch (error) {
         console.error('[logoutUser] failed:', error)
         return { success: false, data: null, error: error.message }
 
-   }
+    }
 }
 
 
 
-export { loginWithEmailAndPassword,getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication , onAuthStateCheck , logoutUser}
+
+export { getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }

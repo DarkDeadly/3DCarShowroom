@@ -1,6 +1,6 @@
 import { debounce , createElements, createImage} from "./utils.js"
 import * as Data from "./data.js"
-import { initNavAuth } from "./uiChanges.js"
+import { initAdminAddCarBtn, initNavAuth } from "./uiChanges.js"
 
 let filterState = {
      currentBrand : '' ,
@@ -257,6 +257,8 @@ const initIndexPage = async () => {
     addClickListener()
     initSearch()
     initFilter()
+    initAdminAddCarBtn()
+
 }
 
 const initCarPage = () => {
