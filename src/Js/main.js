@@ -1,10 +1,10 @@
-import { debounce , createElements, createImage} from "./utils.js"
+import { debounce, createElements, createImage } from "./utils.js"
 import * as Data from "./data.js"
 import { initAdminAddCarBtn, initNavAuth } from "./uiChanges.js"
 
 let filterState = {
-     currentBrand : '' ,
-     currentSearch : ''
+    currentBrand: '',
+    currentSearch: ''
 }
 
 
@@ -16,11 +16,11 @@ let filterState = {
 const renderCars = (carList) => {
     if (!Array.isArray(carList)) {
         console.error('[renderCars] expected array, got:', typeof carList)
-        return   
+        return
     }
     const carContent = document.querySelector('.car__content')
     if (!carContent) return
-     carContent.innerHTML = ''
+    carContent.innerHTML = ''
 
     if (carList.length === 0) {
         carContent.innerHTML = `<p>No cars found.</p>`
@@ -65,7 +65,7 @@ const getAllCars = async () => {
     const result = await Data.getCars()
     if (!result.success) {
         carContent.innerHTML = `<div class="error-state"><p>Failed to load cars. Try again.</p></div>`
-        return  
+        return
     }
     renderCars(result.data)
 }
@@ -96,14 +96,14 @@ const renderCar = (car) => {
         return
     }
     const carContent = document.getElementById('car__content')
-    if (!carContent) return 
-    carContent.innerHTML= '';
+    if (!carContent) return
+    carContent.innerHTML = '';
     const data = {
         name: car.name || 'Unnamed Vehicle',
         brand: car.brand || 'Unknown Brand',
         price: Number(car.price || 0).toLocaleString() + ' DT',
         horsepower: car.horspower || 'N/A',  // fixed typo
-        transmission: car.transmission || 'N/A' 
+        transmission: car.transmission || 'N/A'
     }
 
     const carDetailBody = createElements("div", ['detail-panel__body']);
@@ -180,8 +180,8 @@ const renderCar = (car) => {
 const getCarDetail = async () => {
     const params = new URLSearchParams(window.location.search)
     const id = params.get("id")
-    if (!id ) { 
-        window.location.href = "index.html" 
+    if (!id) {
+        window.location.href = "index.html"
         return
     }
     const result = await Data.getCarDetail(id)
@@ -189,11 +189,11 @@ const getCarDetail = async () => {
         console.error('[getCarDetail] failed:', result.error)
         return;
     }
-    renderCar(result.data) 
+    renderCar(result.data)
 }
 
-const applyFilter = async() => {
-    if (Data.getCachedCars().length===0) {
+const applyFilter = async () => {
+    if (Data.getCachedCars().length === 0) {
         const fetchedCars = await Data.getCars()
         if (!fetchedCars.success) {
             renderCars([])
@@ -201,21 +201,21 @@ const applyFilter = async() => {
         }
     }
     const cars = Data.getFilteredCars(filterState)
-    renderCars(cars)   
+    renderCars(cars)
 }
 const initSearch = () => {
     const searchInput = document.getElementById("carSearchInput")
     if (!searchInput) return
-    searchInput.addEventListener('input', debounce( (e) => {
+    searchInput.addEventListener('input', debounce((e) => {
         filterState.currentSearch = e.target.value.trim()
-        applyFilter()        
+        applyFilter()
     }, 300))
 }
 
 const initFilter = () => {
-    const filterContainer  = document.getElementById("brandSortSelect")
+    const filterContainer = document.getElementById("brandSortSelect")
     if (!filterContainer) return
-    filterContainer.addEventListener('change' , (e) => {
+    filterContainer.addEventListener('change', (e) => {
         filterState.currentBrand = e.target.value.trim()
         applyFilter()
     })
@@ -248,6 +248,23 @@ const addManufacturer = async () => {
     })
 }
 
+const initModal = () => {
+    const addBtn = document.getElementById('openAddModalBtn')
+    if (!addBtn) return
+    const modal = document.getElementById('addCarModal')
+    const closeButton = document.getElementById('closeAddModalBtn');
+    const cancelButton = document.getElementById('cancelAddModalBtn');
+    addBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        modal.showModal()
+    })
+    // Close Native Modal Window Procedures
+    const closeModal = () => modal.close();
+
+    closeButton.addEventListener('click', closeModal);
+    cancelButton.addEventListener('click', closeModal);
+}
+
 const initIndexPage = async () => {
     const carContent = document.querySelector('.car__content')
     if (!carContent) return
@@ -266,8 +283,8 @@ const initCarPage = () => {
     if (!carDetailContainer) return
     getCarDetail()
 }
-
+initModal()
 initIndexPage()
 initCarPage()
-initNavAuth({isAuthPage : false})
+initNavAuth({ isAuthPage: false })
 
