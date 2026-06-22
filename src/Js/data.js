@@ -2,7 +2,8 @@
 import { db } from "../config/firebase.js"
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { validateEmail } from "./utils.js"
-import { getDocs, collection, getDoc, doc, setDoc } from "firebase/firestore"
+import { getDocs, collection, getDoc, doc, setDoc, addDoc } from "firebase/firestore"
+import { cloudinaryConfigs } from '../config/cloudinary.js'
 // Single Source of Truth 
 let allCars = []
 const auth = getAuth()
@@ -159,13 +160,13 @@ const emailPasswordAuthentication = async ({ email = '', password = '', username
         if (!cleanEmail || !cleanPassword || !cleanUsername) {
             return { success: false, data: null, error: 'All fields are required' }
         }
-        
+
         const emailResult = validateEmail(cleanEmail)
         if (!emailResult.valid) {
             console.log('[DEBUG] failed email format')
             return { success: false, data: null, error: emailResult.error }
         }
-        isRegistering = true 
+        isRegistering = true
         const authResult = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPassword)
         await updateProfile(authResult.user, { displayName: cleanUsername })
 
@@ -178,10 +179,10 @@ const emailPasswordAuthentication = async ({ email = '', password = '', username
             isRegistering = false
             return { success: false, data: null, error: 'Registration failed. Please try again.' }
         }
-         // populate cache immediately
+        // populate cache immediately
         currentUser = {
-            uid      : authResult.user.uid,
-            role     : 'buyer'
+            uid: authResult.user.uid,
+            role: 'buyer'
         }
         isRegistering = false
         return { success: true, data: authResult.user }
@@ -333,8 +334,8 @@ const onAuthStateCheck = (callback) => {
         const result = await getUser(user.uid)
 
         const assembledUser = {
-            uid      : user.uid,
-            role     : result.success ? result.data.role : null
+            uid: user.uid,
+            role: result.success ? result.data.role : null
         }
 
         if (!result.success) {
@@ -365,7 +366,99 @@ const logoutUser = async () => {
     }
 }
 
+/**
+ * Upload a file to Cloudinary
+ * @param {File} file - the file object from input
+ * @param {'image' | 'raw'} type - image for photos, raw for .glb files
+ * @returns {Promise<{success: boolean, data: string|null, error?: string}>}
+ */
+
+const uploadToCloudinary = async (file, type) => {
+    try {
+        if (!file) {
+            console.error('[uploadToCloudinary] missing upload file')
+            return { success: false, data: null, error: 'missing file to upload' }
+
+        }
+        const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp']
+        const allowedModelTypes = ['model/gltf-binary', 'application/octet-stream']
+        if (type === 'image' && !allowedImageTypes.includes(file.type)) {
+            return { success: false, data: null, error: 'Invalid image type. Use JPG, PNG or WEBP' }
+        }
+        if (type === 'raw' && !allowedModelTypes.includes(file.type)) {
+            return { success: false, data: null, error: 'Invalid model type. Use .glb files' }
+        }
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', cloudinaryConfigs.uploadPreset)
+        formData.append('folder', cloudinaryConfigs.folder)
+
+        // endpoint differs for images vs raw files (.glb)
+        const endpoint = type === 'image'
+            ? `https://api.cloudinary.com/v1_1/${cloudinaryConfigs.cloudName}/image/upload`
+            : `https://api.cloudinary.com/v1_1/${cloudinaryConfigs.cloudName}/raw/upload`
+
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: formData
+        })
+
+        if (!response.ok) {
+            return { success: false, data: null, error: 'Upload failed. Try again.' }
+        }
+
+        const result = await response.json()
+        return { success: true, data: result.secure_url }
+
+    } catch (error) {
+        console.error('[uploadToCloudinary] failed:', error)
+        return { success: false, data: null, error: error.message }
+    }
+}
 
 
+/**
+ * Add a new car with image to Firestore
+ * @param {Object} carData - car fields
+ * @param {File} imageFile - the image file
+ * @param {File|null} modelFile - optional .glb file
+ * @returns {Promise<{success: boolean, data: null, error?: string}>}
+ */
 
-export { getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }
+const addCars = async (carData, imageFile, modelFile = null) => {
+    try {
+        if (!carData || typeof carData !== 'object') {
+            return { success: false, data: null, error: 'Invalid data payload provided.' }
+        }
+
+        const imageResult = await uploadToCloudinary(imageFile, "image")
+        if (!imageResult.success) {
+            console.error('[addCars] : error has occured : ', imageResult.error)
+            return { success: false, data: null, error: imageResult.error }
+        }
+
+        // 2. upload 3D model if provided
+        let modelUrl = null
+        if (modelFile) {
+            const modelResult = await uploadToCloudinary(modelFile, 'raw')
+            if (!modelResult.success) {
+                return { success: false, data: null, error: modelResult.error }
+            }
+            modelUrl = modelResult.data
+        }
+
+        await addDoc(collection(db, 'cars'), {
+            ...carData,
+            image: imageResult.data,
+            model3D: modelUrl,
+            hasModel: modelUrl !== null
+        })
+        return { success: true, data: null }
+    } catch (error) {
+        console.error('[addCar] failed:', error)
+        return { success: false, data: null, error: error.message }
+    }
+}
+
+
+export { addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }

@@ -1,4 +1,4 @@
-import { debounce, createElements, createImage } from "./utils.js"
+import { debounce, createElements, createImage, showFeedback } from "./utils.js"
 import * as Data from "./data.js"
 import { initAdminAddCarBtn, initNavAuth } from "./uiChanges.js"
 
@@ -102,7 +102,7 @@ const renderCar = (car) => {
         name: car.name || 'Unnamed Vehicle',
         brand: car.brand || 'Unknown Brand',
         price: Number(car.price || 0).toLocaleString() + ' DT',
-        horsepower: car.horspower || 'N/A',  // fixed typo
+        horsepower: car.horsepower || 'N/A',  // fixed typo
         transmission: car.transmission || 'N/A'
     }
 
@@ -254,6 +254,10 @@ const initModal = () => {
     const modal = document.getElementById('addCarModal')
     const closeButton = document.getElementById('closeAddModalBtn');
     const cancelButton = document.getElementById('cancelAddModalBtn');
+    if (!modal || !closeButton || !cancelButton) {
+        console.error('[initModal] critical modal elements missing')
+        return
+    }
     addBtn.addEventListener('click', (e) => {
         e.preventDefault()
         modal.showModal()
@@ -263,6 +267,55 @@ const initModal = () => {
 
     closeButton.addEventListener('click', closeModal);
     cancelButton.addEventListener('click', closeModal);
+}
+
+const handleForm =  () => {
+    const form = document.getElementById('addVehicleForm')
+    if (!form) return
+    const feedbackArea = document.getElementById('auth-feedback')
+    const carNameInput = document.getElementById('car-name')
+    const carBrandInput = document.getElementById('car-brand')
+    const carHorsePowerInput = document.getElementById('car-hp')
+    const carTransmissionInput = document.getElementById('car-transmission')
+    const carPriceInput = document.getElementById('car-price')
+    const carImageInput = document.getElementById('car-image')
+    const addBtn = document.querySelector('.btn-modal-primary')
+    if (!carNameInput || !carBrandInput || !carHorsePowerInput ||
+        !carTransmissionInput || !carPriceInput || !carImageInput) {
+        console.error('[handleForm] form inputs missing')
+        return
+    }
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const carInfo = {
+            name: carNameInput.value.trim() || 'unknown car',
+            brand: carBrandInput.value.trim() || 'unknown brand',
+            horsepower: carHorsePowerInput.value.trim() || '0hp',
+            transmission: carTransmissionInput.value.trim() || '',
+            price: Number(carPriceInput.value) || 0
+        }
+
+        const carImage = carImageInput.files[0]
+
+        if (!carImage) {
+            showFeedback(feedbackArea,'Please select an image', 'error', 'auth-feedback')
+            return
+        }
+        addBtn.disabled = true
+        addBtn.textContent = 'Uploading...'
+        const result = await Data.addCars(carInfo, carImage)
+        addBtn.disabled = false
+        addBtn.textContent = 'Publish Vehicle Listing'
+        if (!result.success) {
+            showFeedback(feedbackArea,result.error, 'error', 'auth-feedback')
+            return
+        }
+        showFeedback(feedbackArea,'Car added successfully', 'success', 'auth-feedback')
+            form.reset()
+        setTimeout(() => {
+           window.location.href = 'index.html'
+        },1500)
+    })
 }
 
 const initIndexPage = async () => {
@@ -275,6 +328,8 @@ const initIndexPage = async () => {
     initSearch()
     initFilter()
     initAdminAddCarBtn()
+    initModal()
+    handleForm()
 
 }
 
@@ -283,7 +338,6 @@ const initCarPage = () => {
     if (!carDetailContainer) return
     getCarDetail()
 }
-initModal()
 initIndexPage()
 initCarPage()
 initNavAuth({ isAuthPage: false })

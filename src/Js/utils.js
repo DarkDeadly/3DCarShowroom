@@ -82,4 +82,9 @@ export const validateEmail = (email) => {
 }
 
 
-
+  export const showFeedback = (element , message, type = 'error' , className) => {
+        if (!element) return
+        element.className = className
+        element.classList.add(`${className}--${type}`)
+        element.textContent = message
+    }

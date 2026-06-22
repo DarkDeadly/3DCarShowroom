@@ -1,6 +1,7 @@
 // auth.js — corrected with HTML knowledge
 import * as Data from './data.js'
 import { initNavAuth } from './uiChanges.js'
+import {showFeedback} from './utils.js'
 
 const initAuthPage = () => {
     // These IDs all confirmed in HTML
@@ -25,14 +26,6 @@ const initAuthPage = () => {
 
     // ── State ─────────────────────────────────────
     let isLoginState = true
-
-    // ── Helpers ───────────────────────────────────
-    const showFeedback = (message, type = 'error') => {
-        if (!feedbackArea) return
-        feedbackArea.className = 'auth-feedback'
-        feedbackArea.classList.add(`auth-feedback--${type}`)
-        feedbackArea.textContent = message
-    }
 
     const clearFeedback = () => {
         if (!feedbackArea) return
@@ -83,7 +76,7 @@ const initAuthPage = () => {
 
         // UI validation — fast feedback before async
         if (!isLoginState && !username) {
-            showFeedback('Please enter a valid username.', 'error')
+            showFeedback(feedbackArea,'Please enter a valid username.', 'error','auth-feedback')
             return
         }
 
@@ -96,17 +89,17 @@ const initAuthPage = () => {
         // Guard clause — failure → return early
         if (!result.success) {
             console.error('[initAuthPage] auth failed:', result.error)
-            showFeedback(result.error || 'Authentication failed. Check your network.', 'error')
+            showFeedback(feedbackArea,result.error || 'Authentication failed. Check your network.', 'error','auth-feedback')
             setLoadingState(false)
             return
         }
 
         // Success — only reaches here when result.success === true
-        showFeedback(
+        showFeedback(feedbackArea ,
             isLoginState
                 ? 'Access granted! Redirecting...'
                 : 'Registration successful! Redirecting...',
-            'success'   // ← second argument required
+            'success'  , 'auth-feedback' // ← second argument required
         )
         form.reset()
         setLoadingState(false)
