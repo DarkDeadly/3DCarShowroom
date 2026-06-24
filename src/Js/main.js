@@ -12,8 +12,9 @@ let filterState = {
 /**
  * this function will only render all cars
  * @param {Array} carList
+ * @param {Array} favCars
  */
-const renderCars = (carList) => {
+const renderCars = (carList, favCars = []) => {
     if (!Array.isArray(carList)) {
         console.error('[renderCars] expected array, got:', typeof carList)
         return
@@ -35,6 +36,10 @@ const renderCars = (carList) => {
         const imageWrapper = createElements("div", ["product-card__image-wrapper"])
         const carImage = createImage(car.image, "carImage", ["product-card__img"])
         const favourite = createElements("button", ["product-card__wishlist-btn"])
+        favourite.dataset.id = car.id
+        if (favCars.includes(car.id)) {
+            favourite.classList.add('active')
+        }
         favourite.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon">
             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
@@ -62,12 +67,12 @@ const getAllCars = async () => {
     const carContent = document.querySelector(".car__content")
     if (!carContent) return
     carContent.innerHTML = `<div class="loading-state"><p>Loading...</p></div>`
-    const result = await Data.getCars()
-    if (!result.success) {
+    const carResult = await Data.getCars()
+    if (!carResult.success) {
         carContent.innerHTML = `<div class="error-state"><p>Failed to load cars. Try again.</p></div>`
         return
     }
-    renderCars(result.data)
+    renderCars(carResult.data, [])
 }
 
 
@@ -269,7 +274,7 @@ const initModal = () => {
     cancelButton.addEventListener('click', closeModal);
 }
 
-const handleForm =  () => {
+const handleForm = () => {
     const form = document.getElementById('addVehicleForm')
     if (!form) return
     const feedbackArea = document.getElementById('auth-feedback')
@@ -298,7 +303,7 @@ const handleForm =  () => {
         const carImage = carImageInput.files[0]
 
         if (!carImage) {
-            showFeedback(feedbackArea,'Please select an image', 'error', 'auth-feedback')
+            showFeedback(feedbackArea, 'Please select an image', 'error', 'auth-feedback')
             return
         }
         addBtn.disabled = true
@@ -307,17 +312,61 @@ const handleForm =  () => {
         addBtn.disabled = false
         addBtn.textContent = 'Publish Vehicle Listing'
         if (!result.success) {
-            showFeedback(feedbackArea,result.error, 'error', 'auth-feedback')
+            showFeedback(feedbackArea, result.error, 'error', 'auth-feedback')
             return
         }
-        showFeedback(feedbackArea,'Car added successfully', 'success', 'auth-feedback')
-            form.reset()
+        showFeedback(feedbackArea, 'Car added successfully', 'success', 'auth-feedback')
+        form.reset()
         setTimeout(() => {
-           window.location.href = 'index.html'
-        },1500)
+            window.location.href = 'index.html'
+        }, 1500)
     })
 }
+const showFavouriteCars =  async(user) => {
+    const cars = Data.getCachedCars()
 
+    if (!user)  {
+        renderCars(cars , [])
+        return
+    }
+    const favResult = await Data.getUserFavourites(user.uid)
+    const favourites = favResult.success ? favResult.data : []
+
+    renderCars(cars, favourites)
+}
+
+
+const handleFavourite = () => {
+    const carContent = document.querySelector('.car__content')
+    if (!carContent) return
+
+    carContent.addEventListener('click', async (e) => {
+        const favBtn = e.target.closest('.product-card__wishlist-btn')
+        if (!favBtn || !favBtn.dataset.id) return
+
+        // Read user at click time — always fresh
+        const user = Data.getCachedUser()
+        if (!user) {
+            window.location.href = 'authentication.html'
+            return
+        }
+
+        const carId = favBtn.dataset.id
+        const result = await Data.toggleFavourite(carId, user.uid)
+
+        if (!result.success) {
+            console.error('[handleFavourite] toggle failed:', result.error)
+            return
+        }
+
+        // Toggle active class on the button
+        if (result.data.isFavourite) {
+            favBtn.classList.add('active')
+        } else {
+            favBtn.classList.remove('active')
+        }
+    })
+}
 const initIndexPage = async () => {
     const carContent = document.querySelector('.car__content')
     if (!carContent) return
@@ -330,8 +379,15 @@ const initIndexPage = async () => {
     initAdminAddCarBtn()
     initModal()
     handleForm()
+    handleFavourite()
+    Data.onAuthStateCheck((user) => {
+        showFavouriteCars(user)
+    })
 
 }
+
+
+
 
 const initCarPage = () => {
     const carDetailContainer = document.getElementById('car__content')

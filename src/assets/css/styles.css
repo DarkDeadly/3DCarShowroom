@@ -287,7 +287,9 @@ nav {
     justify-content: center;
     transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease;
 }
-
+.active {
+  color: #ef4444;
+}
 .product-card__wishlist-btn:hover {
     color: #ef4444; /* Snaps to sharp warning red on direct action */
     background: rgba(13, 14, 18, 0.85);

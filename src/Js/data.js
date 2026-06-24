@@ -2,7 +2,7 @@
 import { db } from "../config/firebase.js"
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { validateEmail } from "./utils.js"
-import { getDocs, collection, getDoc, doc, setDoc, addDoc } from "firebase/firestore"
+import { getDocs, collection, getDoc, doc, setDoc, addDoc, deleteDoc, serverTimestamp } from "firebase/firestore"
 import { cloudinaryConfigs } from '../config/cloudinary.js'
 // Single Source of Truth 
 let allCars = []
@@ -460,5 +460,46 @@ const addCars = async (carData, imageFile, modelFile = null) => {
     }
 }
 
+const toggleFavourite = async (carId, userId) => {
+    if (!carId || typeof (carId) !== 'string') {
+        return { success: false, data: null, error: 'invalid data' }
+    }
+    if (!userId || typeof (userId) !== 'string') {
+        return { success: false, data: null, error: 'invalid data' }
+    }
 
-export { addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }
+    try {
+        const favouriteRef = doc(db, 'users', userId, 'favourites', carId)
+        const getFavCar = await getDoc(favouriteRef)
+        if (getFavCar.exists()) {
+            await deleteDoc(favouriteRef)
+            return { success: true, data: { isFavourite: false } }
+        } else {
+            await setDoc(favouriteRef, {
+                addedAt: serverTimestamp()
+            })
+            return { success: true, data: { isFavourite: true } }
+        }
+    } catch (error) {
+        console.error('[toggleFavourite] failed:', error)
+        return { success: false, data: null, error: error.message }
+    }
+}
+
+const getUserFavourites = async (userId) => {
+    if (!userId || typeof (userId) !== 'string') {
+        return { success: false, data: null, error: 'invalid data' }
+    }
+    try {
+        const favouriteRefs = collection(db, 'users', userId, 'favourites')
+        const favouriteQuery = await getDocs(favouriteRefs)
+        const favCars = favouriteQuery.docs.map((doc) => doc.id)
+
+        return { success: true, data: favCars }
+    } catch (error) {
+        console.error('[getUserFavourites] failed:', error)
+        return { success: false, data: null, error: error.message }
+    }
+}
+
+export {toggleFavourite, getUserFavourites, addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }
