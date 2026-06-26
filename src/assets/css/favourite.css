@@ -1,0 +1,230 @@
+/* ==========================================================================
+   CARSPHERE MODERN SHOWCASE / FAVORITES MATRIX SYSTEM
+   ========================================================================== */
+
+.fav-view-wrapper {
+  width: 100%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── Top Header Section ── */
+.fav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 24px;
+}
+
+.fav-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.fav-subtitle {
+  font-size: 14px;
+  color: #8B8FA8;
+}
+
+.fav-count-badge {
+  background: #1F222C;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #CACDE0;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+/* ── Auto-Sizing Showcase Grid Layout ── */
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+/* ── Luxury Profile Card Item ── */
+.fav-card {
+  background: #16181F;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s, box-shadow 0.25s;
+}
+
+.fav-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Upper Media Window Container */
+.fav-card__image-pane {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #1F222C;
+  overflow: hidden;
+}
+
+.car-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.fav-card:hover .car-thumbnail {
+  transform: scale(1.04);
+}
+
+/* Lower Float Overlay Technical Indicators (Glassmorphism) */
+.fav-card__glass-specs {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.glass-pill {
+  background: rgba(22, 24, 31, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #E2E8F0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* Floating Action: Remove Active Listing Anchor */
+.btn-remove-fav {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(22, 24, 31, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #E63946; /* Filled crimson favorite token signature badge */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.btn-remove-fav:hover {
+  background: #E63946;
+  color: #ffffff;
+  border-color: #E63946;
+  transform: scale(1.05);
+}
+
+/* Lower Content Compartment Details Row */
+.fav-card__details {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-grow: 1;
+}
+
+.car-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.car-brand {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748B;
+  font-weight: 700;
+}
+
+.car-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Bottom Split Row (Pricing Stack + View Button) */
+.car-pricing-tier {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.price-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-label {
+  font-size: 11px;
+  color: #64748B;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.price-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Compact Arrow Execution Redirect Button */
+.btn-view-asset {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #1F222C;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #CACDE0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-view-asset:hover {
+  background: #E63946;
+  color: #ffffff;
+  border-color: #E63946;
+}
+
+/* Responsive Grid Adaptation Overrides */
+@media (max-width: 640px) {
+  .fav-view-wrapper {
+    padding: 20px;
+  }
+  .fav-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}

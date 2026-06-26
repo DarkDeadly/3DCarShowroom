@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/src/assets/css/styles.css">
+  <link rel="stylesheet" href="/src/assets/css/favourite.css">
+  <title>CarSphere</title>
+</head>
+<body>
+    <div>
+         <nav>
+      <!-- Brand -->
+      <a class="navbar-brand" href="#">
+        <img src="/src/assets/Screenshot from 2026-06-10 20-14-50.png" alt="CarSphere logo">
+        <span class="brand-name">Car<span class="accent">Sphere</span></span>
+      </a>
+
+      <!-- Nav links -->
+      <ul class="nav-links">
+        <li><a href="authentication.html">Home</a></li>
+        <li><a href="index.html" >Cars</a></li>
+        <li><a href="favourites.html" class="active">Favourites</a></li>
+        <li><a href="#">Reports</a></li>
+      </ul>
+
+      <!-- Auth buttons -->
+      <div class="nav-actions">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Register</button>
+      </div>
+    </nav>
+    <div class="fav-view-wrapper">
+  
+  <!-- Header Control Row -->
+  <div class="fav-header">
+    <div class="fav-header__text">
+      <h1 class="fav-title">Saved Showcase</h1>
+      <p class="fav-subtitle">Monitor and review your personal curation of premium automotive assets.</p>
+    </div>
+  </div>
+
+  <!-- Modern Favorites Matrix Grid -->
+  <div class="fav-grid" id="favoritesGrid">
+    
+  
+  </div>
+</div>
+    </div>
+      <script type="module" src="/src/Js/main.js"></script>
+  <script type="module" src="/src/config/firebase.js"></script>
+  <script type="module" src="/src/Js/uiChanges.js"></script>
+</body>
+</html>
