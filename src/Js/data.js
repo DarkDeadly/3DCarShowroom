@@ -2,7 +2,7 @@
 import { db } from "../config/firebase.js"
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { validateEmail } from "./utils.js"
-import { getDocs, collection, getDoc, doc, setDoc, addDoc, deleteDoc, serverTimestamp } from "firebase/firestore"
+import { getDocs, collection, getDoc, doc, setDoc, addDoc, deleteDoc, serverTimestamp, query, limit } from "firebase/firestore"
 import { cloudinaryConfigs } from '../config/cloudinary.js'
 // Single Source of Truth 
 let allCars = []
@@ -15,14 +15,17 @@ let isRegistering = false
  */
 const getCars = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, 'cars'))
+        // we set a limit for pagination
+        const q =  query(collection(db, "cars") , limit(10))
+        const querySnapshot = await getDocs(q)
+        
         const cars = querySnapshot.docs.map(doc => ({
+            // the fields is wrapped in metadata with .data() we make sure to get the fields
             ...doc.data(),
             id: doc.id
 
 
         }))
-        allCars = [...cars]
         return { success: true, data: cars }
 
     } catch (error) {
@@ -58,8 +61,8 @@ const getCarDetail = async (id) => {
  * @param {Array<Object>} [cars=allCars] - cars to search within
  * @return {Array<Object>} cars matching the query, or all cars if query is empty
  */
-const searchCars = (query, cars = allCars) => {
-    if (!Array.isArray(cars)) {
+const searchCars = (query, cars) => {
+    if (!Array.isArray(cars) || cars.length === 0) {
         console.error('[searchCars] expected an array but received:', typeof cars)
         return []
     }
@@ -84,7 +87,9 @@ const searchCars = (query, cars = allCars) => {
  * @returns {Array<Object>} filtered cars
  */
 
-const filterCarsByBrand = (brand, cars = allCars) => {
+//explicit dependencies applied
+
+const filterCarsByBrand = (brand, cars) => {
     if (!Array.isArray(cars)) {
         console.error('[filterCarsByBrand] expected array, got:', typeof cars)
         return []
@@ -107,7 +112,9 @@ const filterCarsByBrand = (brand, cars = allCars) => {
 const getCachedCars = () => {
     return [...allCars]
 }
-
+const setCachedCars = (cars) => {
+    allCars = [...cars]
+}
 /**
  * Single entry point for all filtering and searching
  * @param {Object} filterState - { currentBrand, currentSearch }
@@ -502,4 +509,4 @@ const getUserFavourites = async (userId) => {
     }
 }
 
-export {toggleFavourite, getUserFavourites, addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }
+export {setCachedCars,toggleFavourite, getUserFavourites, addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }

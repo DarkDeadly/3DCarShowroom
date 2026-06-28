@@ -1,4 +1,4 @@
-import { debounce, createElements, createImage, showFeedback } from "./utils.js"
+import { debounce, createElements, createImage, showFeedback, showError, showLoading } from "./utils.js"
 import * as Data from "./data.js"
 import { initAdminAddCarBtn, initNavAuth } from "./uiChanges.js"
 
@@ -10,9 +10,15 @@ let filterState = {
 
 
 /**
- * this function will only render all cars
- * @param {Array} carList
- * @param {Array} favCars
+
+ * Renders the car grid into `.car__content`.
+
+ * Each card reflects its favourite-state via the `active` class on the wishlist button.
+
+ * @param {Array} carList  - cars to render
+
+ * @param {Array} favCars  - array of car IDs that are favourited
+
  */
 const renderCars = (carList, favCars = []) => {
     if (!Array.isArray(carList)) {
@@ -65,14 +71,17 @@ const renderCars = (carList, favCars = []) => {
 
 const getAllCars = async () => {
     const carContent = document.querySelector(".car__content")
-    if (!carContent) return
-    carContent.innerHTML = `<div class="loading-state"><p>Loading...</p></div>`
+
+    showLoading(carContent)
+
     const carResult = await Data.getCars()
+
     if (!carResult.success) {
-        carContent.innerHTML = `<div class="error-state"><p>Failed to load cars. Try again.</p></div>`
+        showError(carContent)
         return
     }
     renderCars(carResult.data, [])
+    Data.setCachedCars(carResult.data)
 }
 
 
@@ -183,36 +192,43 @@ const renderCar = (car) => {
 }
 
 const getCarDetail = async () => {
+    const carContent = document.getElementById('car__content')
     const params = new URLSearchParams(window.location.search)
     const id = params.get("id")
     if (!id) {
         window.location.href = "index.html"
         return
     }
+    showLoading(carContent)
     const result = await Data.getCarDetail(id)
     if (!result.success) {
         console.error('[getCarDetail] failed:', result.error)
+        showError(carContent)
         return;
     }
     renderCar(result.data)
 }
-
-const applyFilter = async () => {
+const ensureCachedIsLoaded = async () => {
     if (Data.getCachedCars().length === 0) {
         const fetchedCars = await Data.getCars()
         if (!fetchedCars.success) {
             renderCars([])
             return
         }
+        Data.setCachedCars(fetchedCars.data)
     }
+}
+const applyFilter =  () => {
     const cars = Data.getFilteredCars(filterState)
     renderCars(cars)
 }
+
 const initSearch = () => {
     const searchInput = document.getElementById("carSearchInput")
     if (!searchInput) return
-    searchInput.addEventListener('input', debounce((e) => {
+    searchInput.addEventListener('input', debounce(async(e) => {
         filterState.currentSearch = e.target.value.trim()
+        await ensureCachedIsLoaded()
         applyFilter()
     }, 300))
 }
@@ -504,6 +520,10 @@ const initFavouritePage = () => {
     if (!favContent) return
     Data.onAuthStateCheck((user) => {
 
+        if (!user) {
+            window.location.href = 'authentication.html'
+            return
+        }
         showFavourite(user.uid)
     })
 

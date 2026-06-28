@@ -49,11 +49,22 @@ export const createImage = (src, alt = '', classNames = [], fallbackSrc = '') =>
  * @param {number} timer - the timer set for the delay
  * @returns {Function} - The debounced function
  */
+
+let lastInvocation = 0
+
+
 export const debounce = (func , wait) => {
     let timeout ; 
     return function(...args) {
+        const invocation = ++lastInvocation
         clearTimeout(timeout) ;
-        timeout = setTimeout(() => func.apply(this , args) , wait) ;
+        return new Promise(resolve =>  {
+            timeout = setTimeout(async() => {
+                 if (invocation !== lastInvocation) return resolve()  // stale
+                await func(...args)
+                resolve()
+            },wait) ;
+        })
     }
 }
 /**
@@ -88,3 +99,20 @@ export const validateEmail = (email) => {
         element.classList.add(`${className}--${type}`)
         element.textContent = message
     }
+
+
+/**
+ * 
+ */
+
+export const showLoading = (element) => {
+    if (!element) return
+    element.innerHTML = `<div class="loading-state"><p>Loading...</p></div>`
+}
+
+export const showError = (element, message = 'Failed to load cars. Try again') => {
+    if (!element) return
+    element.innerHTML = `<div class="error-state"><p></p></div>`
+
+    element.querySelector('p').textContent = message 
+}
