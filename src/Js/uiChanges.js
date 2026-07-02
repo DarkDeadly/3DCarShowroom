@@ -23,7 +23,6 @@ const initNavAuth = ({ isAuthPage = false } = {}) => {
 }
 
 const handleLoggedIn = (container, isAuthPage) => {
-    // If user navigates to login/register while already logged in → push them to app
     if (isAuthPage) {
         window.location.href = 'index.html'
         return
@@ -41,12 +40,10 @@ const handleLoggedIn = (container, isAuthPage) => {
         if (!result.success) {
             console.error('[handleLoggedIn] logout failed:', result.error)
         }
-        // Observer automatically catches the state change and fires handleLoggedOut
     })   
 }
 
 const handleLoggedOut = (container, isAuthPage) => {
-    // DRY — Render buttons once
     container.innerHTML = `
         <button class="btn-login" id="nav-login-btn">Login</button>
         <button class="btn-register" id="nav-register-btn">Register</button>
@@ -56,18 +53,15 @@ const handleLoggedOut = (container, isAuthPage) => {
     const registerBtn = document.getElementById('nav-register-btn')
 
     if (isAuthPage) {
-        // We are ON the auth page. Clicking nav buttons should switch the form mode.
         const toggleTrigger = document.getElementById('auth-toggle-trigger')
         
         loginBtn?.addEventListener('click', () => {
-            // If currently in register mode, click the toggle to switch to login
             if (document.getElementById('auth-form-title')?.textContent === 'Create Account') {
                 toggleTrigger?.click()
             }
         })
 
         registerBtn?.addEventListener('click', () => {
-            // If currently in login mode, click the toggle to switch to register
             if (document.getElementById('auth-form-title')?.textContent === 'Welcome Back') {
                 toggleTrigger?.click()
             }
@@ -75,7 +69,6 @@ const handleLoggedOut = (container, isAuthPage) => {
         return
     }
 
-    // We are on OTHER pages. Clicking nav buttons redirects to auth page.
     loginBtn?.addEventListener('click', () => {
         window.location.href = 'authentication.html'
     })

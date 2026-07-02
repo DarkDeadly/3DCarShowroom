@@ -12,3 +12,4 @@ Feature 8  ✅  authorization and fixing the race condition
 Feature 9  ✅  add Car Feature
 Feature 10 ✅  favourite Button
 Feature 11 ✅  Showcase the Favourite car list 
+Feature 12 ✅  Adding the cart functionality

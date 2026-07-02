@@ -2,23 +2,37 @@
 import { db } from "../config/firebase.js"
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { validateEmail } from "./utils.js"
-import { getDocs, collection, getDoc, doc, setDoc, addDoc, deleteDoc, serverTimestamp, query, limit } from "firebase/firestore"
+import { getDocs, collection, getDoc, doc, setDoc, addDoc, deleteDoc, serverTimestamp, query, limit, startAfter } from "firebase/firestore"
 import { cloudinaryConfigs } from '../config/cloudinary.js'
+import { orderBy } from "firebase/firestore/lite"
 // Single Source of Truth 
-let allCars = []
 const auth = getAuth()
 let currentUser = null   // one name, used everywhere
 let isRegistering = false
+
+
+let allCars = []
+
 /**
- * Fetches all cars from Firestore
+ * Fetches all cars from Firestore while applying the cursor pagination
+ * @param {number} cursor - the bookmark of the last limited index
+ * @param {number} limit 
  * @returns {Promise<{success: boolean, data: Array<Object>, error?: string}>}
  */
-const getCars = async () => {
+const getCars = async (cursor = null, Limit = 10) => {
     try {
-        // we set a limit for pagination
-        const q =  query(collection(db, "cars") , limit(10))
+        // we set a limit for out cursor pagination
+        let q = query(
+            collection(db, "cars"),
+            orderBy('createdAt'), // 🎯 CRITICAL: Firestore needs this for cursors
+            limit(Limit))
+
+        if (cursor) {
+            q = query(q, startAfter(cursor))
+        }
+
         const querySnapshot = await getDocs(q)
-        
+
         const cars = querySnapshot.docs.map(doc => ({
             // the fields is wrapped in metadata with .data() we make sure to get the fields
             ...doc.data(),
@@ -26,14 +40,26 @@ const getCars = async () => {
 
 
         }))
-        return { success: true, data: cars }
+        return {
+            success: true,
+            data: {
+                cars,
+                cursor: querySnapshot.docs[querySnapshot.docs.length - 1],
+                hasMore: querySnapshot.docs.length === Limit
+            }
+        }
 
     } catch (error) {
         console.error('[getCars] failed : ', error)
         return { success: false, data: null, error: error.message }
     }
 }
-
+const getCachedCars = () => {
+    return [...allCars]
+}
+const setCachedCars = (cars) => {
+    allCars = [...cars]
+}
 /**
  * Fetch a specific car based on the ID
  * @param {string} id - The car specific id
@@ -55,10 +81,12 @@ const getCarDetail = async (id) => {
     }
 }
 
+// Filter + Search Functionality starts
+
 /**
  * Search for a car based on the following search parameter 
  * @param {string} query - search query
- * @param {Array<Object>} [cars=allCars] - cars to search within
+ * @param {Array<Object>} [cars] - cars to search within
  * @return {Array<Object>} cars matching the query, or all cars if query is empty
  */
 const searchCars = (query, cars) => {
@@ -78,6 +106,21 @@ const searchCars = (query, cars) => {
         }
         return name.includes(q)
     })
+}
+
+
+const getAllBrand = async () => {
+    try {
+        const q = query(collection(db, "cars"))
+        const getCars = await getDocs(q)
+        const brands = [... new Set(
+            getCars.docs.map(car => car.data().brand).filter(Boolean)
+        )]
+        return { success: true, data: brands }
+    } catch (error) {
+        console.error('[ getAllBrand ] error', error.message)
+        return { success: false, data: null }
+    }
 }
 
 /**
@@ -109,12 +152,7 @@ const filterCarsByBrand = (brand, cars) => {
     })
 }
 
-const getCachedCars = () => {
-    return [...allCars]
-}
-const setCachedCars = (cars) => {
-    allCars = [...cars]
-}
+
 /**
  * Single entry point for all filtering and searching
  * @param {Object} filterState - { currentBrand, currentSearch }
@@ -126,6 +164,11 @@ const getFilteredCars = ({ currentBrand = '', currentSearch = '' } = {}) => {
     if (currentSearch) cars = searchCars(currentSearch, cars)
     return cars
 }
+
+// Filter + Search Functionality done 
+
+// authentication Process Start 
+
 /**
  * Register a user role to Firestore
  * @param {string} id - Firebase Auth uid
@@ -156,24 +199,25 @@ const addUserDb = async (id, role = 'buyer') => {
  * @return {{success : boolean , data : object , error?: string}}
  */
 const emailPasswordAuthentication = async ({ email = '', password = '', username = '' }) => {
+
+    if (typeof email !== 'string' || typeof password !== 'string' || typeof username !== 'string') {
+        return { success: false, data: null, error: 'Invalid input types' }
+    }
+
+    const cleanEmail = email.trim()
+    const cleanPassword = password.trim()
+    const cleanUsername = username.trim()
+    if (!cleanEmail || !cleanPassword || !cleanUsername) {
+        return { success: false, data: null, error: 'All fields are required' }
+    }
+
+    const emailResult = validateEmail(cleanEmail)
+    if (!emailResult.valid) {
+        console.log('[DEBUG] failed email format')
+        return { success: false, data: null, error: emailResult.error }
+    }
+    isRegistering = true
     try {
-        if (typeof email !== 'string' || typeof password !== 'string' || typeof username !== 'string') {
-            return { success: false, data: null, error: 'Invalid input types' }
-        }
-
-        const cleanEmail = email.trim()
-        const cleanPassword = password.trim()
-        const cleanUsername = username.trim()
-        if (!cleanEmail || !cleanPassword || !cleanUsername) {
-            return { success: false, data: null, error: 'All fields are required' }
-        }
-
-        const emailResult = validateEmail(cleanEmail)
-        if (!emailResult.valid) {
-            console.log('[DEBUG] failed email format')
-            return { success: false, data: null, error: emailResult.error }
-        }
-        isRegistering = true
         const authResult = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPassword)
         await updateProfile(authResult.user, { displayName: cleanUsername })
 
@@ -183,7 +227,6 @@ const emailPasswordAuthentication = async ({ email = '', password = '', username
         if (!dbResult.success) {
             // Rollback Auth user — prevent stuck state
             await authResult.user.delete()
-            isRegistering = false
             return { success: false, data: null, error: 'Registration failed. Please try again.' }
         }
         // populate cache immediately
@@ -191,11 +234,9 @@ const emailPasswordAuthentication = async ({ email = '', password = '', username
             uid: authResult.user.uid,
             role: 'buyer'
         }
-        isRegistering = false
         return { success: true, data: authResult.user }
 
     } catch (error) {
-        isRegistering = false
         const errorCode = error.code
         let userFriendlyMessage = 'An unexpected error occurred. Please try again.'
 
@@ -225,6 +266,8 @@ const emailPasswordAuthentication = async ({ email = '', password = '', username
         }
 
         return { success: false, data: null, error: userFriendlyMessage }
+    } finally {
+        isRegistering = false
     }
 }
 
@@ -373,6 +416,8 @@ const logoutUser = async () => {
     }
 }
 
+// Authentication Process End
+
 /**
  * Upload a file to Cloudinary
  * @param {File} file - the file object from input
@@ -509,4 +554,30 @@ const getUserFavourites = async (userId) => {
     }
 }
 
-export {setCachedCars,toggleFavourite, getUserFavourites, addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }
+const addToCart = async (carId, userId) => {
+    if (!carId || !userId) {
+        console.error('[addToCart] missing datas')
+        return
+    }
+    if (typeof carId !== 'string' || typeof userId !== 'string') {
+        console.error('[addToCart] invalid data types')
+        return
+    }
+    try {
+        // i dont think there will be a race condition between the two calls
+            const cartRef = doc(db, 'users', userId, 'cart', carId)
+            const setCart = await setDoc(cartRef, {
+                addedAt: serverTimestamp()
+            })
+            return { success: true, data: { inCart: true } }
+
+        
+    } catch (error) {
+        console.error('[addToCart] failed:', error)
+        return {
+            success: false, data: null, error: error.message
+        }
+
+    }}
+
+    export {addToCart, getAllBrand, setCachedCars, toggleFavourite, getUserFavourites, addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }

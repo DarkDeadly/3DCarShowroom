@@ -8,17 +8,86 @@ let filterState = {
 }
 
 
+/* 
+    Getting Cars Functionality starts
+*/
+
+const updateCars = (cardElement, car, favCars) => {
+    //Updating the Price if changed 
+    const priceEl = cardElement.querySelector('.product-card__price')
+    const newPrice = Number(car.price).toLocaleString() + " DT"
+    if (priceEl.textContent !== newPrice) {
+        priceEl.textContent = newPrice
+    }
+    // Update favourite button state
+    const favBtn = cardElement.querySelector('.product-card__wishlist-btn')
+    const isFav = favCars.includes(car.id)
+    const currentlyActive = favBtn.classList.contains('active')
+
+    if (isFav && !currentlyActive) {
+        favBtn.classList.add('active')
+    } else if (!isFav && currentlyActive) {
+        favBtn.classList.remove('active')
+    }
+}
+/**
+ * Builds a complete car card DOM element from scratch
+ * @param {Object} car - The car data
+ * @param {Array} favCars - Array of favourited car IDs
+ * @returns {HTMLElement} - The fully assembled card
+ */
+const buildCarCards = (car, favCars = []) => {
+    // ─── IMAGE SECTION ───
+    const imageWrapper = createElements("div", ["product-card__image-wrapper"])
+    const carImage = createImage(car.image, "carImage", ["product-card__img"])
+
+    const favouriteBtn = createElements("button", ["product-card__wishlist-btn"])
+    favouriteBtn.dataset.id = car.id
+    if (favCars.includes(car.id)) {
+        favouriteBtn.classList.add('active')
+    }
+    favouriteBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+        </svg>`
+
+    imageWrapper.append(carImage, favouriteBtn)
+
+    // ─── BODY SECTION ───
+    const cardBody = createElements("div", ["product-card__body"])
+    const cardHeader = createElements("div", ["product-card__header-row"])
+    const carTitle = createElements("h3", ['product-card__title'], car.name)
+    const carBrand = createElements("p", ["rating-value"], car.brand)
+
+    const priceContainer = createElements("div", ["product-card__price-row"])
+    const price = createElements("span", ["product-card__price"], Number(car.price).toLocaleString() + " DT")
+    const viewButton = createElements("button", ["product-card__btn-cart"], "View")
+    viewButton.dataset.id = car.id
+
+    // ─── ASSEMBLY ───
+    priceContainer.appendChild(price)
+    cardHeader.append(carTitle, carBrand)
+    cardBody.append(cardHeader, priceContainer, viewButton)
+
+    const carCard = createElements("article", ['car__card'])
+    carCard.append(imageWrapper, cardBody)
+
+    // 🎯 CRITICAL: Store the ID on the element itself for keyed reconciliation
+    carCard.dataset.carId = car.id
+
+    return carCard
+}
+
+
+let currentLastDoc = null
+let hasMoreCars = true
+const carElements = new Map()
 
 /**
-
  * Renders the car grid into `.car__content`.
-
  * Each card reflects its favourite-state via the `active` class on the wishlist button.
-
  * @param {Array} carList  - cars to render
-
  * @param {Array} favCars  - array of car IDs that are favourited
-
  */
 const renderCars = (carList, favCars = []) => {
     if (!Array.isArray(carList)) {
@@ -27,64 +96,75 @@ const renderCars = (carList, favCars = []) => {
     }
     const carContent = document.querySelector('.car__content')
     if (!carContent) return
-    carContent.innerHTML = ''
 
     if (carList.length === 0) {
         carContent.innerHTML = `<p>No cars found.</p>`
         return
     }
 
-    const carGrid = createElements("div", ['cars__grid'])
-    carContent.appendChild(carGrid)
+    let carGrid = carContent.querySelector('.cars__grid')
+    if (!carGrid) {
+        // If it's the very first page load, create it once
+        carContent.innerHTML = '' // Clear loading states/error text
+        carGrid = createElements("div", ['cars__grid'])
+        carContent.appendChild(carGrid)
+    }
+    carElements.forEach((el) => {
+        el.dataset.stale = 'true'
+    })
 
-    carList.forEach((car) => {
-        const carCard = createElements("article", ['car__card'])
-        const imageWrapper = createElements("div", ["product-card__image-wrapper"])
-        const carImage = createImage(car.image, "carImage", ["product-card__img"])
-        const favourite = createElements("button", ["product-card__wishlist-btn"])
-        favourite.dataset.id = car.id
-        if (favCars.includes(car.id)) {
-            favourite.classList.add('active')
+    carList.forEach(car => {
+        if (carElements.has(car.id)) {
+            const existantCar = carElements.get(car.id)
+            delete existantCar.dataset.stale 
+            updateCars(existantCar , car , favCars)
+        }else {
+            const newCard = buildCarCards(car , favCars)
+            carGrid.appendChild(newCard)
+            carElements.set(car.id, newCard)
         }
-        favourite.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon">
-            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-        </svg>`
-
-        imageWrapper.append(carImage, favourite)
-        const cardBody = createElements("div", ["product-card__body"])
-        const cardHeader = createElements("div", ["product-card__header-row"])
-        const carTitle = createElements("h3", ['product-card__title'], car.name)
-        const carBrand = createElements("p", ["rating-value"], car.brand)
-        const priceContainer = createElements("div", ["product-card__price-row"])
-        const price = createElements("span", ["product-card__price"], Number(car.price).toLocaleString() + " DT")
-        const viewButton = createElements("button", ["product-card__btn-cart"], "View")
-        viewButton.dataset.id = car.id
-
-        priceContainer.appendChild(price)
-        cardHeader.append(carTitle, carBrand)
-        cardBody.append(cardHeader, priceContainer, viewButton)
-        carCard.append(imageWrapper, cardBody)
-        carGrid.appendChild(carCard)
+    })
+    carElements.forEach((el, id) => {
+        if (el.dataset.stale) {
+            el.remove()           
+            carElements.delete(id)
+        }
     })
 }
 
+
 const getAllCars = async () => {
     const carContent = document.querySelector(".car__content")
-
+    if (!carContent) return
+    if (!hasMoreCars) return  // Stop if we know there's no more
+    
     showLoading(carContent)
 
-    const carResult = await Data.getCars()
+    const carResult = await Data.getCars(currentLastDoc, 10)
 
     if (!carResult.success) {
         showError(carContent)
         return
     }
-    renderCars(carResult.data, [])
-    Data.setCachedCars(carResult.data)
+    
+    // Accumulate: old cars + new cars = full list
+    const accumulated = [...Data.getCachedCars(), ...carResult.data.cars]
+    Data.setCachedCars(accumulated)
+    
+    // Update pagination cursors
+    currentLastDoc = carResult.data.cursor
+    hasMoreCars = carResult.data.hasMore
+    
+    renderCars(accumulated, [])
 }
 
+/* 
+    Getting all Cars functionality Finishes
+*/
 
+/*
+    Getting detail car functionality starts 
+*/
 
 const addClickListener = () => {
     const container = document.querySelector('.car__content')
@@ -165,16 +245,25 @@ const renderCar = (car) => {
 
     // 5. Call-To-Action Interaction Section (Using innerHTML to keep the raw SVG heart asset markup clean)
     const buttonContainer = createElements('div', ['detail__actions']);
-    buttonContainer.innerHTML = `
-        <button class="btn-primary__action">
-            Proceed with Inquire / Purchase
-        </button>
-        <button class="btn-secondary__wishlist" aria-label="Save asset">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-            </svg>
-        </button>
+    // 1. Create the Primary Action Button using native DOM elements
+    const inquireBtn = createElements('button', ['btn-primary__action'], 'Proceed with Inquire / Purchase');
+    inquireBtn.dataset.id = car.id;
+
+    // 2. Create the Wishlist Button shell natively
+    const wishlistBtn = createElements('button', ['btn-secondary__wishlist']);
+    wishlistBtn.setAttribute('aria-label', 'Save asset');
+    wishlistBtn.dataset.id = car.id;
+
+    // 3. Use innerHTML ONLY for the inner SVG string graphic
+    // This avoids dealing with complex document.createElementNS namespaces
+    wishlistBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+        </svg>
     `;
+
+    // 4. Clean assembly chain
+    buttonContainer.append(inquireBtn, wishlistBtn);
 
     // 6. Master Layout Render Assembly Chain
     carDetailBody.append(
@@ -207,7 +296,21 @@ const getCarDetail = async () => {
         return;
     }
     renderCar(result.data)
+    initCart()
 }
+
+/* 
+    Getting detailedCar done
+*/
+
+/*
+    Filtering + Searching functionality
+*/
+
+const initAllBrands = () => {
+
+}
+
 const ensureCachedIsLoaded = async () => {
     if (Data.getCachedCars().length === 0) {
         const fetchedCars = await Data.getCars()
@@ -215,10 +318,10 @@ const ensureCachedIsLoaded = async () => {
             renderCars([])
             return
         }
-        Data.setCachedCars(fetchedCars.data)
+        Data.setCachedCars(fetchedCars.data.cars)
     }
 }
-const applyFilter =  () => {
+const applyFilter = () => {
     const cars = Data.getFilteredCars(filterState)
     renderCars(cars)
 }
@@ -226,7 +329,7 @@ const applyFilter =  () => {
 const initSearch = () => {
     const searchInput = document.getElementById("carSearchInput")
     if (!searchInput) return
-    searchInput.addEventListener('input', debounce(async(e) => {
+    searchInput.addEventListener('input', debounce(async (e) => {
         filterState.currentSearch = e.target.value.trim()
         await ensureCachedIsLoaded()
         applyFilter()
@@ -242,32 +345,29 @@ const initFilter = () => {
     })
 }
 
-const addManufacturer = async () => {
-    const manifactureSelector = document.getElementById('brandSortSelect')
-    if (!manifactureSelector) return
 
-    let manifactorList = Data.getCachedCars()
-
-    if (manifactorList.length === 0) {
-        const result = await Data.getCars()
-        if (!result.success) return
-        manifactorList = result.data
-    }
-
-    // get unique brands only
-    const uniqueBrands = [...new Set(manifactorList.map(car => car.brand))]
-
-    // reset and add default option
-    manifactureSelector.innerHTML = '<option value="">All brands</option>'
-
-    // render one option per unique brand
-    uniqueBrands.forEach(brand => {
+const buildBrandDropdown = (brands) => {
+    const selector = document.getElementById('brandSortSelect')
+    if (!selector) return 
+    selector.innerHTML = '<option value="">All brands</option>'
+    brands.sort().forEach(brand => {
         const option = document.createElement('option')
-        option.value = brand
-        option.textContent = brand  // ← this is what shows in the dropdown
-        manifactureSelector.appendChild(option)
+        option.value = option.textContent = brand
+        selector.appendChild(option)
     })
 }
+const initBrandFilter = async () => {
+    // Orchestrator: fetches, then builds
+    const result = await Data.getAllBrand()
+    console.log(result.data)
+    if (result.success) {
+        buildBrandDropdown(result.data)
+    }
+}
+
+/*
+    filter + search functionality ends
+*/
 
 const initModal = () => {
     const addBtn = document.getElementById('openAddModalBtn')
@@ -494,14 +594,57 @@ const showFavourite = async (userId) => {
         container.innerHTML = '<p>Something went wrong.</p>'
     }
 }
+const initCart = () => {
+    const cartBtn = document.querySelector('.btn-primary__action')
+    if (!cartBtn) return
+    
+    cartBtn.addEventListener('click', async (e) => {
+        const carId = e.currentTarget.dataset.id
+        if (!carId) {
+            console.error('[initCart] carId missing on button')
+            return
+        }
+        const user = Data.getCachedUser()
+        if (!user) {
+            window.location.href = 'authentication.html'
+            return
+        }
 
+        // 🌟 Save the original text so we can restore it if things fail
+        const originalText = cartBtn.textContent
+
+        try {
+            cartBtn.disabled = true
+            cartBtn.textContent = 'Adding to Cart...' 
+
+            const result = await Data.addToCart(carId, user.uid)
+
+            if (!result.success) {
+                console.error('[initCart] addToCart failed:', result.error)
+                
+                cartBtn.disabled = false
+                cartBtn.textContent = originalText
+                return
+            }
+
+            console.log('[initCart] addToCart success:', result.data)
+            cartBtn.textContent = 'Added to Cart!'
+            cartBtn.classList.add('btn--success') // Optional: style it green
+
+        } catch (error) {
+            console.error('[initCart] Unexpected execution error:', error)
+            cartBtn.disabled = false
+            cartBtn.textContent = originalText
+        }
+    })
+}
 
 const initIndexPage = async () => {
     const carContent = document.querySelector('.car__content')
     if (!carContent) return
 
     await getAllCars()
-    await addManufacturer()
+    await initBrandFilter()
     addClickListener()
     initSearch()
     initFilter()
@@ -514,6 +657,8 @@ const initIndexPage = async () => {
     })
 
 }
+
+
 
 const initFavouritePage = () => {
     const favContent = document.querySelector('.fav-grid')
@@ -536,7 +681,9 @@ const initCarPage = () => {
     const carDetailContainer = document.getElementById('car__content')
     if (!carDetailContainer) return
     getCarDetail()
+    
 }
+
 initIndexPage()
 initCarPage()
 initFavouritePage()
