@@ -6,14 +6,12 @@
  * @returns {HTMLElement} - The created HTML element with the specified tag, classes, and text content
  */
 
-export const createElements = (tag , classNames = [] , textContent = '' ) => {
+export const createElements = (tag, classNames = [], textContent = '') => {
     const element = document.createElement(tag);
     classNames.forEach(className => element.classList.add(className));
     if (textContent) element.textContent = textContent;
     return element;
 }
-
-
 /**
  * Creates a configured HTMLImageElement with standard fallback handlers
  * @param {string} src - The image URL source track
@@ -24,15 +22,15 @@ export const createElements = (tag , classNames = [] , textContent = '' ) => {
  */
 export const createImage = (src, alt = '', classNames = [], fallbackSrc = '') => {
     const img = document.createElement('img');
-    
+
     // Core structural properties
     img.src = src;
     img.alt = alt; // Keeps your layout compliant with UI/UX accessibility contrast standards
     img.loading = 'lazy'; // Native performance optimization out of the box for Vite
-    
+
     // Apply styling tokens
     classNames.forEach(className => img.classList.add(className));
-    
+
     // Broken Image Safety Fallback Engine
     if (fallbackSrc) {
         img.onerror = () => {
@@ -40,7 +38,7 @@ export const createImage = (src, alt = '', classNames = [], fallbackSrc = '') =>
             img.onerror = null; // Prevents infinite loops if the fallback link breaks too
         };
     }
-    
+
     return img;
 };
 /**
@@ -51,19 +49,17 @@ export const createImage = (src, alt = '', classNames = [], fallbackSrc = '') =>
  */
 
 let lastInvocation = 0
-
-
-export const debounce = (func , wait) => {
-    let timeout ; 
-    return function(...args) {
+export const debounce = (func, wait) => {
+    let timeout;
+    return function (...args) {
         const invocation = ++lastInvocation
-        clearTimeout(timeout) ;
-        return new Promise(resolve =>  {
-            timeout = setTimeout(async() => {
-                 if (invocation !== lastInvocation) return resolve()  // stale
+        clearTimeout(timeout);
+        return new Promise(resolve => {
+            timeout = setTimeout(async () => {
+                if (invocation !== lastInvocation) return resolve()  // stale
                 await func(...args)
                 resolve()
-            },wait) ;
+            }, wait);
         })
     }
 }
@@ -91,20 +87,12 @@ export const validateEmail = (email) => {
 
     return { valid: true, error: '' }
 }
-
-
-  export const showFeedback = (element , message, type = 'error' , className) => {
-        if (!element) return
-        element.className = className
-        element.classList.add(`${className}--${type}`)
-        element.textContent = message
-    }
-
-
-/**
- * 
- */
-
+export const showFeedback = (element, message, type = 'error', className) => {
+    if (!element) return
+    element.className = className
+    element.classList.add(`${className}--${type}`)
+    element.textContent = message
+}
 export const showLoading = (element) => {
     if (!element) return
     element.innerHTML = `<div class="loading-state"><p>Loading...</p></div>`
@@ -114,5 +102,17 @@ export const showError = (element, message = 'Failed to load cars. Try again') =
     if (!element) return
     element.innerHTML = `<div class="error-state"><p></p></div>`
 
-    element.querySelector('p').textContent = message 
+    element.querySelector('p').textContent = message
+}
+
+export const convertNumber = (value) => {
+    return Number(value) || 0
+}
+export const navigateTo = (url) => {
+    window.location.href = url;
+}
+export const navigateToWithDelay = (url, delay) => {
+    setTimeout(() => {
+        navigateTo(url)
+    }, delay);
 }

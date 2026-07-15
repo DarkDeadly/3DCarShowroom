@@ -1,7 +1,9 @@
 // auth.js — corrected with HTML knowledge
 import * as Data from './data.js'
 import { initNavAuth } from './uiChanges.js'
-import {showFeedback} from './utils.js'
+import { showFeedback , navigateTo , navigateToWithDelay } from './utils.js'
+import * as Render from "./auth/auth.render.js"
+import * as Service from "./auth/auth.service.js"
 
 const initAuthPage = () => {
     // These IDs all confirmed in HTML
@@ -26,43 +28,18 @@ const initAuthPage = () => {
 
     // ── State ─────────────────────────────────────
     let isLoginState = true
-
-    const clearFeedback = () => {
-        if (!feedbackArea) return
-        feedbackArea.className = 'auth-feedback d-none'
-        feedbackArea.textContent = ''
-    }
-
-    // submitBtn IS the button — .disabled and .textContent both work
-    const setLoadingState = (isLoading) => {
-        submitBtn.disabled = isLoading
-        submitBtn.textContent = isLoading
-            ? (isLoginState ? 'Verifying...' : 'Creating Account...')
-            : (isLoginState ? 'Sign In' : 'Register')
-    }
+    Render.clearFeedback(feedbackArea)
 
     // ── Toggle ────────────────────────────────────
     authToggleTrigger.addEventListener('click', (e) => {
         e.preventDefault()
         isLoginState = !isLoginState
-        clearFeedback()
+        Render.clearFeedback(feedbackArea)
 
         if (isLoginState) {
-            authFormTitle.textContent = 'Welcome Back'
-            authFormSubtitle.textContent = 'Enter your credentials to access your CarSphere showroom.'
-            submitBtn.textContent = 'Sign In'
-            toggleSwitchPrompt.textContent = "Don't have an account?"
-            authToggleTrigger.textContent = 'Create one'
-            usernameGroup?.classList.add('d-none')
-            forgotPassAnchor?.classList.remove('d-none')
+            Render.renderLoginMode(authFormTitle, authFormSubtitle, submitBtn, toggleSwitchPrompt, authToggleTrigger, usernameGroup, forgotPassAnchor)
         } else {
-            authFormTitle.textContent = 'Create Account'
-            authFormSubtitle.textContent = 'Join CarSphere to explore and manage interactive 3D automotive profiles.'
-            submitBtn.textContent = 'Register'
-            toggleSwitchPrompt.textContent = 'Already have an account?'
-            authToggleTrigger.textContent = 'Sign in here'
-            usernameGroup?.classList.remove('d-none')
-            forgotPassAnchor?.classList.add('d-none')
+            Render.renderRegisterMode(authFormTitle, authFormSubtitle, submitBtn, toggleSwitchPrompt, authToggleTrigger, usernameGroup, forgotPassAnchor)
         }
     })
 
@@ -76,36 +53,37 @@ const initAuthPage = () => {
 
         // UI validation — fast feedback before async
         if (!isLoginState && !username) {
-            showFeedback(feedbackArea,'Please enter a valid username.', 'error','auth-feedback')
+            showFeedback(feedbackArea, 'Please enter a valid username.', 'error', 'auth-feedback')
             return
         }
 
-        setLoadingState(true)
+        Render.setLoadingState(true, isLoginState, submitBtn)
 
-        const result = isLoginState
-            ? await Data.loginWithEmailAndPassword({ email, password })
-            : await Data.emailPasswordAuthentication({ email, password, username })
+        const result = await Service.authenticate({
+            mode: isLoginState ? 'login' : 'register',
+            email,
+            password,
+            username
+        })
 
         // Guard clause — failure → return early
         if (!result.success) {
             console.error('[initAuthPage] auth failed:', result.error)
-            showFeedback(feedbackArea,result.error || 'Authentication failed. Check your network.', 'error','auth-feedback')
-            setLoadingState(false)
+            showFeedback(feedbackArea, result.error || 'Authentication failed. Check your network.', 'error', 'auth-feedback')
+            Render.setLoadingState(false, isLoginState, submitBtn)
             return
         }
 
         // Success — only reaches here when result.success === true
-        showFeedback(feedbackArea ,
+        showFeedback(feedbackArea,
             isLoginState
                 ? 'Access granted! Redirecting...'
                 : 'Registration successful! Redirecting...',
-            'success'  , 'auth-feedback' // ← second argument required
+            'success', 'auth-feedback' // ← second argument required
         )
         form.reset()
-        setLoadingState(false)
-        setTimeout(() => {
-            window.location.href = 'index.html'
-        }, 1500)
+        Render.setLoadingState(false, isLoginState, submitBtn)
+        navigateToWithDelay('index.html', 1500)
     })
 }
 
