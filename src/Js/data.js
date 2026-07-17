@@ -474,7 +474,7 @@ const uploadToCloudinary = async (file, type) => {
  * @param {Object} carData - car fields
  * @param {File} imageFile - the image file
  * @param {File|null} modelFile - optional .glb file
- * @returns {Promise<{success: boolean, data: null, error?: string}>}
+ * @returns {Promise<{success: boolean, data: Object|null, error?: string}>}
  */
 
 const addCars = async (carData, imageFile, modelFile = null) => {
@@ -498,14 +498,22 @@ const addCars = async (carData, imageFile, modelFile = null) => {
             }
             modelUrl = modelResult.data
         }
-
-        await addDoc(collection(db, 'cars'), {
+        const newCarPayload = {
             ...carData,
             image: imageResult.data,
             model3D: modelUrl,
             hasModel: modelUrl !== null
-        })
-        return { success: true, data: null }
+        }
+
+        // 4. Save to Firestore and capture the document reference
+        const docRef = await addDoc(collection(db, 'cars'), newCarPayload)
+
+        // 5. Construct the complete car object containing the generated ID
+        const createdCar = {
+            id: docRef.id,
+            ...newCarPayload
+        }
+        return { success: true, data: createdCar }
     } catch (error) {
         console.error('[addCar] failed:', error)
         return { success: false, data: null, error: error.message }
@@ -565,19 +573,20 @@ const addToCart = async (carId, userId) => {
     }
     try {
         // i dont think there will be a race condition between the two calls
-            const cartRef = doc(db, 'users', userId, 'cart', carId)
-            const setCart = await setDoc(cartRef, {
-                addedAt: serverTimestamp()
-            })
-            return { success: true, data: { inCart: true } }
+        const cartRef = doc(db, 'users', userId, 'cart', carId)
+        const setCart = await setDoc(cartRef, {
+            addedAt: serverTimestamp()
+        })
+        return { success: true, data: { inCart: true } }
 
-        
+
     } catch (error) {
         console.error('[addToCart] failed:', error)
         return {
             success: false, data: null, error: error.message
         }
 
-    }}
+    }
+}
 
-    export {addToCart, getAllBrand, setCachedCars, toggleFavourite, getUserFavourites, addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }
+export { addToCart, getAllBrand, setCachedCars, toggleFavourite, getUserFavourites, addCars, uploadToCloudinary, getCachedUser, loginWithEmailAndPassword, getCars, getCarDetail, searchCars, getCachedCars, filterCarsByBrand, getFilteredCars, emailPasswordAuthentication, onAuthStateCheck, logoutUser }

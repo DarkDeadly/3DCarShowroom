@@ -15,6 +15,15 @@ const addCar = async (carInfo, carImage) => {
     }
 }
 
+const refreshCache = (newCar) => {
+    try {
+        const currentCache = Data.getCachedCars()
+        const updatedCache = [...currentCache, newCar]
+        Data.setCachedCars(updatedCache)
+        return { success: true, data: updatedCache }
+    } catch (error) {
+        console.error('[refreshLocalCacheWithNewCar] failed:', error)
+    }
+}
 
-
-export { addCar }
+export { addCar , refreshCache }

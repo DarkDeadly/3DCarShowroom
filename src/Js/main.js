@@ -7,8 +7,8 @@ import { ensureCachedIsLoaded } from "./discovery/discovery.service.js"
 import { buildBrandDropdown } from "./discovery/discovery.render.js"
 import { renderFavourites, buildFavouriteCards } from './favourites/favourite.render.js'
 import { getCurrentUser, toggleFavourite, getFavouriteCars } from './favourites/favourite.services.js'
-import { handleModal, setLoadingState } from "./addCar/addCar.render.js"
-import { addCar } from "./addCar/addCar.service.js"
+import { toggleModal, setLoadingState } from "./addCar/addCar.render.js"
+import { addCar , refreshCache } from "./addCar/addCar.service.js"
 let filterState = {
     currentBrand: '',
     currentSearch: ''
@@ -140,6 +140,7 @@ const initModal = () => {
 }
 const handleForm = () => {
     const form = document.getElementById('addVehicleForm')
+    const modal = document.getElementById('addCarModal')
     if (!form) return
     const feedbackArea = document.getElementById('auth-feedback')
     const addBtn = document.querySelector('.btn-modal-primary')
@@ -156,10 +157,13 @@ const handleForm = () => {
             if (!result.success) {
                 showFeedback(feedbackArea, result.error, 'error', 'auth-feedback')
                 return
-            }
+            } 
+
+            const cacheResult = refreshCache(result.data)
+            Render.renderCars(cacheResult.data)
             showFeedback(feedbackArea, 'Car added successfully', 'success', 'auth-feedback')
             form.reset()
-            navigateToWithDelay('index.html', 1500)
+            handleModal('close',modal)
         } finally {
             setLoadingState(false, addBtn)
         }
