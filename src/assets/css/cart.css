@@ -1,0 +1,301 @@
+/* ==========================================================================
+   CARSPHERE PREMIUM CART PAGE STYLES
+   ========================================================================== */
+
+.cart-page {
+  background-color: #0D0E12;
+  color: #F3F4F6;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Base Nav integration rule to guarantee clean margins underneath */
+.cart-page nav {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Main Container Layout */
+.cart-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem 2rem;
+}
+
+/* Header & Typography */
+.cart-header {
+  margin-bottom: 3.5rem;
+}
+
+.cart-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+}
+
+.cart-title .accent {
+  color: #E63946;
+}
+
+.cart-subtitle {
+  color: #8E92B2;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* Two-column Asymmetric Grid layout */
+.cart-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .cart-layout-grid {
+    grid-template-columns: 1.6fr 1fr;
+    align-items: start;
+  }
+}
+
+/* Cart Items Container */
+.cart-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Cart Item Card Structure */
+.cart-item-card {
+  display: flex;
+  flex-direction: column;
+  background: #16181F;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease;
+}
+
+.cart-item-card:hover {
+  border-color: rgba(230, 57, 70, 0.2);
+  transform: translateY(-2px);
+}
+
+@media (min-width: 640px) {
+  .cart-item-card {
+    flex-direction: row;
+    height: 160px;
+  }
+}
+
+/* Image Pane inside vehicle card */
+.cart-item__image-pane {
+  background: #111319;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .cart-item__image-pane {
+    width: 240px;
+    height: 100%;
+    flex-shrink: 0;
+  }
+}
+
+.cart-item__image-pane img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-item-card:hover .cart-item__image-pane img {
+  transform: scale(1.05);
+}
+
+/* Content Details block */
+.cart-item__content {
+  flex-grow: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cart-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.car-brand {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8E92B2;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.car-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Remove button */
+.btn-remove-cart-item {
+  background: transparent;
+  border: none;
+  color: #4E526D;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-remove-cart-item:hover {
+  background: rgba(230, 57, 70, 0.1);
+  color: #E63946;
+}
+
+/* Vehicle spec tags & pricing */
+.cart-item__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: 1rem;
+}
+
+.cart-item__specs {
+  display: flex;
+  gap: 8px;
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #CACDE0;
+}
+
+.cart-item__pricing {
+  text-align: right;
+}
+
+.price-label {
+  font-size: 0.7rem;
+  color: #8E92B2;
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.price-amount {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Sticky Summary Card */
+.cart-summary-sidebar {
+  position: sticky;
+  top: 2rem;
+}
+
+.summary-card {
+  background: #16181F;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.summary-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1.75rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #CACDE0;
+  margin-bottom: 1.25rem;
+}
+
+.summary-divider {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  margin: 1.5rem 0;
+}
+
+.total-row {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+.accent-text {
+  color: #E63946;
+  font-family: 'Syne', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+/* Sticky Sidebar Buttons */
+.btn-checkout {
+  background: #E63946;
+  color: #ffffff;
+  border: none;
+  width: 100%;
+  padding: 1.1rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.btn-checkout:hover {
+  background: #D62837;
+  box-shadow: 0 4px 20px rgba(230, 57, 70, 0.3);
+}
+
+.btn-continue-shopping {
+  display: block;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #8E92B2;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.btn-continue-shopping:hover {
+  color: #ffffff;
+}

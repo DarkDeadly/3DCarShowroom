@@ -103,11 +103,76 @@ nav {
 }
 
 /* ── Auth buttons ── */
+/* ── Navigation Actions Layout Container ── */
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
+  gap: 16px; /* Uniform spacing for children */
+}
+
+/* ── Premium Cart Trigger Button ── */
+.btn-cart-toggle {
+  position: relative;
+  background: #1F222C;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #CACDE0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-cart-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ── Crimson Active Count Badge ── */
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #E63946;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid #0D0E12; /* Cuts background line cleanly */
+  box-shadow: 0 0 8px rgba(230, 57, 70, 0.4);
+  pointer-events: none;
+}
+
+/* ── Minimalist Logout Button ── */
+.btn-logout {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  color: #CACDE0;
+  padding: 11px 22px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  background: #E63946;
+  color: #ffffff;
+  border-color: #E63946;
+  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.25);
 }
 
 .btn-login {

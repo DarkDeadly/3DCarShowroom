@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether Vesper GT — Aether Motors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles/carDetail.css">
+</head>
+
+<body>
+
+  <!-- =========================================================
+     NAVBAR
+========================================================== -->
+  <input type="checkbox" id="burger-toggle" class="burger-toggle">
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="#" class="brand">Aether <span>Motors</span></a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#" class="current">Catalog</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-right">
+        <div class="search-field">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9a9aa3" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" placeholder="Search the collection">
+        </div>
+        <label for="burger-toggle" class="burger-label">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="mobile-menu">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Catalog</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <div class="mobile-search search-field">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9a9aa3" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="Search the collection">
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================
+     1. HERO / GALLERY
+========================================================== -->
+  <section class="gallery-section wrap">
+  
+  </section>
+
+  <!-- =========================================================
+     3. CAR IDENTITY BLOCK
+========================================================== -->
+  <section class="identity-section wrap">
+   
+  </section>
+
+  <!-- =========================================================
+     6. AVAILABILITY & CTA SECTION
+========================================================== -->
+  <section class="cta-section">
+   
+  </section>
+
+  <!-- =========================================================
+     FOOTER
+========================================================== -->
+  <footer>
+    <div class="wrap footer-inner">
+      <p>&copy; 2026 Aether Motors. All vehicles subject to prior sale.</p>
+      <ul class="footer-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Catalog</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+<script type="module" src="/src/config/firebase/firebase.config.js"></script>
+<script type="module" src="/src/config/firebase/firestore.js"></script>
+<script type="module" src="/src/controllers/carDetail.controller.js"></script>
+</body>
+
+</html>
