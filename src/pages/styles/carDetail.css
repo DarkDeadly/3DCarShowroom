@@ -1,20 +1,4 @@
-:root{
-    --base:#0c0c0e;
-    --surface:#16161a;
-    --surface2:#1e1e24;
-    --line:#2a2a30;
-    --ink:#f1efe9;
-    --ink-lo:#9a9aa3;
-    --gold:#c9a227;
-    --gold-hi:#e0c15c;
-    --radius:12px;
-    --radius-sm:8px;
-    --ease:0.25s ease;
-    --shadow-1:0 4px 20px rgba(0,0,0,0.35);
-    --shadow-2:0 20px 48px rgba(0,0,0,0.5);
-  }
 
-  *,*::before,*::after{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
 
   body{

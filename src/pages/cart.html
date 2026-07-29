@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aether Motors &mdash; Your Cart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/global.css">
+<link rel="stylesheet" href="./styles/cart.css">
+</head>
+<body>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="navbar">
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <div class="nav-inner">
+      <a href="#" class="brand"><span class="mark"></span>AETHER MOTORS</a>
+
+      <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Catalog</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </nav>
+
+      <div class="nav-right">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" type="text" placeholder="Search inventory...">
+        </div>
+
+        <a href="#" class="cart-icon-wrap" aria-label="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="20" r="1.4"/>
+            <circle cx="18" cy="20" r="1.4"/>
+            <path d="M2.5 3h2.4l2.2 12.2a2 2 0 0 0 2 1.65h8.3a2 2 0 0 0 1.97-1.62L21 8H6.2"/>
+          </svg>
+          <span class="cart-badge">3</span>
+        </a>
+
+        <label for="menu-toggle" class="hamburger-label" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="mobile-menu">
+      <div class="mobile-search">
+        <input type="text" placeholder="Search inventory...">
+      </div>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Catalog</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ============ PAGE HEADER ============ -->
+  <section class="page-header">
+    <div class="page-header-inner">
+      <h1>Your Cart</h1>
+      <p class="subtitle">3 vehicles selected</p>
+    </div>
+  </section>
+
+  <!-- ============ CART SECTION ============ -->
+  <section class="cart-section">
+    <div class="cart-layout">
+
+      <!-- ===== LEFT: CART ITEMS ===== -->
+      <div class="cart-items">
+
+        <!-- Item 1 -->
+        <article class="cart-item">
+          <div class="item-media">
+            <img src="https://picsum.photos/seed/vespergt/400/300" alt="Vesper GT">
+          </div>
+          <div class="item-body">
+            <div class="item-top">
+              <div>
+                <span class="item-id">AET-2025-001</span>
+                <h3 class="item-model">Vesper GT</h3>
+                <span class="item-unit-price">$187,500 each</span>
+              </div>
+              <button class="remove-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Remove
+              </button>
+            </div>
+            <div class="item-bottom">
+              <span class="item-total">$187,500</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Item 2 -->
+        <article class="cart-item">
+          <div class="item-media">
+            <img src="https://picsum.photos/seed/solace/400/300" alt="Solace SUV">
+          </div>
+          <div class="item-body">
+            <div class="item-top">
+              <div>
+                <span class="item-id">AET-2024-014</span>
+                <h3 class="item-model">Solace SUV</h3>
+                <span class="item-unit-price">$124,900 each</span>
+              </div>
+              <button class="remove-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Remove
+              </button>
+            </div>
+            <div class="item-bottom">
+              <span class="item-total">$124,900</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Item 3 -->
+        <article class="cart-item">
+          <div class="item-media">
+            <img src="https://picsum.photos/seed/apex/400/300" alt="Apex Roadster">
+          </div>
+          <div class="item-body">
+            <div class="item-top">
+              <div>
+                <span class="item-id">AET-2025-008</span>
+                <h3 class="item-model">Apex Roadster</h3>
+                <span class="item-unit-price">$249,000 each</span>
+              </div>
+              <button class="remove-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Remove
+              </button>
+            </div>
+            <div class="item-bottom">
+              <span class="item-total">$249,000</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- ===== RIGHT: ORDER SUMMARY ===== -->
+      <aside class="summary-card">
+        <h2>Order Summary</h2>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span class="value">$561,400</span>
+        </div>
+        <div class="summary-row">
+          <span>Estimated tax &amp; fees</span>
+          <span class="value">$44,912</span>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-total">
+          <span class="label">Grand Total</span>
+          <span class="value">$606,312</span>
+        </div>
+
+        <button class="btn-gold" type="button">Proceed to Checkout</button>
+        <a href="#" class="continue-link">Continue Shopping</a>
+      </aside>
+
+    </div>
+
+    <!-- ============ EMPTY CART STATE (alternative) ============ -->
+    <!--
+    Swap in this markup (and remove .cart-layout above) to render the empty state.
+    Styles for .empty-cart / .empty-icon are already defined in <style>.
+
+    <div class="empty-cart">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="20" r="1.4"/>
+          <circle cx="18" cy="20" r="1.4"/>
+          <path d="M2.5 3h2.4l2.2 12.2a2 2 0 0 0 2 1.65h8.3a2 2 0 0 0 1.97-1.62L21 8H6.2"/>
+        </svg>
+      </div>
+      <h2>Your cart is empty</h2>
+      <p>You haven&rsquo;t selected any vehicles yet. Explore the collection to begin.</p>
+      <a href="#" class="btn-gold" style="display:inline-block; width:auto; padding:14px 32px;">Browse the Catalog</a>
+    </div>
+    -->
+
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy">&copy; 2026 Aether Motors. All rights reserved.</span>
+      <div class="footer-links">
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

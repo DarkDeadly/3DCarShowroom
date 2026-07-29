@@ -1,6 +1,7 @@
 import * as carServices from "../services/car.service.js"
 import * as carRenders from "../renders/car.renders.js"
 import { navigateTo } from "../utils/uiBuilder.js"
+import * as authService from "../services/auth.service.js"
 
 let nextCursor = null;
 let hasMore = false;
@@ -66,9 +67,24 @@ const carsInit = async () => {
     await loadInitialCars(catalog, carGrid)
     initShowMore(carGrid)
 }
+
+const logoutInit =  () => {
+    const logoutBtn = document.querySelector(".btn-logout")
+    if (!logoutBtn) return
+    logoutBtn.addEventListener("click" , async () => {
+       const result = await authService.logoutService()
+       if (!result.success) {
+         navigateTo("authentication.html")
+         return
+       }
+       navigateTo("authentication.html")
+    })
+}
+
 const mainInit = () => {
     carsInit()
     initViewDetailNavigation()
+    logoutInit()
 }
 
 

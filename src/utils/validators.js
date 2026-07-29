@@ -29,16 +29,14 @@ export const validateRegistration = (credential = {}) => {
         return returnContract.failure("Please enter a valid Password")
     }
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/
-    const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/
+    const usernameRegex = /^[a-zA-Z0-9_-]{3,}$/
     if (!passwordRegex.test(trimmedPassword)) {
         return returnContract.failure("password must have at least 8 characters , a numbre and an uppercase")
     }
-    if (!usernameRegex.test(username.trim())) {
-        return returnContract.failure("please provide a valid username")
-    } 
+  
 
     return returnContract.success({
-        username : username.trim(),
+        username ,
         password : trimmedPassword , 
         email : validatedEmail.data
     })

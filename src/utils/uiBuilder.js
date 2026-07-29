@@ -45,3 +45,9 @@ export const createImage = (src, alt = '', classNames = [], fallbackSrc = '') =>
 export const navigateTo = (url) => {
     window.location.href = url;
 }
+
+export const navigateToWithDelay = (url, delay) => {
+    setTimeout(() => {
+        navigateTo(url)
+    }, delay);
+}

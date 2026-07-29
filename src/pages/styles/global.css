@@ -1,0 +1,20 @@
+:root{
+    --base:#0B0C0E;
+    --surface:#15171B;
+    --surface2:#1D2025;
+    --line:#2A2D33;
+    --ink:#F3EFE7;
+    --ink-lo:#8B8E95;
+    --gold:#C9A24B;
+    --gold-hi:#E4C583;
+    --garnet:#7A2331;
+    --danger:#D64545;
+    --radius:14px;
+    --radius-sm:8px;
+    --ease: 0.25s ease;
+    --shadow-1: 0 4px 18px rgba(0,0,0,0.35);
+    --shadow-2: 0 18px 45px rgba(0,0,0,0.55);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }

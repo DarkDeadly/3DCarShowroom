@@ -54,6 +54,7 @@ export const userLogin = async(credential = {}) => {
 export const userRegister = async (credential = {}) => {
     const validationResult = credentialValidation.validateRegistration(credential)
     if (!validationResult.success) {
+        console.log("validation Prob : " , validationResult)
         return validationResult
     }
     try {
@@ -69,5 +70,19 @@ export const userRegister = async (credential = {}) => {
         return repoContract.success(registerResult.user)
     } catch (error) {
       return repoContract.authErrors(error.code)  
+    }
+}
+
+/**
+ * Logout the user
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+export const logoutUser = async () => {
+    try {
+        await signOut(auth)
+        return repoContract.success(null)
+    } catch (error) {
+        return repoContract.failure(error.message)
+
     }
 }

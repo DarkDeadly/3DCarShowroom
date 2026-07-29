@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurelia Motors &mdash; Account Access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles/global.css">
+  <link rel="stylesheet" href="./styles/auth.css">
+</head>
+
+<body>
+
+  <main class="auth-shell">
+
+    <!-- ============ LEFT: SHOWCASE PANEL ============ -->
+    <section class="showcase" aria-hidden="true">
+      <div class="showcase-inner">
+        <a href="#" class="wordmark"><span class="mark"></span>AURELIA MOTORS</a>
+        <div class="showcase-copy">
+          <span class="eyebrow">Private Collection</span>
+          <h1>Access to the collection is by account only.</h1>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RIGHT: AUTH PANEL ============ -->
+    <section class="auth-panel">
+      <div class="auth-col">
+
+        <div class="auth-top">
+          <a href="#" class="wordmark" style="font-size:1.15rem;"><span class="mark"></span>AURELIA</a>
+          <a href="#" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Back to showroom
+          </a>
+        </div>
+
+        <div class="auth-card">
+
+          <input type="radio" name="auth-tab" id="tab-signin" class="tab-input" checked>
+          <input type="radio" name="auth-tab" id="tab-register" class="tab-input">
+
+          <div class="card-head">
+            <h2>Welcome to Aurelia</h2>
+            <p>Sign in or create an account to continue.</p>
+          </div>
+
+          <div class="tabs">
+            <label class="tab-label" for="tab-signin">Sign In</label>
+            <label class="tab-label" for="tab-register">Create Account</label>
+          </div>
+
+          <button type="button" class="btn-google">
+            <svg viewBox="0 0 48 48">
+              <path fill="#FFC107"
+                d="M43.61 20.08H42V20H24v8h11.3c-1.65 4.66-6.09 8-11.3 8-6.63 0-12-5.37-12-12s5.37-12 12-12c3.06 0 5.85 1.15 7.97 3.03l5.66-5.66C34.19 6.11 29.36 4 24 4 12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20c0-1.34-.14-2.65-.39-3.92z" />
+              <path fill="#FF3D00"
+                d="M6.31 14.69l6.57 4.82C14.62 16.05 18.99 13 24 13c3.06 0 5.85 1.15 7.97 3.03l5.66-5.66C34.19 6.11 29.36 4 24 4 16.32 4 9.68 8.34 6.31 14.69z" />
+              <path fill="#4CAF50"
+                d="M24 44c5.26 0 10.03-2.01 13.65-5.29l-6.3-5.33C29.36 35.47 26.79 36 24 36c-5.19 0-9.62-3.31-11.28-7.94l-6.53 5.03C9.6 39.63 16.25 44 24 44z" />
+              <path fill="#1976D2"
+                d="M43.61 20.08H42V20H24v8h11.3c-.79 2.23-2.24 4.15-4.11 5.55l6.3 5.33C41.34 35.55 44 30.24 44 24c0-1.34-.14-2.65-.39-3.92z" />
+            </svg>
+            Continue with Google
+          </button>
+
+          <div class="divider">
+            <span class="line"></span>
+            <span>or continue with email</span>
+            <span class="line"></span>
+          </div>
+
+          <div class="panels">
+
+            <!-- ============ SIGN IN FORM ============ -->
+            <form class="panel panel-signin">
+              <div class="alert alert-error si-error" role="alert" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <line x1="12" y1="8" x2="12" y2="13" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span></span>
+              </div>
+              <div class="alert alert-success si-success" role="status" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <polyline points="8 12.5 10.8 15 16 9.5" />
+                </svg>
+                <span></span>
+              </div>
+              <div class="field">
+                <label class="field-label" for="si-email">Email</label>
+                <div class="input-wrap">
+                  <input type="email" id="si-email" placeholder="you@domain.com" autocomplete="email">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="si-password">Password</label>
+                <div class="input-wrap password-wrap">
+                  <input type="password" id="si-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                    autocomplete="current-password">
+                  <label class="show-toggle" for="si-show"><span class="toggle-dot"></span>Show</label>
+                </div>
+              </div>
+
+              <div class="field-row-between">
+                <a href="#" class="link-muted">Forgot password?</a>
+              </div>
+
+              <button type="submit" class="btn-gold si-btn">Sign In</button>
+            </form>
+
+            <!-- ============ CREATE ACCOUNT FORM ============ -->
+            <form class="panel panel-register">
+              <div class="alert alert-error ra-error" role="alert" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <line x1="12" y1="8" x2="12" y2="13" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span><strong>Something's not right.</strong> Check that both passwords match and try again.</span>
+              </div>
+
+              <div class="alert alert-success ra-success" role="status" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <polyline points="8 12.5 10.8 15 16 9.5" />
+                </svg>
+                <span><strong>Account created.</strong> Check your inbox to verify your email.</span>
+              </div>
+              <div class="field">
+                <label class="field-label" for="ra-name">Full Name</label>
+                <div class="input-wrap">
+                  <input type="text" id="ra-name" placeholder="Your full name" autocomplete="name">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="ra-email">Email</label>
+                <div class="input-wrap">
+                  <input type="email" id="ra-email" placeholder="you@domain.com" autocomplete="email">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="ra-password">Password</label>
+                <div class="input-wrap password-wrap">
+                  <input type="password" id="ra-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                    autocomplete="new-password">
+                  <label class="show-toggle" for="ra-show"><span class="toggle-dot"></span>Show</label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-gold ra-btn">Create Account</button>
+            </form>
+
+          </div>
+
+        </div>
+
+        <p class="auth-foot">By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+<script type="module" src="/src/config/firebase/firebase.config.js"></script>
+<script type="module" src="/src/config/firebase/firestore.js"></script>
+<script type="module" src="/src/controllers/auth.controller.js"></script>
+</body>
+
+</html>
