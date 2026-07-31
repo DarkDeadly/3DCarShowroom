@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import {auth} from "../config/firebase/firebase.auth.js"
 import * as repoContract from "../utils/responseContract.js"
 import * as credentialValidation from "../utils/validators.js"
-import { doc, setDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "../config/firebase/firestore.js"
 
 
@@ -85,4 +85,18 @@ export const logoutUser = async () => {
         return repoContract.failure(error.message)
 
     }
+}
+
+export const getUser = async(uid) => {
+    if (!uid) return repoContract.failure("UID is required")
+        try {
+          const userDoc = await getDoc(doc(db, 'users', uid))
+        if (!userDoc.exists()) {
+            return repoContract.failure("User role not found")
+        }
+        return repoContract.success(userDoc.data().role)  
+        } catch (error) {
+            console.log("the error is : " , error.message)
+        }
+
 }

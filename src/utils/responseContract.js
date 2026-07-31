@@ -12,7 +12,7 @@ export const authErrors = (errorMessage)=> {
         switch (errorMessage) {
             case 'auth/invalid-email':
                 userFriendlyMessage = 'Please enter a valid email address.'
-                break
+                break 
             case 'auth/missing-email':
                 userFriendlyMessage = 'Email is required.'
                 break

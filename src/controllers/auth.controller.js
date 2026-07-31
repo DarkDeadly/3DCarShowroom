@@ -1,7 +1,9 @@
 import * as authServices from "../services/auth.service.js"
 import * as authRenders from "../renders/auth.render.js"
 import { navigateToWithDelay } from "../utils/uiBuilder.js"
+import * as authStore from "../states/cart.store.js"
 
+authServices.initAuthState()
 
 const registrationInit = () => {
     const usernameInput = document.getElementById("ra-name")

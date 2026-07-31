@@ -1,5 +1,4 @@
-
-  body{
+body{
     margin:0;
     background:var(--base);
     color:var(--ink);
@@ -392,13 +391,7 @@
      CATALOG GRID
   =================================================================== */
 
-   .catalog{ padding:20px 0 40px; }
-
-  .load-more-toggle{
-    position:absolute;
-    opacity:0;
-    pointer-events:none;
-  }
+  .catalog{ padding:20px 0 60px; }
 
   .card-grid{
     display:grid;
@@ -406,19 +399,8 @@
     gap:30px;
   }
 
-  /* cards 4-9 hidden until the Load More checkbox is checked */
-  .car-card.extra{ display:none; }
-  #load-more:checked ~ .catalog-body .card-grid .car-card.extra{
-    display:flex;
-    animation:reveal 0.4s ease;
-  }
-
-  @keyframes reveal{
-    from{ opacity:0; transform:translateY(14px); }
-    to{ opacity:1; transform:translateY(0); }
-  }
-
   .car-card{
+    display:flex;
     background:var(--surface);
     border:1px solid var(--line);
     border-radius:var(--radius);
@@ -427,7 +409,6 @@
     transition:transform var(--ease), box-shadow var(--ease), border-color var(--ease);
     flex-direction:column;
   }
-  .car-card:not(.extra){ display:flex; }
   .car-card:hover{
     transform:translateY(-8px);
     box-shadow:var(--shadow-2);
@@ -594,7 +575,7 @@
   }
 
   /* ===================================================================
-     LOAD MORE (CSS-only, checkbox hack)
+     LOAD MORE — JS controlled
   =================================================================== */
 
   .load-more-wrap{
@@ -610,10 +591,6 @@
     letter-spacing:0.16em;
     text-transform:uppercase;
     color:var(--ink-lo);
-  }
-  .count-indicator .shown::before{ content:"3"; }
-  #load-more:checked ~ .catalog-body .load-more-wrap .count-indicator .shown::before{
-    content:"9";
   }
 
   .btn-load-more{
@@ -639,9 +616,7 @@
     transform:translateY(-2px);
     box-shadow:0 14px 30px rgba(201,162,75,0.25);
   }
-
-  /* hide the Load More button once expanded */
-  #load-more:checked ~ .catalog-body .load-more-wrap .btn-load-more{
+  .btn-load-more.is-hidden{
     display:none;
   }
 
@@ -650,15 +625,13 @@
     font-size:0.78rem;
     color:var(--ink-lo);
   }
-  #load-more:checked ~ .catalog-body .load-more-wrap .all-shown-note{
+  .all-shown-note.is-visible{
     display:block;
   }
 
 /* ===================================================================
      CATALOG — EMPTY STATE
   =================================================================== */
-
-  .catalog{ padding:20px 0 60px; }
 
   .empty-state{
     display:flex;
@@ -744,8 +717,6 @@
     border-color:var(--gold);
     color:var(--ink);
   }
-
-
 
   /* ===================================================================
      FOOTER
