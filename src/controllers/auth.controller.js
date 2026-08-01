@@ -28,6 +28,11 @@ const registrationInit = () => {
             authRenders.authErrorMessage(result.error , "register")
             return
         }
+        authStore.store.set({
+            user : result.data.user,
+            isAuthenticated : true,
+            role : result.data.role || "buyer"
+        })
         authRenders.authSuccessMessage("Account created successfully! Redirecting...","register")
         form.reset()
         navigateToWithDelay("carCatalog.html", 1500)
@@ -56,6 +61,11 @@ const loginInit = () => {
             authRenders.authErrorMessage(result , "login")
             return
         }
+        authStore.store.set({
+            user : result.data.user,
+            isAuthenticated : true,
+            role : result.data.role || "buyer"
+        })
         authRenders.authSuccessMessage("Signed in successfully! Redirecting..." , "login")
         form.reset()
         navigateToWithDelay("carCatalog.html", 1500)

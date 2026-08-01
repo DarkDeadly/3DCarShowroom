@@ -92,6 +92,7 @@ export const buildCTASection = (car) => {
   
   const reserveBtn = createElements('button', ['btn', 'btn-primary'], 'Add To Cart');
   reserveBtn.type = 'button';
+  reserveBtn.dataset.action = 'add-to-cart';
   if (!car.availability) reserveBtn.disabled = true;
 
   const specialistLink = createElements('a', ['specialist-link'], 'Contact Specialist →');

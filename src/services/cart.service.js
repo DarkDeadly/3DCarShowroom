@@ -13,6 +13,8 @@ export const isInCart = async (userId , carId) => {
 }
 export const getCartCars = async (userId) => {
     const cartResult = await cartRepo.getCartItems(userId)
+    console.log("Cart items retrieved:", cartResult);
+
     if (!cartResult.success) return cartResult;
     const cartItems = cartResult.data;
     const carPromises = cartItems.map(item => carRepo.getCarById(item.carId))

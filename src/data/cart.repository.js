@@ -1,5 +1,6 @@
-import { deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc } from "firebase/firestore";
 import * as repoContract from "../utils/responseContract.js"
+import { db } from "../config/firebase/firestore.js";
 
 
 export const addToCart = async (carId, userId) => {

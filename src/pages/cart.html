@@ -74,99 +74,11 @@
       <!-- ===== LEFT: CART ITEMS ===== -->
       <div class="cart-items">
 
-        <!-- Item 1 -->
-        <article class="cart-item">
-          <div class="item-media">
-            <img src="https://picsum.photos/seed/vespergt/400/300" alt="Vesper GT">
-          </div>
-          <div class="item-body">
-            <div class="item-top">
-              <div>
-                <span class="item-id">AET-2025-001</span>
-                <h3 class="item-model">Vesper GT</h3>
-                <span class="item-unit-price">$187,500 each</span>
-              </div>
-              <button class="remove-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                Remove
-              </button>
-            </div>
-            <div class="item-bottom">
-              <span class="item-total">$187,500</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Item 2 -->
-        <article class="cart-item">
-          <div class="item-media">
-            <img src="https://picsum.photos/seed/solace/400/300" alt="Solace SUV">
-          </div>
-          <div class="item-body">
-            <div class="item-top">
-              <div>
-                <span class="item-id">AET-2024-014</span>
-                <h3 class="item-model">Solace SUV</h3>
-                <span class="item-unit-price">$124,900 each</span>
-              </div>
-              <button class="remove-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                Remove
-              </button>
-            </div>
-            <div class="item-bottom">
-              <span class="item-total">$124,900</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Item 3 -->
-        <article class="cart-item">
-          <div class="item-media">
-            <img src="https://picsum.photos/seed/apex/400/300" alt="Apex Roadster">
-          </div>
-          <div class="item-body">
-            <div class="item-top">
-              <div>
-                <span class="item-id">AET-2025-008</span>
-                <h3 class="item-model">Apex Roadster</h3>
-                <span class="item-unit-price">$249,000 each</span>
-              </div>
-              <button class="remove-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                Remove
-              </button>
-            </div>
-            <div class="item-bottom">
-              <span class="item-total">$249,000</span>
-            </div>
-          </div>
-        </article>
-
       </div>
 
       <!-- ===== RIGHT: ORDER SUMMARY ===== -->
       <aside class="summary-card">
-        <h2>Order Summary</h2>
-
-        <div class="summary-row">
-          <span>Subtotal</span>
-          <span class="value">$561,400</span>
-        </div>
-        <div class="summary-row">
-          <span>Estimated tax &amp; fees</span>
-          <span class="value">$44,912</span>
-        </div>
-
-        <div class="summary-divider"></div>
-
-        <div class="summary-total">
-          <span class="label">Grand Total</span>
-          <span class="value">$606,312</span>
-        </div>
-
-        <button class="btn-gold" type="button">Proceed to Checkout</button>
-        <a href="#" class="continue-link">Continue Shopping</a>
+       
       </aside>
 
     </div>
@@ -203,6 +115,8 @@
       </div>
     </div>
   </footer>
-
+  <script type="module" src="/src/config/firebase/firebase.config.js"></script>
+  <script type="module" src="/src/config/firebase/firestore.js"></script>
+  <script type="module" src="../controllers/cart.controller.js"></script>
 </body>
 </html>

@@ -4,6 +4,8 @@ import {auth} from "../config/firebase/firebase.auth.js"
 import * as authStore from "../states/cart.store.js"
 
 let unsubscribe = null
+let authReadyPromise = null;
+
 
 export const registerService = async(credential = {}) => {
     return await authRepo.userRegister(credential)
@@ -18,23 +20,26 @@ export const logoutService = async () => {
 }
 
 export const initAuthState = () => {
-    if (unsubscribe) return;
-
-    unsubscribe = onAuthStateChanged(auth , async (firebaseUser) => {
-        if (firebaseUser) {
-            const roleResult = await authRepo.getUser(firebaseUser.uid)
-            const role = roleResult.success ? roleResult.data : "buyer"
-            authStore.store.set({
-                user : firebaseUser , 
-                isAuthenticated : true ,
-                role : role
-            })
-        }else {
-            authStore.store.set({
-                user: null,
-                isAuthenticated: false,
-                role: null
-            })
-        }
-    })
-}
+    if (authReadyPromise) return authReadyPromise; // Already initialized
+    
+    return authReadyPromise = new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            if (firebaseUser) {
+                const roleResult = await authRepo.getUser(firebaseUser.uid);
+                const role = roleResult.success ? roleResult.data : "buyer";
+                authStore.store.set({
+                    user: firebaseUser,
+                    isAuthenticated: true,
+                    role: role
+                });
+            } else {
+                authStore.store.set({
+                    user: null,
+                    isAuthenticated: false,
+                    role: null
+                });
+            }
+            resolve(); // ← Tell the world: auth is now known
+        });
+    });
+};

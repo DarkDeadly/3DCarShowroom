@@ -1,4 +1,4 @@
-import {createElements , createImage} from "../utils/uiBuilder"
+import {createElements , createImage} from "../utils/uiBuilder.js"
 
 
 export const cartEmptyState = (container) => {
@@ -47,13 +47,13 @@ const createRemoveIcon = () => {
  * Creates the static cart item element.
  * @returns {HTMLElement} <article class="cart-item">
  */
-export const createCartItem = () => {
+export const createCartItem = (car , container) => {
   // <article class="cart-item">
   const article = createElements('article', ['cart-item']);
 
   // <div class="item-media">
   const itemMedia = createElements('div', ['item-media']);
-  const itemImg = createImage('https://picsum.photos/seed/vespergt/400/300', 'Vesper GT');
+  const itemImg = createImage(car.image, car.model);
   itemMedia.appendChild(itemImg);
 
   // <div class="item-body">
@@ -63,13 +63,14 @@ export const createCartItem = () => {
   const itemTop = createElements('div', ['item-top']);
   const infoContainer = createElements('div');
 
-  const itemModel = createElements('h3', ['item-model'], 'Vesper GT');
-  const itemUnitPrice = createElements('span', ['item-unit-price'], '$187,500 each');
+  const itemModel = createElements('h3', ['item-model'], car.model);
+  const itemUnitPrice = createElements('span', ['item-unit-price'], car.price.toLocaleString() + ' DT each');
 
-  infoContainer.append(itemId, itemModel, itemUnitPrice);
+  infoContainer.append( itemModel, itemUnitPrice);
 
   // <button class="remove-btn">
   const removeBtn = createElements('button', ['remove-btn']);
+  removeBtn.dataset.carId = car.id
   const removeIcon = createRemoveIcon();
   const removeText = document.createTextNode('Remove');
 
@@ -79,13 +80,66 @@ export const createCartItem = () => {
 
   // <div class="item-bottom">
   const itemBottom = createElements('div', ['item-bottom']);
-  const itemTotal = createElements('span', ['item-total'], '$187,500');
+  const itemTotal = createElements('span', ['item-total'], car.price.toLocaleString() + ' DT');
 
   itemBottom.appendChild(itemTotal);
 
   // Assemble the tree
   itemBody.append(itemTop, itemBottom);
   article.append(itemMedia, itemBody);
-
+  container.append(article)
   return article;
+};
+
+
+/**
+ * Creates the static order summary block.
+ * @returns {HTMLElement} A wrapper containing the heading, rows, total, and actions
+ */
+export const createOrderSummary = (container , price) => {
+  // Wrapper container (e.g., <div class="summary-card"> or DocumentFragment)
+
+  // <h2>Order Summary</h2>
+  const heading = createElements('h2', [], 'Order Summary');
+
+  // Subtotal row
+  const subtotalRow = createElements('div', ['summary-row']);
+  const subtotalLabel = createElements('span', [], 'Subtotal');
+  const subtotalValue = createElements('span', ['value'], price.toLocaleString() + ' DT');
+  subtotalRow.append(subtotalLabel, subtotalValue);
+
+  // Tax & fees row
+  const taxRow = createElements('div', ['summary-row']);
+  const taxLabel = createElements('span', [], 'Estimated tax & fees');
+  const taxValue = createElements('span', ['value'], '44,912'.toLocaleString() + ' DT');
+  taxRow.append(taxLabel, taxValue);
+
+  // <div class="summary-divider"></div>
+  const divider = createElements('div', ['summary-divider']);
+
+  // Grand total section
+  const totalRow = createElements('div', ['summary-total']);
+  const totalLabel = createElements('span', ['label'], 'Grand Total');
+  const totalValue = createElements('span', ['value'], (price + 44912).toLocaleString() + ' DT');
+  totalRow.append(totalLabel, totalValue);
+
+  // Actions
+  const checkoutBtn = createElements('button', ['btn-gold'], 'Proceed to Checkout');
+  checkoutBtn.type = 'button';
+
+  const continueLink = createElements('a', ['continue-link'], 'Continue Shopping');
+  continueLink.href = '#';
+
+  // Assemble everything
+  container.append(
+    heading,
+    subtotalRow,
+    taxRow,
+    divider,
+    totalRow,
+    checkoutBtn,
+    continueLink
+  );
+
+  return container;
 };
