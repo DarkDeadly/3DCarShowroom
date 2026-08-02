@@ -80,15 +80,18 @@ export const addCar = async (carData) => {
     return repoContract.failure("required Fields")
   }
   for (const [field, rules] of Object.entries(carSchema)) {
-    if (rules.required && !(field in carData)) {
-      return repoContract.failure(`${field} is missing`)
-    }
-    if (field in carData && typeof carData[field] !== rules.type) {
-      return repoContract.failure(
-        `${field} must be a ${rules.type}`
-      );
-    }
+  const value = carData[field];
+
+  // required check
+  if (rules.required && (value === undefined || value === null || value === "")) {
+    return repoContract.failure(`${field} is missing`);
   }
+
+  // type check only when the field is present and not null
+  if (value !== undefined && value !== null && typeof value !== rules.type) {
+    return repoContract.failure(`${field} must be a ${rules.type}`);
+  }
+}
   try {
     const collectionRef = collection(db, "cars")
     const firestoreCar = {

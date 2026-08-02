@@ -35,7 +35,7 @@ const buildCarCard = (car) => {
 
   const swatchRow  = createElements('div', ['swatch-row']);
   const swatch     = createElements('span', ['swatch']);
-  swatch.style.background = '#111214';          // manual style override
+  swatch.style.background = car.color;          // manual style override
   const swatchLabel = createElements('span', ['swatch-label'], car.color);
   swatchRow.append(swatch, swatchLabel);
 

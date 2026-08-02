@@ -18,12 +18,14 @@ export const getCarById = async (id) => {
 export const addCar = async(formData , imageFile ,  modelFile = null) => {
     try {
         const imageResult = await uploadToCloudinary(imageFile, "image")
+        console.log("Image upload result:", imageResult);
         if (!imageResult.success) {
                     return returnContract.failure(imageResult.error)
                 }
                 let modelUrl = null
                 if (modelFile) {
                     const modelResult = await uploadToCloudinary(modelFile, 'raw')
+                    console.log("Model upload result:", modelResult);
                     if (!modelResult.success) {
                         return returnContract.failure(modelResult.error)
                     }
