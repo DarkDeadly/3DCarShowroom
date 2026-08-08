@@ -7,8 +7,11 @@ const buildCarCard = (car) => {
   // ── Media ─────────────────────────────────────────
   const media = createElements('div', ['car-media']);
 
-  const badgeAvailable = createElements('span', ['badge', 'available'], car.availability ? "Available" : "Unavailable");
-  const img            = createImage(
+ const badgeAvailable = createElements(
+    'span',
+    car.availability ? ['badge', 'available'] : ['badge', 'sold'],
+    car.availability ? "Available" : "Unavailable"
+  );  const img            = createImage(
     car.image,
     car.model,
     []

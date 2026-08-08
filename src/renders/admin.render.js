@@ -51,9 +51,9 @@ const createDeleteIcon = () => {
  * @returns {HTMLTableRowElement} <tr data-cat="Coupe">
  */
 export const createCarTableRow = (car) => {
-    // <tr data-cat="Coupe">
+    // <tr data-cat="Coupe"> — real category so CSS chip filters work
     const tr = createElements('tr');
-    tr.setAttribute('data-cat', 'Coupe');
+    tr.setAttribute('data-cat', car.category || '');
 
     // 1. Thumbnail & Name Cell
     const tdThumb = createElements('td', ['thumb-cell']);

@@ -1,122 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aether Motors &mdash; Your Cart</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./styles/global.css">
-<link rel="stylesheet" href="./styles/cart.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aurelia Motors — your cart. Reservations are held for 72 hours pending inspection sign-off.">
+  <meta name="theme-color" content="#0c0d10">
+  <meta name="color-scheme" content="dark">
+  <title>Aurelia Motors — Your Cart</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500;1,6..96,600&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles/global.css">
+  <link rel="stylesheet" href="./styles/showroom.css">
+  <link rel="stylesheet" href="./styles/cart.css">
 </head>
 <body>
-
-  <!-- ============ NAVBAR ============ -->
+  <!-- Scroll progress — pure CSS, scroll-timeline driven -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <!-- =========================================================
+     NAVBAR — shared showroom chrome
+  ========================================================== -->
+  <input type="checkbox" id="burger-toggle" class="burger-toggle">
   <header class="navbar">
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
     <div class="nav-inner">
-      <a href="#" class="brand"><span class="mark"></span>AETHER MOTORS</a>
-
-      <nav class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">Catalog</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
+      <a href="carCatalog.html#home" class="brand">Aurelia <span>Motors</span></a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="carCatalog.html#home">Home</a></li>
+          <li><a href="carCatalog.html#catalog">Catalog</a></li>
+          <li><a href="carCatalog.html#assurance">Concierge</a></li>
+          <li><a href="carCatalog.html#contact">Contact</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
       </nav>
-
       <div class="nav-right">
-        <div class="search-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input class="search-input" type="text" placeholder="Search inventory...">
-        </div>
-
-        <a href="#" class="cart-icon-wrap" aria-label="Cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="20" r="1.4"/>
-            <circle cx="18" cy="20" r="1.4"/>
-            <path d="M2.5 3h2.4l2.2 12.2a2 2 0 0 0 2 1.65h8.3a2 2 0 0 0 1.97-1.62L21 8H6.2"/>
+        <a href="cart.html" class="cart-icon" aria-label="Open cart" aria-current="page">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
           <span class="cart-badge">3</span>
         </a>
-
-        <label for="menu-toggle" class="hamburger-label" aria-label="Toggle menu">
+        <button class="account" type="button" popovertarget="account-menu" aria-label="Account menu">
+          <span class="avatar">MB</span>
+          <span class="account-name">Marcus B.</span>
+          <svg class="caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+        <button class="btn-logout" type="button">Logout</button>
+        <label for="burger-toggle" class="burger-label" aria-label="Toggle menu">
           <span></span><span></span><span></span>
         </label>
       </div>
     </div>
-
     <div class="mobile-menu">
-      <div class="mobile-search">
-        <input type="text" placeholder="Search inventory...">
+      <div class="mobile-menu-inner">
+        <ul>
+          <li><a href="carCatalog.html#home">Home</a></li>
+          <li><a href="carCatalog.html#catalog">Catalog</a></li>
+          <li><a href="carCatalog.html#assurance">Concierge</a></li>
+          <li><a href="carCatalog.html#contact">Contact</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+        <div class="mobile-account">
+          <div class="who">
+            <span class="avatar">MB</span>
+            <span class="account-name">Marcus B.</span>
+          </div>
+          <button class="btn-logout" type="button">Logout</button>
+        </div>
       </div>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Catalog</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
     </div>
   </header>
-
-  <!-- ============ PAGE HEADER ============ -->
-  <section class="page-header">
-    <div class="page-header-inner">
-      <h1>Your Cart</h1>
-      <p class="subtitle">3 vehicles selected</p>
-    </div>
-  </section>
-
-  <!-- ============ CART SECTION ============ -->
-  <section class="cart-section">
-    <div class="cart-layout">
-
-      <!-- ===== LEFT: CART ITEMS ===== -->
-      <div class="cart-items">
-
+  <!-- Account popover — native Popover API, anchor-positioned -->
+  <div id="account-menu" popover>
+    <div class="menu-head">
+      <span class="avatar">MB</span>
+      <div>
+        <strong>Marcus Bennett</strong>
+        <span>Collector since 2021 · Atelier Noir tier</span>
       </div>
-
-      <!-- ===== RIGHT: ORDER SUMMARY ===== -->
-      <aside class="summary-card">
-       
-      </aside>
-
     </div>
-
-    <!-- ============ EMPTY CART STATE (alternative) ============ -->
-    <!--
-    Swap in this markup (and remove .cart-layout above) to render the empty state.
-    Styles for .empty-cart / .empty-icon are already defined in <style>.
-
-    <div class="empty-cart">
-      <div class="empty-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="20" r="1.4"/>
-          <circle cx="18" cy="20" r="1.4"/>
-          <path d="M2.5 3h2.4l2.2 12.2a2 2 0 0 0 2 1.65h8.3a2 2 0 0 0 1.97-1.62L21 8H6.2"/>
-        </svg>
+    <ul class="menu-links">
+      <li><a href="cart.html">My Cart &amp; Orders <span aria-hidden="true">→</span></a></li>
+      <li><a href="carCatalog.html#catalog">Saved Favourites <span aria-hidden="true">→</span></a></li>
+      <li><a href="carCatalog.html#assurance">Concierge Services <span aria-hidden="true">→</span></a></li>
+    </ul>
+    <p class="menu-foot">Private viewings available Mon–Sat, 9:00–19:00.</p>
+  </div>
+  <main>
+    <!-- ============ PAGE HEADER ============ -->
+    <section class="page-header wrap">
+      <span class="eyebrow">Your Selection · 2026 Floor</span>
+      <h1>The <em>Cart.</em></h1>
+      <p class="subtitle" data-cart-subtitle>Fetching your selection…</p>
+    </section>
+    <!-- ============ CART SECTION (items + summary filled by cart.controller.js) ============ -->
+    <section class="cart-section wrap">
+      <div class="cart-layout">
+        <div class="cart-items" aria-live="polite"></div>
+        <aside class="summary-card" aria-label="Order summary"></aside>
       </div>
-      <h2>Your cart is empty</h2>
-      <p>You haven&rsquo;t selected any vehicles yet. Explore the collection to begin.</p>
-      <a href="#" class="btn-gold" style="display:inline-block; width:auto; padding:14px 32px;">Browse the Catalog</a>
-    </div>
-    -->
-
-  </section>
-
+    </section>
+  </main>
   <!-- ============ FOOTER ============ -->
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-copy">&copy; 2026 Aether Motors. All rights reserved.</span>
-      <div class="footer-links">
-        <a href="#">Terms</a>
-        <a href="#">Privacy</a>
-        <a href="#">Support</a>
-      </div>
+  <footer id="contact">
+    <div class="wrap footer-inner">
+      <p>&copy; 2026 Aurelia Motors. All vehicles subject to prior sale.</p>
+      <ul class="footer-links">
+        <li><a href="carCatalog.html#home">Home</a></li>
+        <li><a href="carCatalog.html#catalog">Catalog</a></li>
+        <li><a href="carCatalog.html#assurance">Concierge</a></li>
+        <li><a href="carCatalog.html#contact">Contact</a></li>
+      </ul>
     </div>
+    <span class="footer-mark" aria-hidden="true">Aurelia</span>
   </footer>
-  <script type="module" src="/src/config/firebase/firebase.config.js"></script>
-  <script type="module" src="/src/config/firebase/firestore.js"></script>
-  <script type="module" src="../controllers/cart.controller.js"></script>
+  <!-- Toast — populated by the enhancement module -->
+  <div class="toast" id="cart-toast" role="status" hidden><span></span></div>
+<script type="module" src="/src/config/firebase/firebase.config.js"></script>
+<script type="module" src="/src/config/firebase/firestore.js"></script>
+<script type="module" src="../controllers/cart.controller.js"></script>
+<script type="module">
+  /* ── Progressive enhancement layer ───────────────────────────
+     Optional polish only — cart.controller.js owns the data.
+     Here: real logout binding (the page's controller has none),
+     live cart badge + subtitle counting, and an honest toast for
+     the not-yet-wired checkout. */
+  import { logoutService } from '../services/auth.service.js';
+  import { store } from '../states/cart.store.js';
+  import { navigateTo } from '../utils/uiBuilder.js';
+  /* Real logout (mobile + desktop buttons) */
+  document.querySelectorAll('.btn-logout').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const result = await logoutService();
+      store.set({ user: null, isAuthenticated: false, role: null });
+      navigateTo('authentication.html');
+    });
+  });
+  /* Toast helper */
+  const toast = document.getElementById('cart-toast');
+  let toastTimer = 0;
+  const showToast = (message) => {
+    toast.querySelector('span').textContent = message;
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toast.hidden = true; }, 3400);
+  };
+  /* Live counters — the controller renders async, so watch the DOM */
+  const badge    = document.querySelector('.cart-badge');
+  const subtitle = document.querySelector('[data-cart-subtitle]');
+  const layout   = document.querySelector('.cart-layout');
+  const syncCounters = () => {
+    const items  = document.querySelectorAll('.cart-items article.cart-item');
+    const count  = items.length;
+    const isEmpty = !!document.querySelector('.cart-layout > .empty-icon');
+    if (badge) {
+      badge.hidden = count === 0;
+      badge.textContent = count;
+    }
+    if (subtitle) {
+      if (isEmpty)      subtitle.textContent = 'Nothing on hold — yet.';
+      else if (count)   subtitle.textContent = `${count} vehicle${count === 1 ? '' : 's'} on hold · reservations kept for 72 hours`;
+    }
+  };
+  if (layout) {
+    new MutationObserver(syncCounters)
+      .observe(layout, { childList: true, subtree: true });
+  }
+  /* Checkout — ordered from the renderer, not wired to payments yet */
+  document.addEventListener('click', (e) => {
+    const checkout = e.target.closest('button.btn-gold');
+    if (!checkout) return;
+    showToast('Your concierge finalizes acquisitions in person — payments arrive with the spring collection.');
+  });
+</script>
 </body>
-</html>

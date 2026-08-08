@@ -1,354 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aether Motors — Admin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./styles/admin.css">
-<link rel="stylesheet" href="./styles/global.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aurelia Motors — fleet administration. Manage the collection, add vehicles, control availability.">
+  <meta name="theme-color" content="#0c0d10">
+  <meta name="color-scheme" content="dark">
+  <title>Aurelia Motors — Fleet Administration</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500;1,6..96,600&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles/global.css">
+  <link rel="stylesheet" href="./styles/showroom.css">
+  <link rel="stylesheet" href="./styles/admin.css">
 </head>
 <body>
-
-<input type="checkbox" id="burger-toggle" class="burger-toggle">
-
-<header class="topbar">
-  <div class="brand">
-    <div class="brand-mark">A</div>
-    <div class="brand-name">Aether <em>Motors</em></div>
-    <span class="admin-badge">Admin</span>
-  </div>
-
-  <ul class="nav-links">
-    <li><a href="#" class="active">Dashboard</a></li>
-    <li><a href="carCatalog.html">Cars</a></li>
-    <li><a href="#">Orders</a></li>
-    <li><a href="#">Settings</a></li>
-  </ul>
-
-  <div class="topbar-right">
-    <div class="admin-account">
-      <div class="avatar">EV</div>
-      <div class="admin-name">Elior Voss<span>Fleet Administrator</span></div>
-    </div>
-    <button class="icon-btn" title="Log out" aria-label="Log out">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-    </button>
-    <label for="burger-toggle" class="burger-label" aria-label="Toggle menu"><span></span></label>
-  </div>
-</header>
-
-<div class="shell">
-  <aside class="sidebar">
-    <div>
-      <div class="side-group-label">Showroom</div>
-      <ul class="side-nav">
-        <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</a></li>
-        <li><a href="#" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 17h1a3 3 0 0 0 6 0h4a3 3 0 0 0 6 0h1v-5l-3-4H9L5 13z"/><circle cx="8" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>Cars</a></li>
-        <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/></svg>Categories</a></li>
-        <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M3 15l4.5-4.5L12 15l3-3 6 6"/></svg>Media</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="side-group-label">System</div>
-      <ul class="side-nav">
-        <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.36a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.64 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.64a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.36 9c.1.36.29.68.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg>Settings</a></li>
-      </ul>
-    </div>
-  </aside>
-
-  <main class="main">
-
-    <!-- ============ DASHBOARD STAT STRIP ============ -->
-    <section class="stat-strip" aria-label="Fleet summary">
-      <div class="stat-card"><div class="stat-label">Total Cars</div><div class="stat-value">6</div></div>
-      <div class="stat-card"><div class="stat-label">Available</div><div class="stat-value">4</div></div>
-      <div class="stat-card sold"><div class="stat-label">Sold Out</div><div class="stat-value">2</div></div>
-      <div class="stat-card"><div class="stat-label">Average Price</div><div class="stat-value">$335k</div></div>
-    </section>
-
-    <!-- ============ CARS HEADER ============ -->
-    <div class="cars-header">
-      <div class="cars-heading-block">
-        <h2>Cars</h2>
-        <p class="cars-subtitle"><strong>6</strong> vehicles in the current collection</p>
+  <!-- Scroll progress -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <input type="checkbox" id="burger-toggle" class="burger-toggle">
+  <!-- ============ TOPBAR ============ -->
+  <header class="navbar topbar">
+    <div class="nav-inner">
+      <a href="carCatalog.html" class="brand">
+        Aurelia <span>Motors</span>
+        <em class="admin-badge">Admin</em>
+      </a>
+      <nav aria-label="Admin">
+        <ul class="nav-links">
+          <li><a href="#" class="current">Dashboard</a></li>
+          <li><a href="carCatalog.html">Showroom</a></li>
+          <li><a href="cart.html">Orders</a></li>
+          <li><a href="carCatalog.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-right">
+        <div class="admin-account">
+          <span class="avatar">EV</span>
+          <span class="admin-name">Elior Voss<small>Fleet Administrator</small></span>
+        </div>
+        <button class="icon-btn" type="button" title="Log out" aria-label="Log out" data-logout>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <path d="M16 17l5-5-5-5" />
+            <path d="M21 12H9" />
+          </svg>
+        </button>
+        <label for="burger-toggle" class="burger-label" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
       </div>
-      <label for="panel-add" class="btn btn-gold">
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
-        Add New Car
+    </div>
+  </header>
+  <div class="shell">
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" aria-label="Sections">
+      <nav>
+        <div class="side-group-label">Showroom</div>
+        <ul class="side-nav">
+          <li><a href="#" class="active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            Overview</a></li>
+          <li><a href="carCatalog.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 17h1a3 3 0 0 0 6 0h4a3 3 0 0 0 6 0h1v-5l-3-4H9L5 13z"/><circle cx="8" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
+            Cars</a></li>
+          <li><a href="cart.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Orders</a></li>
+          <li><a href="carCatalog.html#assurance">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.4-7 10-4-1.6-7-5.6-7-10V6l7-3z"/></svg>
+            Concierge</a></li>
+        </ul>
+      </nav>
+      <nav>
+        <div class="side-group-label">System</div>
+        <ul class="side-nav">
+          <li><a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.36a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.64 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.64a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.36 9c.1.36.29.68.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg>
+            Settings</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="main">
+      <!-- ============ FLEET STATS (live — synced by the enhancement module) ============ -->
+      <section class="stat-strip" aria-label="Fleet summary">
+        <div class="stat-card">
+          <span class="stat-label">Total Cars</span>
+          <span class="stat-value" data-stat="total">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Available</span>
+          <span class="stat-value" data-stat="available">—</span>
+        </div>
+        <div class="stat-card sold">
+          <span class="stat-label">Sold Out</span>
+          <span class="stat-value" data-stat="sold">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Average Price</span>
+          <span class="stat-value" data-stat="avg">—</span>
+        </div>
+      </section>
+      <!-- ============ FLEET HEADER ============ -->
+      <div class="cars-header">
+        <div class="cars-heading-block">
+          <h1>The <em>Fleet.</em></h1>
+          <p class="cars-subtitle"><strong data-fleet-count>—</strong> vehicles in the current collection</p>
+        </div>
+        <label for="panel-add" class="btn-gold add-btn" tabindex="0">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          Add New Car
+        </label>
+      </div>
+      <!-- ============ TOOLBAR ============ -->
+      <div class="toolbar">
+        <label class="search-field">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" />
+          </svg>
+          <input type="search" placeholder="Search by brand, model or car ID…" data-fleet-search aria-label="Search the fleet">
+        </label>
+        <div class="chip-row" role="radiogroup" aria-label="Filter by category">
+          <input type="radio" name="cat" id="cat-all" checked><label for="cat-all" class="chip">All</label>
+          <input type="radio" name="cat" id="cat-coupe"><label for="cat-coupe" class="chip">Coupe</label>
+          <input type="radio" name="cat" id="cat-sedan"><label for="cat-sedan" class="chip">Sedan</label>
+          <input type="radio" name="cat" id="cat-suv"><label for="cat-suv" class="chip">SUV</label>
+          <input type="radio" name="cat" id="cat-convertible"><label for="cat-convertible" class="chip">Convertible</label>
+          <input type="radio" name="cat" id="cat-hypercar"><label for="cat-hypercar" class="chip">Hypercar</label>
+        </div>
+      </div>
+      <!-- ============ TABLE (rows rendered by admin.controller.js) ============ -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle</th><th>Year</th><th>Category</th><th>Price</th><th>Color</th><th>Status</th>
+              <th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="no-results" data-no-results hidden>
+          <h3>Nothing matches</h3>
+          <p>No vehicle fits that search — loosen the term or reset the filters.</p>
+        </div>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 17h1a3 3 0 0 0 6 0h4a3 3 0 0 0 6 0h1v-5l-3-4H9L5 13z"/><circle cx="8" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
+          <h3>No vehicles found</h3>
+          <p>Nothing matches your search or filter. Try a different term, or add a new car to the collection.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- ============ ADD CAR SLIDE-OVER (checkbox-driven — controller closes via #panel-add) ============ -->
+  <input type="checkbox" id="panel-add" class="panel-toggle">
+  <label for="panel-add" class="overlay" aria-hidden="true"></label>
+  <aside class="panel" role="dialog" aria-label="Add new car" aria-modal="true">
+    <div class="panel-head">
+      <div>
+        <span class="eyebrow">New Arrival</span>
+        <h3>Add New Car</h3>
+      </div>
+      <label for="panel-add" class="close-btn" aria-label="Close" tabindex="0">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </label>
     </div>
-    <div class="coachline" style="margin-bottom:24px;"></div>
-
-    <!-- ============ TOOLBAR ============ -->
-    <div class="toolbar">
-      <div class="search-field">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input type="text" placeholder="Search by brand, model or car ID…">
+    <div class="panel-body">
+      <div class="field-row">
+        <div class="field-group"><label>Brand <span class="req">*</span></label><input type="text" required placeholder="e.g. Aurelio" class="brand"></div>
+        <div class="field-group"><label>Model <span class="req">*</span></label><input type="text" required placeholder="e.g. Solstice GT" class="model"></div>
       </div>
-      <div class="chip-row">
-        <input type="radio" name="cat" id="cat-all" checked><label for="cat-all" class="chip">All</label>
-        <input type="radio" name="cat" id="cat-coupe"><label for="cat-coupe" class="chip">Coupe</label>
-        <input type="radio" name="cat" id="cat-sedan"><label for="cat-sedan" class="chip">Sedan</label>
-        <input type="radio" name="cat" id="cat-suv"><label for="cat-suv" class="chip">SUV</label>
-        <input type="radio" name="cat" id="cat-convertible"><label for="cat-convertible" class="chip">Convertible</label>
-        <input type="radio" name="cat" id="cat-hypercar"><label for="cat-hypercar" class="chip">Hypercar</label>
-        <input type="radio" name="cat" id="cat-roadster"><label for="cat-roadster" class="chip">Roadster</label>
+      <div class="field-row">
+        <div class="field-group"><label>Year <span class="req">*</span></label><input type="number" required placeholder="2026" min="1950" max="2100" class="year"></div>
+        <div class="field-group"><label>Price (DT) <span class="req">*</span></label><input type="number" required placeholder="285000" min="0" class="price"></div>
       </div>
-    </div>
-
-    <!-- ============ TABLE ============ -->
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Vehicle</th><th>Year</th><th>Category</th><th>Price</th><th>Color</th><th>Status</th>
-            <th style="text-align:right;">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-      </table>
-      <div class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 17h1a3 3 0 0 0 6 0h4a3 3 0 0 0 6 0h1v-5l-3-4H9L5 13z"/><circle cx="8" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
-        <h3>No vehicles found</h3>
-        <p>Nothing matches your search or filter. Try a different term, or add a new car to the collection.</p>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<!-- ============ ADD CAR SLIDE-OVER ============ -->
-<input type="checkbox" id="panel-add" class="modal-toggle">
-<label for="panel-add" class="overlay"></label>
-<aside class="panel" role="dialog" aria-label="Add new car">
-  <div class="panel-head">
-    <h3>Add New Car</h3>
-    <label for="panel-add" class="close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label>
-  </div>
-  <div class="panel-body">
-    <div class="field-row">
-      <div class="field-group"><label>Brand <span class="req">*</span></label><input type="text" required placeholder="e.g. Aurelio" class="brand"></div>
-      <div class="field-group"><label>Model <span class="req">*</span></label><input type="text" required placeholder="e.g. Solstice GT" class="model"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Year <span class="req">*</span></label><input type="number" required placeholder="2025" min="1950" max="2100" class="year"></div>
-      <div class="field-group"><label>Price (DT) <span class="req">*</span></label><input type="number" required placeholder="285000" min="0" class="price"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group">
-        <label>Category <span class="req">*</span></label>
-        <select required class="category"><option value="">Select category…</option><option>Coupe</option><option>Sedan</option><option>SUV</option><option>Convertible</option><option>Hypercar</option></select>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Category <span class="req">*</span></label>
+          <select required class="category">
+            <option value="">Select category…</option>
+            <option>Coupe</option><option>Sedan</option><option>SUV</option><option>Convertible</option><option>Hypercar</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Color</label>
+          <div class="color-field">
+            <input type="color" value="#C9A24B" aria-label="Pick a color">
+            <input type="text" placeholder="#C9A24B" class="color">
+          </div>
+        </div>
       </div>
       <div class="field-group">
-        <label>Color</label>
-        <div class="color-field"><input type="color" value="#C9A24B"><input type="text" placeholder="#C9A24B" class="color"></div>
+        <label>Description</label>
+        <textarea placeholder="Notes on trim, provenance, condition…" class="description" rows="3"></textarea>
+      </div>
+      <div class="field-group">
+        <label>Vehicle Image</label>
+        <div class="upload-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+          <div>Drag an image here, or click to upload</div>
+          <input type="file" accept="image/*" class="image">
+        </div>
+        <p class="field-hint" data-upload-hint>No file selected — the listing needs a hero image.</p>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="tlabel">Availability</div>
+          <div class="tsub">Marks this vehicle as available in the showroom</div>
+        </div>
+        <div class="switch"><input type="checkbox" id="avail-add" checked><label for="avail-add" class="track"></label></div>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="model3d-add">
+        <label for="model3d-add">Include interactive 3D model on listing page</label>
       </div>
     </div>
-    <div class="field-group"><label>Description</label><textarea placeholder="Notes on trim, provenance, condition…" class="description"></textarea></div>
-    <div class="field-group">
-      <label>Vehicle Image</label>
-      <div class="upload-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
-        <div>Drag an image here, or click to upload</div>
-        <input type="file" accept="image/*" class="image">
-      </div>
-      <p class="field-hint">No file selected — a placeholder thumbnail will be used.</p>
+    <div class="panel-foot">
+      <label for="panel-add" class="btn-ghost" tabindex="0">Cancel</label>
+      <button type="button" class="btn-gold savebtn">Save Car</button>
     </div>
-    <div class="toggle-row">
-      <div><div class="tlabel">Availability</div><div class="tsub">Marks this vehicle as available in the showroom</div></div>
-      <div class="switch"><input type="checkbox" id="avail-add" checked><label for="avail-add" class="track"></label></div>
-    </div>
-    <div class="checkbox-row"><input type="checkbox" id="model3d-add"><label for="model3d-add">Include interactive 3D model on listing page</label></div>
-  </div>
-  <div class="panel-foot">
-    <label for="panel-add" class="btn btn-ghost">Cancel</label>
-    <button type="button" class="btn btn-gold savebtn">Save Car</button>
-  </div>
-</aside>
-
-<!-- ============ EDIT SLIDE-OVERS (one per car, pre-filled) ============ -->
-
-<input type="checkbox" id="panel-edit-1" class="modal-toggle">
-<label for="panel-edit-1" class="overlay"></label>
-<aside class="panel" role="dialog" aria-label="Edit Aurelio Solstice GT">
-  <div class="panel-head"><h3>Edit Car</h3><label for="panel-edit-1" class="close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label></div>
-  <div class="panel-body">
-    <div class="field-row">
-      <div class="field-group"><label>Brand <span class="req">*</span></label><input type="text" required value="Aurelio"></div>
-      <div class="field-group"><label>Model <span class="req">*</span></label><input type="text" required value="Solstice GT"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Year <span class="req">*</span></label><input type="number" required value="2024" min="1950" max="2100"></div>
-      <div class="field-group"><label>Price (USD) <span class="req">*</span></label><input type="number" required value="268000" min="0"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Category <span class="req">*</span></label><select required><option>Coupe</option><option>Sedan</option><option>SUV</option><option>Convertible</option><option>Hypercar</option></select></div>
-      <div class="field-group"><label>Color</label><div class="color-field"><input type="color" value="#7A2331"><input type="text" value="#7A2331"></div></div>
-    </div>
-    <div class="field-group"><label>Description</label><textarea>Hand-stitched garnet leather cabin with carbon accents.</textarea></div>
-    <div class="field-group">
-      <label>Vehicle Image</label>
-      <div class="upload-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><div>Drag an image here, or click to upload</div><input type="file" accept="image/*"></div>
-      <p class="field-hint">Existing image retained.</p>
-    </div>
-    <div class="toggle-row"><div><div class="tlabel">Availability</div><div class="tsub">Marks this vehicle as available in the showroom</div></div><div class="switch"><input type="checkbox" id="avail-1" checked><label for="avail-1" class="track"></label></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="model3d-1" checked><label for="model3d-1">Include interactive 3D model on listing page</label></div>
-  </div>
-  <div class="panel-foot"><label for="panel-edit-1" class="btn btn-ghost">Cancel</label><label for="panel-edit-1" class="btn btn-gold">Update Car</label></div>
-</aside>
-
-<input type="checkbox" id="panel-edit-2" class="modal-toggle">
-<label for="panel-edit-2" class="overlay"></label>
-<aside class="panel" role="dialog" aria-label="Edit Veyrone Continental Spyder">
-  <div class="panel-head"><h3>Edit Car</h3><label for="panel-edit-2" class="close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label></div>
-  <div class="panel-body">
-    <div class="field-row">
-      <div class="field-group"><label>Brand <span class="req">*</span></label><input type="text" required value="Veyrone"></div>
-      <div class="field-group"><label>Model <span class="req">*</span></label><input type="text" required value="Continental Spyder"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Year <span class="req">*</span></label><input type="number" required value="2023" min="1950" max="2100"></div>
-      <div class="field-group"><label>Price (USD) <span class="req">*</span></label><input type="number" required value="412000" min="0"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Category <span class="req">*</span></label><select required><option>Coupe</option><option>Sedan</option><option>SUV</option><option selected>Convertible</option><option>Hypercar</option></select></div>
-      <div class="field-group"><label>Color</label><div class="color-field"><input type="color" value="#C9A24B"><input type="text" value="#C9A24B"></div></div>
-    </div>
-    <div class="field-group"><label>Description</label><textarea>Champagne gold coachwork, bespoke commission.</textarea></div>
-    <div class="field-group">
-      <label>Vehicle Image</label>
-      <div class="upload-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><div>Drag an image here, or click to upload</div><input type="file" accept="image/*"></div>
-      <p class="field-hint">Existing image retained.</p>
-    </div>
-    <div class="toggle-row"><div><div class="tlabel">Availability</div><div class="tsub">Marks this vehicle as available in the showroom</div></div><div class="switch"><input type="checkbox" id="avail-2" checked><label for="avail-2" class="track"></label></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="model3d-2"><label for="model3d-2">Include interactive 3D model on listing page</label></div>
-  </div>
-  <div class="panel-foot"><label for="panel-edit-2" class="btn btn-ghost">Cancel</label><label for="panel-edit-2" class="btn btn-gold">Update Car</label></div>
-</aside>
-
-<input type="checkbox" id="panel-edit-3" class="modal-toggle">
-<label for="panel-edit-3" class="overlay"></label>
-<aside class="panel" role="dialog" aria-label="Edit Norvane Aetherline SUV">
-  <div class="panel-head"><h3>Edit Car</h3><label for="panel-edit-3" class="close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label></div>
-  <div class="panel-body">
-    <div class="field-row">
-      <div class="field-group"><label>Brand <span class="req">*</span></label><input type="text" required value="Norvane"></div>
-      <div class="field-group"><label>Model <span class="req">*</span></label><input type="text" required value="Aetherline SUV"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Year <span class="req">*</span></label><input type="number" required value="2025" min="1950" max="2100"></div>
-      <div class="field-group"><label>Price (USD) <span class="req">*</span></label><input type="number" required value="189500" min="0"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Category <span class="req">*</span></label><select required><option>Coupe</option><option>Sedan</option><option selected>SUV</option><option>Convertible</option><option>Hypercar</option></select></div>
-      <div class="field-group"><label>Color</label><div class="color-field"><input type="color" value="#15171B"><input type="text" value="#15171B"></div></div>
-    </div>
-    <div class="field-group"><label>Description</label><textarea>Onyx black, panoramic glass roof, four-zone climate.</textarea></div>
-    <div class="field-group">
-      <label>Vehicle Image</label>
-      <div class="upload-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><div>Drag an image here, or click to upload</div><input type="file" accept="image/*"></div>
-      <p class="field-hint">Existing image retained.</p>
-    </div>
-    <div class="toggle-row"><div><div class="tlabel">Availability</div><div class="tsub">Marks this vehicle as available in the showroom</div></div><div class="switch"><input type="checkbox" id="avail-3" checked><label for="avail-3" class="track"></label></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="model3d-3" checked><label for="model3d-3">Include interactive 3D model on listing page</label></div>
-  </div>
-  <div class="panel-foot"><label for="panel-edit-3" class="btn btn-ghost">Cancel</label><label for="panel-edit-3" class="btn btn-gold">Update Car</label></div>
-</aside>
-
-<input type="checkbox" id="panel-edit-4" class="modal-toggle">
-<label for="panel-edit-4" class="overlay"></label>
-<aside class="panel" role="dialog" aria-label="Edit Calderon Meridian Sedan">
-  <div class="panel-head"><h3>Edit Car</h3><label for="panel-edit-4" class="close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label></div>
-  <div class="panel-body">
-    <div class="field-row">
-      <div class="field-group"><label>Brand <span class="req">*</span></label><input type="text" required value="Calderon"></div>
-      <div class="field-group"><label>Model <span class="req">*</span></label><input type="text" required value="Meridian Sedan"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Year <span class="req">*</span></label><input type="number" required value="2022" min="1950" max="2100"></div>
-      <div class="field-group"><label>Price (USD) <span class="req">*</span></label><input type="number" required value="96500" min="0"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Category <span class="req">*</span></label><select required><option>Coupe</option><option selected>Sedan</option><option>SUV</option><option>Convertible</option><option>Hypercar</option></select></div>
-      <div class="field-group"><label>Color</label><div class="color-field"><input type="color" value="#8B8E95"><input type="text" value="#8B8E95"></div></div>
-    </div>
-    <div class="field-group"><label>Description</label><textarea>Silver metallic, low-mileage executive trim.</textarea></div>
-    <div class="field-group">
-      <label>Vehicle Image</label>
-      <div class="upload-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><div>Drag an image here, or click to upload</div><input type="file" accept="image/*"></div>
-      <p class="field-hint">Existing image retained.</p>
-    </div>
-    <div class="toggle-row"><div><div class="tlabel">Availability</div><div class="tsub">Marks this vehicle as available in the showroom</div></div><div class="switch"><input type="checkbox" id="avail-4"><label for="avail-4" class="track"></label></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="model3d-4"><label for="model3d-4">Include interactive 3D model on listing page</label></div>
-  </div>
-  <div class="panel-foot"><label for="panel-edit-4" class="btn btn-ghost">Cancel</label><label for="panel-edit-4" class="btn btn-gold">Update Car</label></div>
-</aside>
-
-<input type="checkbox" id="panel-edit-5" class="modal-toggle">
-<label for="panel-edit-5" class="overlay"></label>
-<aside class="panel" role="dialog" aria-label="Edit Ferroni Rosso Ultima">
-  <div class="panel-head"><h3>Edit Car</h3><label for="panel-edit-5" class="close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label></div>
-  <div class="panel-body">
-    <div class="field-row">
-      <div class="field-group"><label>Brand <span class="req">*</span></label><input type="text" required value="Ferroni"></div>
-      <div class="field-group"><label>Model <span class="req">*</span></label><input type="text" required value="Rosso Ultima"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Year <span class="req">*</span></label><input type="number" required value="2025" min="1950" max="2100"></div>
-      <div class="field-group"><label>Price (USD) <span class="req">*</span></label><input type="number" required value="890000" min="0"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Category <span class="req">*</span></label><select required><option>Coupe</option><option>Sedan</option><option>SUV</option><option>Convertible</option><option selected>Hypercar</option></select></div>
-      <div class="field-group"><label>Color</label><div class="color-field"><input type="color" value="#7A2331"><input type="text" value="#7A2331"></div></div>
-    </div>
-    <div class="field-group"><label>Description</label><textarea>Limited to twelve units worldwide, garnet livery.</textarea></div>
-    <div class="field-group">
-      <label>Vehicle Image</label>
-      <div class="upload-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><div>Drag an image here, or click to upload</div><input type="file" accept="image/*"></div>
-      <p class="field-hint">Existing image retained.</p>
-    </div>
-    <div class="toggle-row"><div><div class="tlabel">Availability</div><div class="tsub">Marks this vehicle as available in the showroom</div></div><div class="switch"><input type="checkbox" id="avail-5" checked><label for="avail-5" class="track"></label></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="model3d-5" checked><label for="model3d-5">Include interactive 3D model on listing page</label></div>
-  </div>
-  <div class="panel-foot"><label for="panel-edit-5" class="btn btn-ghost">Cancel</label><label for="panel-edit-5" class="btn btn-gold">Update Car</label></div>
-</aside>
-
-<input type="checkbox" id="panel-edit-6" class="modal-toggle">
-<label for="panel-edit-6" class="overlay"></label>
-<aside class="panel" role="dialog" aria-label="Edit Aurelio Belvara Coupe">
-  <div class="panel-head"><h3>Edit Car</h3><label for="panel-edit-6" class="close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label></div>
-  <div class="panel-body">
-    <div class="field-row">
-      <div class="field-group"><label>Brand <span class="req">*</span></label><input type="text" required value="Aurelio"></div>
-      <div class="field-group"><label>Model <span class="req">*</span></label><input type="text" required value="Belvara Coupe"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Year <span class="req">*</span></label><input type="number" required value="2021" min="1950" max="2100"></div>
-      <div class="field-group"><label>Price (USD) <span class="req">*</span></label><input type="number" required value="154000" min="0"></div>
-    </div>
-    <div class="field-row">
-      <div class="field-group"><label>Category <span class="req">*</span></label><select required><option selected>Coupe</option><option>Sedan</option><option>SUV</option><option>Convertible</option><option>Hypercar</option></select></div>
-      <div class="field-group"><label>Color</label><div class="color-field"><input type="color" value="#0B0C0E"><input type="text" value="#0B0C0E"></div></div>
-    </div>
-    <div class="field-group"><label>Description</label><textarea>Matte black, previously showroom demonstrator.</textarea></div>
-    <div class="field-group">
-      <label>Vehicle Image</label>
-      <div class="upload-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><div>Drag an image here, or click to upload</div><input type="file" accept="image/*"></div>
-      <p class="field-hint">Existing image retained.</p>
-    </div>
-    <div class="toggle-row"><div><div class="tlabel">Availability</div><div class="tsub">Marks this vehicle as available in the showroom</div></div><div class="switch"><input type="checkbox" id="avail-6"><label for="avail-6" class="track"></label></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="model3d-6"><label for="model3d-6">Include interactive 3D model on listing page</label></div>
-  </div>
-  <div class="panel-foot"><label for="panel-edit-6" class="btn btn-ghost">Cancel</label><label for="panel-edit-6" class="btn btn-gold">Update Car</label></div>
-</aside>
+  </aside>
+  <!-- Toast — populated by the enhancement module -->
+  <div class="toast" id="admin-toast" role="status" hidden><span></span></div>
 <script type="module" src="/src/config/firebase/firebase.config.js"></script>
 <script type="module" src="/src/config/firebase/firestore.js"></script>
 <script type="module" src="/src/config/cloudinary/cloudinary.config.js"></script>
 <script type="module" src="/src/controllers/admin.controller.js"></script>
+<script type="module">
+  /* ── Progressive enhancement layer ───────────────────────────
+     Optional polish only — admin.controller.js owns the fleet.
+     Here: real logout, live fleet stats computed from rendered
+     rows, working toolbar search, an honest toast for the static
+     edit affordance, upload-box feedback, and color-picker sync. */
+  import { logoutService } from '../services/auth.service.js';
+  import { store } from '../states/cart.store.js';
+  import { navigateTo } from '../utils/uiBuilder.js';
+  /* Real logout */
+  document.querySelector('[data-logout]')?.addEventListener('click', async () => {
+    await logoutService();
+    store.set({ user: null, isAuthenticated: false, role: null });
+    navigateTo('authentication.html');
+  });
+  /* Toast helper */
+  const toast = document.getElementById('admin-toast');
+  let toastTimer = 0;
+  const showToast = (message) => {
+    toast.querySelector('span').textContent = message;
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toast.hidden = true; }, 3400);
+  };
+  /* Live fleet stats + header count */
+  const tbody = document.querySelector('tbody');
+  const statTotal = document.querySelector('[data-stat="total"]');
+  const statAvail = document.querySelector('[data-stat="available"]');
+  const statSold  = document.querySelector('[data-stat="sold"]');
+  const statAvg   = document.querySelector('[data-stat="avg"]');
+  const fleetCount = document.querySelector('[data-fleet-count]');
+  const refreshStats = () => {
+    const rows = [...tbody.querySelectorAll('tr')];
+    const available = rows.filter((r) => r.querySelector('.badge.available')).length;
+    const prices = rows
+      .map((r) => parseFloat((r.querySelector('.price-cell')?.textContent || '').replace(/[^\d.]/g, '')))
+      .filter((n) => !Number.isNaN(n));
+    const avg = prices.length ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : 0;
+    statTotal.textContent = rows.length;
+    statAvail.textContent = available;
+    statSold.textContent  = rows.length - available;
+    statAvg.textContent   = avg ? `${Math.round(avg / 1000)}k DT` : '—';
+    fleetCount.textContent = rows.length;
+  };
+  if (tbody) {
+    new MutationObserver(refreshStats).observe(tbody, { childList: true });
+    refreshStats();
+  }
+  /* Working toolbar search (chip filters stay pure CSS) */
+  const searchInput = document.querySelector('[data-fleet-search]');
+  const noResults   = document.querySelector('[data-no-results]');
+  searchInput?.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    tbody.querySelectorAll('tr').forEach((tr) => {
+      const hit = !q || tr.textContent.toLowerCase().includes(q);
+      tr.hidden = !hit;
+      if (hit) visible++;
+    });
+    noResults.hidden = !(tbody.children.length > 0 && visible === 0);
+  });
+  /* Edit affordance — labels point at demo panels that no longer exist */
+  document.addEventListener('click', (e) => {
+    const edit = e.target.closest('.icon-action.edit');
+    if (!edit) return;
+    e.preventDefault();
+    showToast('Inline editing arrives with the spring collection — delete & re-add works today.');
+  });
+  /* Upload box: drag feedback + selected filename */
+  const fileInput = document.querySelector('.image');
+  const uploadBox = fileInput?.closest('.upload-box');
+  const uploadHint = document.querySelector('[data-upload-hint]');
+  ['dragenter', 'dragover'].forEach((ev) =>
+    uploadBox?.addEventListener(ev, (e) => { e.preventDefault(); uploadBox.classList.add('is-drag'); }));
+  ['dragleave', 'drop'].forEach((ev) =>
+    uploadBox?.addEventListener(ev, () => uploadBox.classList.remove('is-drag')));
+  fileInput?.addEventListener('change', () => {
+    uploadHint.textContent = fileInput.files[0]
+      ? `Selected: ${fileInput.files[0].name}`
+      : 'No file selected — the listing needs a hero image.';
+  });
+  /* Color picker ↔ hex text sync (two-way) */
+  const picker = document.querySelector('.color-field input[type="color"]');
+  const hexText = document.querySelector('.color-field .color');
+  picker?.addEventListener('input', () => { hexText.value = picker.value.toUpperCase(); });
+  hexText?.addEventListener('input', () => {
+    if (/^#[0-9a-fA-F]{6}$/.test(hexText.value.trim())) picker.value = hexText.value.trim();
+  });
+  /* Keyboard: open/close the panel from its label buttons (labels aren't natively focusable-activatable) */
+  document.querySelectorAll('label[for="panel-add"][tabindex]').forEach((lbl) => {
+    lbl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        document.getElementById('panel-add').checked ^= true;
+      }
+    });
+  });
+</script>
 </body>
 </html>

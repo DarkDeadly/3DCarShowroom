@@ -1,107 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aether Vesper GT — Aether Motors</title>
+  <meta name="description" content="Aurelia Motors — vehicle detail. Inspected, hand-detailed and rendered in interactive 3D.">
+  <meta name="theme-color" content="#0c0d10">
+  <meta name="color-scheme" content="dark">
+  <title>Aurelia Motors — Vehicle Detail</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500;1,6..96,600&family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="./styles/global.css">
+  <link rel="stylesheet" href="./styles/showroom.css">
   <link rel="stylesheet" href="./styles/carDetail.css">
 </head>
-
 <body>
-
+  <!-- Scroll progress — pure CSS, scroll-timeline driven -->
+  <div class="scroll-progress" aria-hidden="true"></div>
   <!-- =========================================================
-     NAVBAR
-========================================================== -->
+     NAVBAR — shared with the catalog page
+  ========================================================== -->
   <input type="checkbox" id="burger-toggle" class="burger-toggle">
   <header class="navbar">
     <div class="nav-inner">
-      <a href="#" class="brand">Aether <span>Motors</span></a>
-
-      <nav>
+      <a href="carCatalog.html#home" class="brand">Aurelia <span>Motors</span></a>
+      <nav aria-label="Primary">
         <ul class="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#" class="current">Catalog</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="carCatalog.html#home">Home</a></li>
+          <li><a href="carCatalog.html#catalog" class="current">Catalog</a></li>
+          <li><a href="carCatalog.html#assurance">Concierge</a></li>
+          <li><a href="carCatalog.html#contact">Contact</a></li>
+          <li><a href="admin.html">Admin</a></li>
         </ul>
       </nav>
-
       <div class="nav-right">
-        <div class="search-field">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9a9aa3" stroke-width="2">
-            <circle cx="11" cy="11" r="7" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        <a href="cart.html" class="cart-icon" aria-label="Open cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
-          <input type="text" placeholder="Search the collection">
-        </div>
-        <label for="burger-toggle" class="burger-label">
+          <span class="cart-badge">3</span>
+        </a>
+        <button class="account" type="button" popovertarget="account-menu" aria-label="Account menu">
+          <span class="avatar">MB</span>
+          <span class="account-name">Marcus B.</span>
+          <svg class="caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+        <button class="btn-logout" type="button">Logout</button>
+        <label for="burger-toggle" class="burger-label" aria-label="Toggle menu">
           <span></span><span></span><span></span>
         </label>
       </div>
     </div>
-
     <div class="mobile-menu">
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Catalog</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-      <div class="mobile-search search-field">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9a9aa3" stroke-width="2">
-          <circle cx="11" cy="11" r="7" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
-        <input type="text" placeholder="Search the collection">
+      <div class="mobile-menu-inner">
+        <ul>
+          <li><a href="carCatalog.html#home">Home</a></li>
+          <li><a href="carCatalog.html#catalog">Catalog</a></li>
+          <li><a href="carCatalog.html#assurance">Concierge</a></li>
+          <li><a href="carCatalog.html#contact">Contact</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+        <div class="mobile-account">
+          <div class="who">
+            <span class="avatar">MB</span>
+            <span class="account-name">Marcus B.</span>
+          </div>
+          <button class="btn-logout" type="button">Logout</button>
+        </div>
       </div>
     </div>
   </header>
-
-  <!-- =========================================================
-     1. HERO / GALLERY
-========================================================== -->
-  <section class="gallery-section wrap">
-  
-  </section>
-
-  <!-- =========================================================
-     3. CAR IDENTITY BLOCK
-========================================================== -->
-  <section class="identity-section wrap">
-   
-  </section>
-
-  <!-- =========================================================
-     6. AVAILABILITY & CTA SECTION
-========================================================== -->
-  <section class="cta-section">
-   
-  </section>
-
+  <!-- Account popover — native Popover API, anchor-positioned -->
+  <div id="account-menu" popover>
+    <div class="menu-head">
+      <span class="avatar">MB</span>
+      <div>
+        <strong>Marcus Bennett</strong>
+        <span>Collector since 2021 · Atelier Noir tier</span>
+      </div>
+    </div>
+    <ul class="menu-links">
+      <li><a href="cart.html">My Cart &amp; Orders <span aria-hidden="true">→</span></a></li>
+      <li><a href="carCatalog.html#catalog">Saved Favourites <span aria-hidden="true">→</span></a></li>
+      <li><a href="carCatalog.html#assurance">Concierge Services <span aria-hidden="true">→</span></a></li>
+    </ul>
+    <p class="menu-foot">Private viewings available Mon–Sat, 9:00–19:00.</p>
+  </div>
+  <main>
+    <!-- =========================================================
+       DETAIL STAGE — gallery + identity (filled by carDetail.controller.js)
+    ========================================================== -->
+    <section class="detail-stage wrap">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="carCatalog.html#catalog">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5m7-7-7 7 7 7" />
+          </svg>
+          Catalog
+        </a>
+        <span class="sep" aria-hidden="true">/</span>
+        <span class="here">Vehicle Detail</span>
+      </nav>
+      <div class="detail-grid">
+        <div class="gallery-section"></div>
+        <div class="identity-section"></div>
+      </div>
+    </section>
+    <!-- =========================================================
+       RESERVATION BAND — filled by carDetail.controller.js
+    ========================================================== -->
+    <section class="cta-section"></section>
+    <!-- =========================================================
+       ASSURANCE PERKS — static trust strip
+    ========================================================== -->
+    <section class="detail-perks wrap" aria-label="Ownership assurances">
+      <div class="perk">
+        <span class="perk-ico" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7h11v9H3zM14 10h4l3 3v3h-7" />
+            <circle cx="7" cy="18" r="1.6" />
+            <circle cx="17.5" cy="18" r="1.6" />
+          </svg>
+        </span>
+        <div>
+          <strong>White-glove delivery</strong>
+          <p>Enclosed, climate-controlled transport. Continental delivery within 72 hours.</p>
+        </div>
+      </div>
+      <div class="perk">
+        <span class="perk-ico" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l7 3v5c0 4.4-3 8.4-7 10-4-1.6-7-5.6-7-10V6l7-3z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+        </span>
+        <div>
+          <strong>Sealed provenance</strong>
+          <p>Digital passport: ownership chain, service history, paint readings.</p>
+        </div>
+      </div>
+      <div class="perk">
+        <span class="perk-ico" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 9h13l-3-3M20 15H7l3 3" />
+          </svg>
+        </span>
+        <div>
+          <strong>Trade-in atelier</strong>
+          <p>On-floor valuation, held for 14 days against any car in the collection.</p>
+        </div>
+      </div>
+    </section>
+  </main>
   <!-- =========================================================
      FOOTER
-========================================================== -->
-  <footer>
+  ========================================================== -->
+  <footer id="contact">
     <div class="wrap footer-inner">
-      <p>&copy; 2026 Aether Motors. All vehicles subject to prior sale.</p>
+      <p>&copy; 2026 Aurelia Motors. All vehicles subject to prior sale.</p>
       <ul class="footer-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Catalog</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="carCatalog.html#home">Home</a></li>
+        <li><a href="carCatalog.html#catalog">Catalog</a></li>
+        <li><a href="carCatalog.html#assurance">Concierge</a></li>
+        <li><a href="carCatalog.html#contact">Contact</a></li>
       </ul>
     </div>
+    <span class="footer-mark" aria-hidden="true">Aurelia</span>
   </footer>
 <script type="module" src="/src/config/firebase/firebase.config.js"></script>
 <script type="module" src="/src/config/firebase/firestore.js"></script>
 <script type="module" src="/src/controllers/carDetail.controller.js"></script>
+<script type="module">
+  /* ── Progressive enhancement layer ───────────────────────────
+     Optional polish only: pointer parallax + spotlight on the
+     gallery frame, on-demand 3D model showcase (model-viewer is
+     fetched from CDN only when the car actually has a model),
+     duplicate-logout forwarding, and a graceful failure panel
+     when the vehicle can't be loaded. */
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer  = matchMedia('(pointer: fine)').matches;
+  const logoutBtns = document.querySelectorAll('.btn-logout');
+  logoutBtns.forEach((btn, i) => {
+    if (i > 0) btn.addEventListener('click', () => logoutBtns[0].click());
+  });
+  const gallery  = document.querySelector('.gallery-section');
+  const identity = document.querySelector('.identity-section');
+  let mainFrame = null;
+  let threeDToggle = null;
+  /* 3D — model-viewer is imported lazily, never blocking the page */
+  let viewerPromise = null;
+  const loadViewer = () =>
+    (viewerPromise ??= import('https://cdn.jsdelivr.net/npm/@google/model-viewer@3/dist/model-viewer.min.js'));
+  const activate3D = async () => {
+    if (!mainFrame || !threeDToggle || mainFrame.dataset.state === '3d') return;
+    threeDToggle.textContent = 'Loading 3D…';
+    try {
+      await loadViewer();
+      const mv = document.createElement('model-viewer');
+      mv.setAttribute('src', mainFrame.dataset.model);
+      mv.setAttribute('camera-controls', '');
+      mv.setAttribute('auto-rotate', '');
+      mv.setAttribute('shadow-intensity', '1');
+      mv.setAttribute('touch-action', 'pan-y');
+      mv.setAttribute('alt', 'Interactive 3D model of the vehicle');
+      mainFrame.querySelector('img')?.remove();
+      mainFrame.appendChild(mv);
+      mainFrame.dataset.state = '3d';
+      threeDToggle.setAttribute('aria-pressed', 'true');
+      threeDToggle.textContent = '3D · Live';
+    } catch (err) {
+      console.warn('[carDetail] 3D viewer unavailable:', err);
+      threeDToggle.textContent = '3D unavailable';
+      setTimeout(() => { threeDToggle.textContent = 'View in 3D'; }, 2600);
+    }
+  };
+  const wireFrame = (frame) => {
+    mainFrame = frame;
+    gallery.classList.remove('is-failed');
+    /* pointer parallax + spotlight (fine pointers only) */
+    if (finePointer && !reduceMotion) {
+      let raf = 0;
+      frame.addEventListener('pointermove', (e) => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const r  = frame.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width;
+          const py = (e.clientY - r.top) / r.height;
+          frame.style.setProperty('--mx', (px * 100).toFixed(2) + '%');
+          frame.style.setProperty('--my', (py * 100).toFixed(2) + '%');
+          frame.style.setProperty('--px', (px - 0.5).toFixed(3));
+          frame.style.setProperty('--py', (py - 0.5).toFixed(3));
+        });
+      });
+      frame.addEventListener('pointerleave', () => {
+        frame.style.setProperty('--px', '0');
+        frame.style.setProperty('--py', '0');
+      });
+    }
+    /* 3D toggle — only when the renderer flagged an actual model */
+    if (frame.dataset.hasModel === 'true' && frame.dataset.model) {
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'viewer-toggle';
+      toggle.setAttribute('aria-pressed', 'false');
+      toggle.textContent = 'View in 3D';
+      frame.appendChild(toggle);
+      toggle.addEventListener('click', activate3D);
+      threeDToggle = toggle;
+    }
+  };
+  /* the controller fills the gallery asynchronously — watch for it */
+  if (gallery) {
+    const existing = gallery.querySelector('.main-frame');
+    if (existing) wireFrame(existing);
+    else {
+      const observer = new MutationObserver(() => {
+        const frame = gallery.querySelector('.main-frame');
+        if (frame) {
+          observer.disconnect();
+          wireFrame(frame);
+        }
+      });
+      observer.observe(gallery, { childList: true });
+    }
+  }
+  /* "3D Model Showcase" CTA rendered inside the identity card */
+  document.addEventListener('click', (e) => {
+    const cta = e.target.closest('[data-action="show-3d"]');
+    if (!cta) return;
+    const behavior = reduceMotion ? 'auto' : 'smooth';
+    if (threeDToggle) {
+      mainFrame.scrollIntoView({ behavior, block: 'center' });
+      activate3D();
+    } else if (gallery) {
+      gallery.scrollIntoView({ behavior, block: 'center' });
+    }
+  });
+  /* graceful failure — Firebase unreachable, missing car or bad id */
+  setTimeout(() => {
+    if (identity && !identity.hasChildNodes()) {
+      gallery?.classList.add('is-failed');
+      identity.innerHTML = `
+        <div class="load-fallback">
+          <h3>This vehicle couldn't be unveiled</h3>
+          <p>The showroom connection didn't answer in time — the car may have
+             moved to a new owner, or the link is stale.</p>
+          <a class="btn-ghost" href="carCatalog.html">← Back to the collection</a>
+        </div>`;
+    }
+  }, 8000);
+</script>
 </body>
-
 </html>

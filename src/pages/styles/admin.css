@@ -1,364 +1,807 @@
-html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--base);
+/* ====================================================================
+   AURELIA MOTORS — admin.css · fleet administration page only
+   Requires: global.css + showroom.css (tokens, base, navbar,
+   search-field, chips primitives, .btn-gold, .toast, keyframes)
+   Page features: :has() drawer + chip row-filtering (pure CSS),
+   attr(data-label) table→cards reflow, checkbox-driven slide-over
+   with spring transitions, accent-color, cascading entrances.
+   Table row classes match admin.render.js output.
+==================================================================== */
+@keyframes row-in {
+  from { opacity: 0; translate: 0 14px; }
+}
+@keyframes stat-in {
+  from { opacity: 0; translate: 0 22px; }
+}
+@keyframes rise-in {
+  from { opacity: 0; translate: 0 26px; }
+}
+/* =================================================================
+   1 · SHELL — sidebar + main
+================================================================= */
+.shell {
+  display: grid;
+  grid-template-columns: 244px 1fr;
+  min-height: calc(100svh - 78px);
+}
+.sidebar {
+  position: sticky;
+  top: 78px;
+  height: calc(100svh - 78px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 34px 18px;
+  border-right: 1px solid var(--line-faint);
+  background: color-mix(in oklch, var(--base-2) 55%, transparent);
+}
+.side-group-label {
+  margin: 0 14px 10px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, var(--ink-lo) 70%, transparent);
+}
+.side-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    color: var(--ink-lo);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: color 0.3s ease, background 0.3s ease, translate 0.4s var(--spring);
+    svg { width: 17px; height: 17px; flex-shrink: 0; }
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 20% auto 20% 0;
+      width: 2.5px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, var(--gold-hi), var(--gold));
+      scale: 0 1;
+      transition: scale 0.4s var(--spring);
+    }
+    &:hover {
+      color: var(--ink);
+      background: color-mix(in oklch, var(--ink) 5%, transparent);
+      translate: 2px 0;
+    }
+    &.active {
+      color: var(--gold-hi);
+      background: var(--gold-tint);
+      &::before { scale: 1 1; }
+    }
+  }
+}
+.main {
+  min-width: 0;
+  padding: 40px clamp(24px, 4vw, 52px) 80px;
+  background:
+    radial-gradient(70% 26% at 50% 0%, color-mix(in oklch, var(--gold) 4%, transparent), transparent 60%);
+}
+/* =================================================================
+   2 · TOPBAR EXTRAS (shared navbar + admin bits)
+================================================================= */
+.admin-badge {
+  align-self: center;
+  font-family: "Manrope", sans-serif;
+  font-style: normal;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-hi);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--gold) 40%, transparent);
+  background: var(--gold-tint);
+}
+.brand { gap: 12px; }
+.admin-account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .admin-name {
+    font-size: 0.8rem;
+    line-height: 1.25;
+    small {
+      display: block;
+      font-size: 0.64rem;
+      color: var(--ink-lo);
+      letter-spacing: 0.04em;
+    }
+  }
+}
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--line-soft);
+  background: color-mix(in oklch, var(--surface) 82%, transparent);
+  color: var(--ink-lo);
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease, translate 0.5s var(--spring);
+  &:hover {
+    color: oklch(0.85 0.06 15);
+    border-color: var(--garnet);
+    background: color-mix(in oklch, var(--garnet) 16%, transparent);
+    translate: 0 -2px;
+  }
+}
+/* =================================================================
+   3 · STAT STRIP — values synced live by the enhancement module
+================================================================= */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  margin-bottom: clamp(34px, 4vw, 52px);
+  .stat-card {
+    animation: stat-in 0.8s var(--out-expo) both;
+    animation-delay: calc(var(--i, 0) * 90ms + 60ms);
+    &:nth-child(1) { --i: 0; }
+    &:nth-child(2) { --i: 1; }
+    &:nth-child(3) { --i: 2; }
+    &:nth-child(4) { --i: 3; }
+  }
+}
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 24px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-faint);
+  background: color-mix(in oklch, var(--surface) 82%, transparent);
+  transition: translate 0.5s var(--spring), border-color 0.35s ease;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--gold) 55%, transparent), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  &:hover {
+    translate: 0 -4px;
+    border-color: var(--line-soft);
+    &::after { opacity: 1; }
+  }
+  .stat-label {
+    display: block;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-lo);
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: "Bodoni Moda", serif;
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--gold);
+    font-variant-numeric: tabular-nums;
+  }
+  &.sold .stat-value { color: oklch(0.70 0.10 20); }
+}
+/* =================================================================
+   4 · FLEET HEADER
+================================================================= */
+.cars-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+  animation: rise-in 0.9s var(--out-expo) 0.2s both;
+  h1 {
+    font-size: clamp(2.1rem, 4vw, 3.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    em {
+      font-style: italic;
+      font-weight: 500;
+      background: linear-gradient(100deg, var(--gold-hi), var(--gold) 55%, color-mix(in oklch, var(--gold) 65%, var(--garnet)));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  }
+  .cars-subtitle {
+    margin: 10px 0 0;
+    color: var(--ink-lo);
+    font-size: 0.9rem;
+    strong { color: var(--gold); font-variant-numeric: tabular-nums; }
+  }
+  .add-btn { cursor: pointer; user-select: none; }
+}
+/* =================================================================
+   5 · TOOLBAR — search (shared pill) + radio chips
+================================================================= */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+  animation: rise-in 0.9s var(--out-expo) 0.3s both;
+}
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-lo);
+  background: color-mix(in oklch, var(--surface) 75%, transparent);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.3s ease, background 0.35s ease, border-color 0.35s ease,
+              translate 0.5s var(--spring), scale 0.5s var(--spring);
+  &:hover {
+    border-color: color-mix(in oklch, var(--gold) 60%, transparent);
     color: var(--ink);
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
+    translate: 0 -2px;
   }
-  h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 600; margin: 0; letter-spacing: 0.01em; }
-  p { margin: 0; }
-  a { color: inherit; text-decoration: none; }
-  input, select, textarea { font-family: inherit; }
-  ::selection { background: var(--gold); color: var(--base); }
-  :focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
-
-  /* coachline — signature divider motif, echoes a coachwork pinstripe */
-  .coachline {
-    height: 1px; width: 100%;
-    background: linear-gradient(90deg, var(--gold) 0%, rgba(201,162,75,0.15) 45%, transparent 100%);
+  input:checked + & {
+    background: linear-gradient(135deg, var(--gold-hi), var(--gold));
+    border-color: transparent;
+    color: oklch(0.20 0.05 80);
+    font-weight: 800;
+    scale: 1.04;
   }
-
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: var(--base); }
-  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 8px; border: 2px solid var(--base); }
-  ::-webkit-scrollbar-thumb:hover { background: var(--line); }
-
-  /* ============ TOPBAR ============ */
-  .topbar {
-    position: sticky; top: 0; z-index: 60;
-    display: flex; align-items: center; justify-content: space-between; gap: 24px;
-    height: 76px; padding: 0 28px;
-    background: rgba(11,12,14,0.86);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--line);
+  input:focus-visible + & {
+    outline: 2px solid var(--gold-hi);
+    outline-offset: 3px;
   }
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .brand-mark {
-    width: 38px; height: 38px; border: 1px solid var(--gold); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif; font-size: 19px; color: var(--gold-hi);
+}
+/* =================================================================
+   6 · FLEET TABLE — rows match admin.render.js output
+================================================================= */
+.table-wrap {
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklch, var(--surface) 85%, transparent);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  animation: rise-in 0.9s var(--out-expo) 0.4s both;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 780px;
+}
+thead th {
+  text-align: left;
+  padding: 16px 20px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-lo);
+  background: color-mix(in oklch, var(--surface-2) 65%, transparent);
+  border-bottom: 1px solid var(--line-faint);
+}
+tbody {
+  td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line-faint);
+    font-size: 0.88rem;
+    vertical-align: middle;
+  }
+  tr {
+    animation: row-in 0.55s var(--out-expo) both;
+    transition: background 0.3s ease;
+    &:last-child td { border-bottom: none; }
+    &:hover { background: color-mix(in oklch, var(--ink) 3%, transparent); }
+  }
+}
+.thumb-cell {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 220px;
+}
+.car-thumb {
+  width: 66px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--line-soft);
+  background: oklch(0.10 0.006 260);
+  transition: transform 0.5s var(--out-expo);
+  tr:hover & { transform: scale(1.05); }
+}
+.car-name {
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  font-size: 0.9rem;
+  small {
+    margin-top: 4px;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+}
+.price-cell {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.color-cell { display: flex; align-items: center; gap: 8px; }
+/* badge override — showroom's badge is absolute for cards; table wants inline */
+.badge {
+  position: static;
+  z-index: auto;
+  top: auto;
+  left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  &::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  &.available {
+    color: var(--gold-hi);
+    background: color-mix(in oklch, var(--gold) 10%, transparent);
+    border: 1px solid color-mix(in oklch, var(--gold) 30%, transparent);
+    animation: none;
+    &::before { animation: badge-breathe 2.4s ease-in-out infinite; }
+  }
+  &.unavailable {
+    color: oklch(0.75 0.05 20);
+    background: color-mix(in oklch, var(--garnet) 16%, transparent);
+    border: 1px solid color-mix(in oklch, var(--garnet) 45%, transparent);
+    backdrop-filter: none;
+  }
+}
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.icon-action {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line-faint);
+  color: var(--ink-lo);
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease,
+              translate 0.45s var(--spring);
+  svg { width: 14px; height: 14px; }
+  &:hover { translate: 0 -2px; }
+  &.edit:hover {
+    color: var(--gold-hi);
+    border-color: color-mix(in oklch, var(--gold) 60%, transparent);
+    background: var(--gold-tint);
+  }
+  &.del:hover {
+    color: oklch(0.85 0.07 15);
+    border-color: color-mix(in oklch, var(--garnet) 70%, transparent);
+    background: color-mix(in oklch, var(--garnet) 16%, transparent);
+  }
+}
+/* ---- chip filters — pure CSS :has() row filtering (no JS) ---- */
+body:has(#cat-coupe:checked)       tbody tr:not([data-cat="Coupe" i]),
+body:has(#cat-sedan:checked)       tbody tr:not([data-cat="Sedan" i]),
+body:has(#cat-suv:checked)         tbody tr:not([data-cat="SUV" i]),
+body:has(#cat-convertible:checked) tbody tr:not([data-cat="Convertible" i]),
+body:has(#cat-hypercar:checked)    tbody tr:not([data-cat="Hypercar" i]) {
+  display: none;
+}
+/* ---- empty + no-results states ---- */
+.empty-state {
+  display: none; /* renderer flips it to flex inline */
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 72px 24px;
+  svg {
+    width: 42px;
+    height: 42px;
+    stroke: var(--gold);
+    margin-bottom: 20px;
+    animation: float-slow 5s ease-in-out infinite;
+  }
+  h3 { font-size: 1.35rem; margin-bottom: 8px; }
+  p {
+    color: var(--ink-lo);
+    font-size: 0.88rem;
+    max-width: 380px;
+    margin: 0;
+    text-wrap: pretty;
+  }
+}
+.no-results {
+  padding: 48px 20px;
+  text-align: center;
+  h3 { font-size: 1.2rem; margin-bottom: 6px; }
+  p { color: var(--ink-lo); font-size: 0.84rem; margin: 0; }
+}
+/* ---- table → cards reflow (attr(data-label) from the renderer) ---- */
+@media (max-width: 760px) {
+  table { min-width: 0; }
+  thead { display: none; }
+  table, tbody, tr, td { display: block; }
+  tbody tr {
+    margin: 14px;
+    border: 1px solid var(--line-faint);
+    border-radius: var(--radius);
+    background: color-mix(in oklch, var(--surface-2) 55%, transparent);
+    padding: 12px 14px;
+  }
+  tbody td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: none;
+    padding: 7px 4px;
+    &::before {
+      content: attr(data-label);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-lo);
+    }
+    &.thumb-cell, &.actions-cell {
+      justify-content: flex-start;
+      &::before { content: none; }
+    }
+    &.actions-cell { justify-content: flex-end; }
+  }
+}
+/* =================================================================
+   7 · ADD-CAR SLIDE-OVER — checkbox-driven (controller closes it)
+================================================================= */
+.panel-toggle {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 340;
+  background: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+  cursor: pointer;
+}
+.panel {
+  position: fixed;
+  z-index: 350;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: min(500px, 100%);
+  display: flex;
+  flex-direction: column;
+  background: color-mix(in oklch, var(--base-2) 97%, transparent);
+  border-inline-start: 1px solid var(--line-soft);
+  box-shadow: -32px 0 84px rgb(0 0 0 / 0.5);
+  translate: 105% 0;
+  visibility: hidden;
+  transition: translate 0.55s var(--out-expo), visibility 0s linear 0.55s;
+}
+/* :has() master switch — also locks body scroll while open */
+body:has(#panel-add:checked) {
+  overflow: hidden;
+  .panel {
+    translate: 0 0;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+  .overlay {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+}
+.panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 28px 22px;
+  border-bottom: 1px solid var(--line-faint);
+  .eyebrow { display: block; margin-bottom: 8px; }
+  h3 { font-size: 1.5rem; font-weight: 500; }
+}
+.close-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line-faint);
+  color: var(--ink-lo);
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease, rotate 0.5s var(--spring);
+  &:hover {
+    color: var(--ink);
+    border-color: color-mix(in oklch, var(--gold) 60%, transparent);
+    rotate: 90deg;
+  }
+}
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 26px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.panel-foot {
+  display: flex;
+  gap: 14px;
+  padding: 20px 28px;
+  border-top: 1px solid var(--line-faint);
+  background: color-mix(in oklch, var(--surface) 60%, transparent);
+  .btn-ghost, .btn-gold {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+  }
+}
+/* =================================================================
+   8 · PANEL FIELDS
+================================================================= */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.field-group {
+  min-width: 0;
+  > label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-lo);
+    margin-bottom: 9px;
+  }
+  .req { color: var(--gold); }
+}
+.field-group input[type="text"],
+.field-group input[type="number"],
+.field-group select,
+.field-group textarea {
+  width: 100%;
+  background: color-mix(in oklch, var(--surface-2) 78%, transparent);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-family: "Manrope", sans-serif;
+  font-size: 0.9rem;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  &::placeholder { color: color-mix(in oklch, var(--ink-lo) 75%, transparent); }
+  &:focus {
+    border-color: color-mix(in oklch, var(--gold) 65%, transparent);
+    box-shadow: 0 0 0 4px var(--gold-tint);
+  }
+}
+.field-group select {
+  appearance: none;
+  cursor: pointer;
+  padding-inline-end: 40px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--gold) 50%),
+                    linear-gradient(135deg, var(--gold) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 55%, calc(100% - 14px) 55%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+.field-group textarea { resize: vertical; min-height: 84px; }
+/* color pair — native picker + hex input */
+.color-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  input[type="color"] {
+    appearance: none;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.3s ease, scale 0.4s var(--spring);
+    &:hover { border-color: var(--gold); scale: 1.05; }
+    &::-webkit-color-swatch-wrapper { padding: 4px; }
+    &::-webkit-color-swatch { border: none; border-radius: 7px; }
+    &::-moz-color-swatch { border: none; border-radius: 7px; }
+  }
+}
+/* upload drop zone */
+.upload-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+  padding: 32px 20px;
+  border: 1.5px dashed var(--line-soft);
+  border-radius: var(--radius);
+  color: var(--ink-lo);
+  text-align: center;
+  font-size: 0.84rem;
+  transition: border-color 0.35s ease, background 0.35s ease, color 0.3s ease;
+  svg { width: 26px; height: 26px; stroke: var(--gold); }
+  input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  &:hover {
+    border-color: color-mix(in oklch, var(--gold) 60%, transparent);
+    color: var(--ink);
+  }
+  &.is-drag {
+    border-color: var(--gold);
+    background: var(--gold-tint);
+    color: var(--gold-hi);
+    scale: 1.01;
+  }
+}
+.field-hint {
+  margin-top: 9px;
+  font-size: 0.74rem;
+  color: var(--ink-lo);
+}
+/* availability switch */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklch, var(--surface) 55%, transparent);
+}
+.tlabel { font-size: 0.86rem; font-weight: 700; }
+.tsub { font-size: 0.74rem; color: var(--ink-lo); margin-top: 3px; }
+.switch {
+  position: relative;
+  flex-shrink: 0;
+  input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .track {
+    display: block;
+    width: 48px;
+    height: 27px;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--ink) 16%, transparent);
+    transition: background 0.35s ease;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 3.5px;
+      left: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: oklch(0.95 0.01 90);
+      transition: translate 0.5s var(--spring), background 0.3s ease;
+    }
+  }
+  input:checked + .track {
+    background: linear-gradient(135deg, var(--gold-hi), var(--gold));
+    &::after {
+      translate: 21px 0;
+      background: oklch(0.20 0.05 80);
+    }
+  }
+  input:focus-visible + .track {
+    outline: 2px solid var(--gold-hi);
+    outline-offset: 3px;
+  }
+}
+/* 3D checkbox — accent-color showcase */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 0.8rem;
+  color: var(--ink-lo);
+  input {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--gold);
+    cursor: pointer;
     flex-shrink: 0;
   }
-  .brand-name { font-size: 22px; line-height: 1; color: var(--ink); }
-  .brand-name em { font-style: normal; color: var(--gold-hi); }
-  .admin-badge {
-    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-lo);
-    border: 1px solid var(--line); border-radius: 100px; padding: 3px 9px; margin-left: 4px;
-  }
-
-  .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
-  .nav-links a {
-    padding: 9px 16px; font-size: 14px; font-weight: 500; color: var(--ink-lo);
-    border-radius: 100px; transition: color var(--ease), background var(--ease);
-  }
-  .nav-links a:hover { color: var(--ink); background: var(--surface2); }
-  .nav-links a.active { color: var(--gold-hi); background: rgba(201,162,75,0.09); }
-
-  .topbar-right { display: flex; align-items: center; gap: 18px; }
-  .admin-account { display: flex; align-items: center; gap: 10px; }
-  .avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: linear-gradient(145deg, var(--garnet), #4a1420);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600; color: var(--gold-hi);
-    border: 1px solid var(--line);
-  }
-  .admin-name { font-size: 13px; line-height: 1.2; }
-  .admin-name span { display: block; font-size: 11px; color: var(--ink-lo); font-weight: 400; }
-  .icon-btn {
-    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
-    border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface);
-    color: var(--ink-lo); transition: color var(--ease), border-color var(--ease);
-  }
-  .icon-btn:hover { color: var(--danger); border-color: var(--danger); }
-
-  /* hamburger — checkbox hack, CSS-only */
-  .burger-toggle { display: none; }
-  .burger-label {
-    display: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: var(--radius-sm);
-    align-items: center; justify-content: center; cursor: pointer;
-  }
-  .burger-label span, .burger-label span::before, .burger-label span::after {
-    content: ''; display: block; width: 18px; height: 1.5px; background: var(--ink);
-    position: relative; transition: transform var(--ease), opacity var(--ease);
-  }
-  .burger-label span::before { position: absolute; top: -6px; }
-  .burger-label span::after { position: absolute; top: 6px; }
-  .burger-toggle:checked ~ .topbar .burger-label span { background: transparent; }
-  .burger-toggle:checked ~ .topbar .burger-label span::before { transform: translateY(6px) rotate(45deg); }
-  .burger-toggle:checked ~ .topbar .burger-label span::after { transform: translateY(-6px) rotate(-45deg); }
-
-  /* ============ SHELL / SIDEBAR ============ */
-  .shell { display: flex; align-items: flex-start; min-height: calc(100vh - 76px); }
-
+  label { cursor: pointer; }
+}
+/* =================================================================
+   9 · RESPONSIVE SHELL — sidebar becomes a :has() drawer
+================================================================= */
+@media (max-width: 1023px) {
+  .nav-links { display: none; }
+  .burger-label { display: flex; }
+  .shell { grid-template-columns: 1fr; }
   .sidebar {
-    width: 236px; flex-shrink: 0; position: sticky; top: 76px; height: calc(100vh - 76px);
-    background: var(--surface); border-right: 1px solid var(--line);
-    padding: 26px 14px; display: flex; flex-direction: column; gap: 26px;
+    position: fixed;
+    z-index: 290;
+    top: 78px;
+    left: 0;
+    width: 264px;
+    box-shadow: 32px 0 84px rgb(0 0 0 / 0.5);
+    background: color-mix(in oklch, var(--base-2) 97%, transparent);
+    translate: -105% 0;
+    transition: translate 0.55s var(--out-expo);
   }
-  .side-group-label {
-    font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-lo);
-    padding: 0 12px 8px; font-weight: 600;
-  }
-  .side-nav { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
-  .side-nav a {
-    display: flex; align-items: center; gap: 12px; padding: 10px 12px; font-size: 14px; font-weight: 500;
-    color: var(--ink-lo); border-radius: var(--radius-sm); border-left: 2px solid transparent;
-    transition: background var(--ease), color var(--ease), border-color var(--ease);
-  }
-  .side-nav a svg { width: 17px; height: 17px; flex-shrink: 0; opacity: 0.85; }
-  .side-nav a:hover { background: var(--surface2); color: var(--ink); }
-  .side-nav a.active { color: var(--gold-hi); background: rgba(201,162,75,0.08); border-left-color: var(--gold); }
-
-  .main { flex: 1; min-width: 0; padding: 34px 36px 80px; }
-
-  /* ============ STAT STRIP ============ */
-  .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
-  .stat-card {
-    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 20px 22px; box-shadow: var(--shadow-1); position: relative; overflow: hidden;
-  }
-  .stat-card::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); opacity: 0.7; }
-  .stat-card.sold::after { background: var(--garnet); }
-  .stat-label { font-size: 12px; color: var(--ink-lo); font-weight: 500; margin-bottom: 10px; }
-  .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 34px; color: var(--ink); }
-
-  /* ============ CARS HEADER ============ */
-  .cars-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 22px; }
-  .cars-heading-block h2 { font-size: 40px; color: var(--ink); }
-  .cars-subtitle { color: var(--ink-lo); font-size: 14px; margin-top: 6px; }
-  .cars-subtitle strong { color: var(--gold-hi); font-weight: 600; }
-
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: var(--radius-sm);
-    font-size: 13.5px; font-weight: 600; border: 1px solid transparent; cursor: pointer;
-    transition: transform var(--ease), box-shadow var(--ease), background var(--ease), border-color var(--ease), color var(--ease);
-    white-space: nowrap;
-  }
-  .btn-gold { background: linear-gradient(160deg, var(--gold-hi), var(--gold)); color: #201603; box-shadow: var(--shadow-1); }
-  .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(201,162,75,0.28); }
-  .btn-ghost { background: transparent; border-color: var(--line); color: var(--ink); }
-  .btn-ghost:hover { border-color: var(--gold); color: var(--gold-hi); }
-  .btn-danger-solid { background: var(--danger); color: var(--ink); box-shadow: var(--shadow-1); }
-  .btn-danger-solid:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(214,69,69,0.3); }
-  .btn-sm { padding: 8px 14px; font-size: 12.5px; }
-
-  /* ============ TOOLBAR ============ */
-  .toolbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
-  .search-field {
-    flex: 1; min-width: 220px; display: flex; align-items: center; gap: 10px;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 11px 18px;
-    transition: border-color var(--ease);
-  }
-  .search-field:focus-within { border-color: var(--gold); }
-  .search-field svg { width: 16px; height: 16px; color: var(--ink-lo); flex-shrink: 0; }
-  .search-field input { border: none; background: transparent; color: var(--ink); font-size: 14px; width: 100%; outline: none; }
-  .search-field input::placeholder { color: var(--ink-lo); }
-
-  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .chip-row input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-  .chip {
-    padding: 8px 16px; border-radius: 100px; border: 1px solid var(--line); background: var(--surface);
-    color: var(--ink-lo); font-size: 12.5px; font-weight: 500; cursor: pointer; transition: all var(--ease);
-    display: inline-block;
-  }
-  .chip:hover { color: var(--ink); border-color: var(--ink-lo); }
-  .chip-row input[type="radio"]:checked + .chip { background: rgba(201,162,75,0.12); border-color: var(--gold); color: var(--gold-hi); }
-
-  /* ============ TABLE ============ */
-  .table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-1); }
-  table { width: 100%; border-collapse: collapse; }
-  thead th {
-    text-align: left; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-lo);
-    font-weight: 600; padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--surface2);
-  }
-  tbody tr { border-bottom: 1px solid var(--line); transition: background var(--ease); }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: rgba(201,162,75,0.04); }
-  tbody td { padding: 14px 20px; font-size: 14px; vertical-align: middle; color: var(--ink); }
-
-  .car-thumb { width: 64px; height: 44px; border-radius: var(--radius-sm); object-fit: cover; border: 1px solid var(--line); background: var(--surface2); display: block; }
-  .car-id { font-family: 'Inter', monospace; font-size: 11.5px; letter-spacing: 0.04em; color: var(--ink-lo); }
-  .car-name { font-weight: 600; font-size: 15px; }
-  .car-name small { display: block; font-weight: 400; font-size: 12px; color: var(--ink-lo); margin-top: 2px; }
-  .price-cell { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--gold-hi); font-weight: 600; }
-
-  .swatch { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); display: inline-block; vertical-align: middle; box-shadow: 0 0 0 2px var(--surface2); }
-  .color-cell { display: flex; align-items: center; gap: 8px; }
-
-  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em; }
-  .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
-  .badge.available { color: var(--gold-hi); background: rgba(201,162,75,0.1); border: 1px solid rgba(201,162,75,0.35); }
-  .badge.available::before { background: var(--gold-hi); }
-  .badge.sold { color: #e37f7f; background: rgba(214,69,69,0.08); border: 1px solid rgba(214,69,69,0.3); }
-  .badge.sold::before { background: var(--danger); }
-
-  .row-actions { display: flex; gap: 8px; justify-content: flex-end; }
-  .icon-action {
-    width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
-    border-radius: var(--radius-sm); border: 1px solid var(--line); background: transparent;
-    transition: all var(--ease); cursor: pointer;
-  }
-  .icon-action svg { width: 15px; height: 15px; }
-  .icon-action.edit { color: var(--gold-hi); }
-  .icon-action.edit:hover { background: rgba(201,162,75,0.12); border-color: var(--gold); }
-  .icon-action.del { color: var(--danger); }
-  .icon-action.del:hover { background: rgba(214,69,69,0.12); border-color: var(--danger); }
-
-  .empty-state {
-    display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-    padding: 70px 30px; gap: 12px;
-  }
-  .empty-state svg { width: 46px; height: 46px; color: var(--line); }
-  .empty-state h3 { font-size: 24px; color: var(--ink); }
-  .empty-state p { color: var(--ink-lo); font-size: 14px; max-width: 320px; }
-
-  /* Category filtering — pure CSS, using the general sibling combinator.
-     The radio inputs live in .toolbar; each rule hides rows whose data-cat
-     doesn't match the checked filter, and the "Roadster" chip matches no
-     row, which is used to demonstrate the empty state below. */
-  #cat-coupe:checked ~ .table-wrap tbody tr:not([data-cat="Coupe"]) { display: none; }
-  #cat-sedan:checked ~ .table-wrap tbody tr:not([data-cat="Sedan"]) { display: none; }
-  #cat-suv:checked ~ .table-wrap tbody tr:not([data-cat="SUV"]) { display: none; }
-  #cat-convertible:checked ~ .table-wrap tbody tr:not([data-cat="Convertible"]) { display: none; }
-  #cat-hypercar:checked ~ .table-wrap tbody tr:not([data-cat="Hypercar"]) { display: none; }
-  #cat-roadster:checked ~ .table-wrap tbody tr { display: none; }
-  #cat-roadster:checked ~ .table-wrap .empty-state { display: flex; }
-
-  /* ============ MODAL / SLIDE-OVER (checkbox hack) ============ */
-  .modal-toggle { display: none; }
-  .overlay {
-    position: fixed; inset: 0; background: rgba(4,4,5,0.6); backdrop-filter: blur(3px); z-index: 90;
-    opacity: 0; pointer-events: none; transition: opacity var(--ease); cursor: pointer;
-  }
-  .modal-toggle:checked + .overlay { opacity: 1; pointer-events: auto; }
-
-  .panel {
-    position: fixed; top: 0; right: 0; height: 100%; width: min(520px, 92vw);
-    background: var(--surface); border-left: 1px solid var(--line); box-shadow: var(--shadow-2); z-index: 91;
-    transform: translateX(100%); transition: transform 0.32s cubic-bezier(.22,.9,.32,1);
-    display: flex; flex-direction: column;
-  }
- .modal-toggle:checked + .overlay + .panel { transform: translateX(0); }
-
-  .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 26px 30px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
-  .panel-head h3 { font-size: 26px; color: var(--ink); }
-  .panel-head .close-btn {
-    width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: center; color: var(--ink-lo);
-    transition: all var(--ease); cursor: pointer;
-  }
-  .panel-head .close-btn:hover { color: var(--ink); border-color: var(--gold); }
-
-  .panel-body { padding: 28px 30px; overflow-y: auto; flex: 1; }
-  .panel-foot { padding: 20px 30px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0; }
-
-  .field-group { margin-bottom: 22px; }
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-lo); margin-bottom: 8px; letter-spacing: 0.02em; }
-  .req { color: var(--gold-hi); }
-  input[type="text"], input[type="number"], select, textarea {
-    width: 100%; background: var(--surface2); border: 1px solid var(--line); border-radius: var(--radius-sm);
-    padding: 12px 14px; color: var(--ink); font-size: 14px; transition: border-color var(--ease), box-shadow var(--ease);
-  }
-  input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-    outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,162,75,0.12);
-  }
-  /* :invalid only paints once a value has been entered, so empty required
-     fields don't show red before the admin has had a chance to type */
-  input[type="text"]:required:invalid:not(:placeholder-shown),
-  input[type="number"]:required:invalid:not(:placeholder-shown),
-  select:required:invalid {
-    border-color: var(--danger);
-  }
-  .field-hint { font-size: 11.5px; color: var(--ink-lo); margin-top: 6px; }
-  textarea { resize: vertical; min-height: 90px; }
-  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238B8E95'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 34px; }
-
-  .color-field { display: flex; align-items: center; gap: 10px; }
-  .color-field input[type="color"] { width: 46px; height: 42px; padding: 2px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface2); }
-
-  .upload-box {
-    border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 22px; text-align: center;
-    color: var(--ink-lo); font-size: 13px; position: relative; transition: border-color var(--ease);
-  }
-  .upload-box:hover { border-color: var(--gold); color: var(--ink); }
-  .upload-box input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .upload-box svg { width: 22px; height: 22px; margin-bottom: 8px; color: var(--gold-hi); }
-
-  .toggle-row {
-    display: flex; align-items: center; justify-content: space-between; padding: 14px 16px;
-    background: var(--surface2); border: 1px solid var(--line); border-radius: var(--radius-sm); margin-bottom: 14px;
-  }
-  .toggle-row .tlabel { font-size: 13.5px; font-weight: 500; color: var(--ink); }
-  .toggle-row .tsub { font-size: 11.5px; color: var(--ink-lo); margin-top: 2px; }
-
-  .switch { position: relative; width: 44px; height: 25px; flex-shrink: 0; }
-  .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
-  .switch .track { position: absolute; inset: 0; background: var(--line); border-radius: 100px; transition: background var(--ease); cursor: pointer; }
-  .switch .track::before { content: ''; position: absolute; left: 3px; top: 3px; width: 19px; height: 19px; border-radius: 50%; background: var(--ink); transition: transform var(--ease); }
-  .switch input:checked + .track { background: var(--gold); }
-  .switch input:checked + .track::before { transform: translateX(19px); background: #1a1200; }
-
-  .checkbox-row { display: flex; align-items: center; gap: 10px; }
-  .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--gold); }
-  .checkbox-row label { margin: 0; font-size: 13.5px; color: var(--ink); font-weight: 500; }
-
-  /* delete confirm dialog (centered) */
-  .confirm-overlay {
-    position: fixed; inset: 0; background: rgba(4,4,5,0.65); z-index: 92;
-    opacity: 0; pointer-events: none; transition: opacity var(--ease); cursor: pointer;
-  }
-  .confirm-dialog {
-    position: fixed; z-index: 92; top: 50%; left: 50%; transform: translate(-50%, -46%);
-    width: min(400px, 90vw); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow-2); padding: 30px; opacity: 0; pointer-events: none;
-    transition: opacity var(--ease), transform var(--ease);
-  }
-  .modal-toggle:checked + .confirm-overlay { opacity: 1; pointer-events: auto; }
-  .modal-toggle:checked ~ .confirm-dialog { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%); }
-  .confirm-icon {
-    width: 48px; height: 48px; border-radius: 50%; background: rgba(214,69,69,0.1); border: 1px solid rgba(214,69,69,0.35);
-    display: flex; align-items: center; justify-content: center; color: var(--danger); margin-bottom: 16px;
-  }
-  .confirm-icon svg { width: 22px; height: 22px; }
-  .confirm-dialog h3 { font-size: 24px; margin-bottom: 8px; }
-  .confirm-dialog p { color: var(--ink-lo); font-size: 13.5px; line-height: 1.55; margin-bottom: 22px; }
-  .confirm-dialog .car-target { color: var(--gold-hi); font-weight: 600; }
-  .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
-
-  /* ============ RESPONSIVE ============ */
-  @media (max-width: 980px) {
-    .field-row { grid-template-columns: 1fr; }
-    .stat-strip { grid-template-columns: 1fr 1fr; }
-    .sidebar { position: fixed; left: 0; top: 76px; z-index: 55; transform: translateX(-100%); transition: transform var(--ease); box-shadow: var(--shadow-2); }
-    .burger-toggle:checked ~ .shell .sidebar { transform: translateX(0); }
-    .main { padding: 26px 20px 70px; }
-  }
-  @media (max-width: 860px) {
-    .nav-links { display: none; }
-    .burger-label { display: flex; }
-    .admin-name { display: none; }
-  }
-  @media (max-width: 760px) {
-    .table-wrap table thead { display: none; }
-    .table-wrap table, .table-wrap tbody, .table-wrap tr, .table-wrap td { display: block; width: 100%; }
-    .table-wrap tr { padding: 18px 18px 16px; border-bottom: 1px solid var(--line); position: relative; }
-    .table-wrap td { padding: 6px 0; border: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .table-wrap td[data-label]::before {
-      content: attr(data-label); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--ink-lo); font-weight: 600; flex-shrink: 0;
+  body:has(#burger-toggle:checked) {
+    .sidebar { translate: 0 0; }
+    .burger-label {
+      span:nth-child(1) { translate: 0 9px; rotate: 45deg; }
+      span:nth-child(2) { opacity: 0; }
+      span:nth-child(3) { translate: 0 -9px; rotate: -45deg; }
     }
-    .table-wrap td.thumb-cell { justify-content: flex-start; }
-    .table-wrap td.thumb-cell::before { display: none; }
-    .table-wrap td.thumb-cell .car-name { margin-left: 12px; }
-    .table-wrap td.actions-cell { justify-content: flex-end; }
-    .table-wrap td.actions-cell::before { display: none; }
   }
-  @media (max-width: 600px) {
-    .stat-strip { grid-template-columns: 1fr; }
-    .cars-header { align-items: flex-start; }
-    .topbar { padding: 0 16px; }
-  }
+}
+@media (max-width: 700px) {
+  .main { padding: 28px 18px 70px; }
+  .admin-name { display: none; }
+  .field-row { grid-template-columns: 1fr; }
+  .panel-foot { flex-direction: column-reverse; }
+  .cars-header .add-btn { width: 100%; }
+}

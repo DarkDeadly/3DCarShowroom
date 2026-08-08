@@ -1,66 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aurelia Motors &mdash; Account Access</title>
+  <meta name="description" content="Aurelia Motors — account access. Sign in or create your collector account.">
+  <meta name="theme-color" content="#0c0d10">
+  <meta name="color-scheme" content="dark">
+  <title>Aurelia Motors — Account Access</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500;1,6..96,600&family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="./styles/global.css">
+  <link rel="stylesheet" href="./styles/showroom.css">
   <link rel="stylesheet" href="./styles/auth.css">
 </head>
-
 <body>
-
   <main class="auth-shell">
-
-    <!-- ============ LEFT: SHOWCASE PANEL ============ -->
+    <!-- ============ LEFT: SHOWCASE PANEL (pure CSS art) ============ -->
     <section class="showcase" aria-hidden="true">
+      <div class="show-fx">
+        <div class="show-aurora"></div>
+        <div class="show-grid"></div>
+      </div>
       <div class="showcase-inner">
-        <a href="#" class="wordmark"><span class="mark"></span>AURELIA MOTORS</a>
+        <a href="carCatalog.html" class="wordmark"><span class="mark"></span>AURELIA MOTORS</a>
         <div class="showcase-copy">
-          <span class="eyebrow">Private Collection</span>
-          <h1>Access to the collection is by account only.</h1>
+          <span class="eyebrow">Private Collection · 2026</span>
+          <h1>Access to the collection is <em>by account only.</em></h1>
+          <ul class="show-points">
+            <li><span aria-hidden="true">✦</span> Every vehicle rendered in interactive 3D</li>
+            <li><span aria-hidden="true">✦</span> Provenance passports, sealed on delivery</li>
+            <li><span aria-hidden="true">✦</span> Concierge on call, Mon–Sat</li>
+          </ul>
+        </div>
+        <div class="show-marquee">
+          <div class="show-marquee-track">
+            <span>Bespoke</span><b>✦</b><span>Electric</span><b>✦</b><span>Performance</span><b>✦</b><span>Heritage</span><b>✦</b><span>3D Showcase</span><b>✦</b>
+            <span>Bespoke</span><b>✦</b><span>Electric</span><b>✦</b><span>Performance</span><b>✦</b><span>Heritage</span><b>✦</b><span>3D Showcase</span><b>✦</b>
+          </div>
         </div>
       </div>
+      <span class="show-word">Aurelia</span>
     </section>
-
     <!-- ============ RIGHT: AUTH PANEL ============ -->
     <section class="auth-panel">
       <div class="auth-col">
-
         <div class="auth-top">
-          <a href="#" class="wordmark" style="font-size:1.15rem;"><span class="mark"></span>AURELIA</a>
-          <a href="#" class="back-link">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <a href="carCatalog.html" class="wordmark wordmark-sm"><span class="mark"></span>AURELIA</a>
+          <a href="carCatalog.html#catalog" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
             Back to showroom
           </a>
         </div>
-
         <div class="auth-card">
-
           <input type="radio" name="auth-tab" id="tab-signin" class="tab-input" checked>
           <input type="radio" name="auth-tab" id="tab-register" class="tab-input">
-
           <div class="card-head">
             <h2>Welcome to Aurelia</h2>
             <p>Sign in or create an account to continue.</p>
           </div>
-
           <div class="tabs">
             <label class="tab-label" for="tab-signin">Sign In</label>
             <label class="tab-label" for="tab-register">Create Account</label>
           </div>
-
           <button type="button" class="btn-google">
-            <svg viewBox="0 0 48 48">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
               <path fill="#FFC107"
                 d="M43.61 20.08H42V20H24v8h11.3c-1.65 4.66-6.09 8-11.3 8-6.63 0-12-5.37-12-12s5.37-12 12-12c3.06 0 5.85 1.15 7.97 3.03l5.66-5.66C34.19 6.11 29.36 4 24 4 12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20c0-1.34-.14-2.65-.39-3.92z" />
               <path fill="#FF3D00"
@@ -72,19 +82,16 @@
             </svg>
             Continue with Google
           </button>
-
           <div class="divider">
             <span class="line"></span>
             <span>or continue with email</span>
             <span class="line"></span>
           </div>
-
           <div class="panels">
-
             <!-- ============ SIGN IN FORM ============ -->
             <form class="panel panel-signin">
               <div class="alert alert-error si-error" role="alert" hidden>
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="9" />
                   <line x1="12" y1="8" x2="12" y2="13" />
                   <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -92,7 +99,7 @@
                 <span></span>
               </div>
               <div class="alert alert-success si-success" role="status" hidden>
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="9" />
                   <polyline points="8 12.5 10.8 15 16 9.5" />
                 </svg>
@@ -101,85 +108,135 @@
               <div class="field">
                 <label class="field-label" for="si-email">Email</label>
                 <div class="input-wrap">
-                  <input type="email" id="si-email" placeholder="you@domain.com" autocomplete="email">
+                  <input type="email" id="si-email" placeholder="you@domain.com" autocomplete="email" required>
                 </div>
               </div>
-
               <div class="field">
                 <label class="field-label" for="si-password">Password</label>
                 <div class="input-wrap password-wrap">
-                  <input type="password" id="si-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                    autocomplete="current-password">
-                  <label class="show-toggle" for="si-show"><span class="toggle-dot"></span>Show</label>
+                  <input type="password" id="si-password" placeholder="••••••••"
+                    autocomplete="current-password" required>
+                  <button type="button" class="show-toggle" data-show-for="si-password" aria-pressed="false">
+                    <span class="toggle-dot" aria-hidden="true"></span><span class="txt">Show</span>
+                  </button>
                 </div>
               </div>
-
               <div class="field-row-between">
                 <a href="#" class="link-muted">Forgot password?</a>
               </div>
-
               <button type="submit" class="btn-gold si-btn">Sign In</button>
             </form>
-
             <!-- ============ CREATE ACCOUNT FORM ============ -->
             <form class="panel panel-register">
               <div class="alert alert-error ra-error" role="alert" hidden>
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="9" />
                   <line x1="12" y1="8" x2="12" y2="13" />
                   <line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
-                <span><strong>Something's not right.</strong> Check that both passwords match and try again.</span>
+                <span></span>
               </div>
-
               <div class="alert alert-success ra-success" role="status" hidden>
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="9" />
                   <polyline points="8 12.5 10.8 15 16 9.5" />
                 </svg>
-                <span><strong>Account created.</strong> Check your inbox to verify your email.</span>
+                <span></span>
               </div>
               <div class="field">
                 <label class="field-label" for="ra-name">Full Name</label>
                 <div class="input-wrap">
-                  <input type="text" id="ra-name" placeholder="Your full name" autocomplete="name">
+                  <input type="text" id="ra-name" placeholder="Your full name" autocomplete="name" required>
                 </div>
               </div>
-
               <div class="field">
                 <label class="field-label" for="ra-email">Email</label>
                 <div class="input-wrap">
-                  <input type="email" id="ra-email" placeholder="you@domain.com" autocomplete="email">
+                  <input type="email" id="ra-email" placeholder="you@domain.com" autocomplete="email" required>
                 </div>
               </div>
-
               <div class="field">
                 <label class="field-label" for="ra-password">Password</label>
                 <div class="input-wrap password-wrap">
-                  <input type="password" id="ra-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                    autocomplete="new-password">
-                  <label class="show-toggle" for="ra-show"><span class="toggle-dot"></span>Show</label>
+                  <input type="password" id="ra-password" placeholder="6+ characters"
+                    autocomplete="new-password" minlength="6" required>
+                  <button type="button" class="show-toggle" data-show-for="ra-password" aria-pressed="false">
+                    <span class="toggle-dot" aria-hidden="true"></span><span class="txt">Show</span>
+                  </button>
+                </div>
+                <div class="strength" data-strength>
+                  <div class="strength-track"><span class="strength-fill"></span></div>
+                  <span class="strength-label" data-strength-label>Use 6+ characters</span>
                 </div>
               </div>
-
               <button type="submit" class="btn-gold ra-btn">Create Account</button>
             </form>
-
           </div>
-
         </div>
-
         <p class="auth-foot">By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
         </p>
-
       </div>
     </section>
-
+    <!-- Toast — populated by the enhancement module -->
+    <div class="toast" id="auth-toast" role="status" hidden><span></span></div>
   </main>
-
 <script type="module" src="/src/config/firebase/firebase.config.js"></script>
 <script type="module" src="/src/config/firebase/firestore.js"></script>
 <script type="module" src="/src/controllers/auth.controller.js"></script>
+<script type="module">
+  /* ── Progressive enhancement layer ───────────────────────────
+     Optional polish only — the auth controller owns submission.
+     Here: password visibility toggles (the old markup referenced
+     checkboxes that never existed), a password strength meter,
+     and an honest toast for the not-yet-wired Google button. */
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Password show/hide */
+  document.querySelectorAll('.show-toggle').forEach((btn) => {
+    const input = document.getElementById(btn.dataset.showFor);
+    if (!input) return;
+    btn.addEventListener('click', () => {
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      btn.setAttribute('aria-pressed', String(show));
+      btn.querySelector('.txt').textContent = show ? 'Hide' : 'Show';
+    });
+  });
+  /* Password strength meter (register) */
+  const raPwd     = document.getElementById('ra-password');
+  const strength  = document.querySelector('[data-strength]');
+  const strLabel  = document.querySelector('[data-strength-label]');
+  raPwd?.addEventListener('input', () => {
+    const v = raPwd.value;
+    let score = 0;
+    if (v.length >= 6)  score++;
+    if (v.length >= 10) score++;
+    if (/[a-z]/.test(v) && /[A-Z]/.test(v)) score++;
+    if (/\d/.test(v) || /[^a-zA-Z0-9]/.test(v)) score++;
+    strength.style.setProperty('--strength', v ? score : 0);
+    const labels = ['Too short', 'Getting there', 'Strong', 'Vault-grade'];
+    strLabel.textContent = v ? labels[Math.max(0, score - 1)] : 'Use 6+ characters';
+  });
+  /* Toast helper */
+  const toast = document.getElementById('auth-toast');
+  let toastTimer = 0;
+  const showToast = (message) => {
+    toast.querySelector('span').textContent = message;
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toast.hidden = true; }, 3400);
+  };
+  /* Google button — not wired to a provider yet; say so gracefully */
+  document.querySelector('.btn-google')?.addEventListener('click', () => {
+    showToast('Google sign-in arrives with the spring collection — email works today.');
+  });
+  /* Caps-lock warning on password fields */
+  document.querySelectorAll('input[type="password"]').forEach((input) => {
+    input.addEventListener('keyup', (e) => {
+      if (!e.getModifierState) return;
+      const on = e.getModifierState('CapsLock');
+      if (on) showToast('Caps Lock is on.');
+    });
+  });
+</script>
 </body>
-
 </html>

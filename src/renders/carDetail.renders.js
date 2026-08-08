@@ -27,9 +27,9 @@ export const buildIdentitySection = (car) => {
   const categorySpan = createElements('span', [], car.category);
   const dot2 = createElements('span', ['dot'], '·');
   
-  const colorSpan = createElements('span');
+const colorSpan = createElements('span');
   const swatch = createElements('span', ['swatch']);
-  swatch.style.background = '#1a1a2e'; // Custom swatch color or map dynamically
+  swatch.style.background = car.color || '#1a1a2e';
   
   colorSpan.appendChild(swatch);
   colorSpan.appendChild(document.createTextNode(car.color));
@@ -56,8 +56,9 @@ export const buildIdentitySection = (car) => {
 
   const ctaRow = createElements('div', ['cta-row']);
   
-  const privateViewingBtn = createElements('button', ['btn', 'btn-primary'], '3D Model Showcase');
+   const privateViewingBtn = createElements('button', ['btn', 'btn-primary'], '3D Model Showcase');
   privateViewingBtn.type = 'button';
+  privateViewingBtn.dataset.action = 'show-3d';
 
   const specialistLink = createElements('a', ['specialist-link'], 'Contact a Specialist →');
   specialistLink.href = '#';

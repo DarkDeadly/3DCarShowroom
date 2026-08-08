@@ -12,7 +12,7 @@ export const cartEmptyState = (container) => {
     </div>
     <h2>Your cart is empty</h2>
     <p>You haven&rsquo;t selected any vehicles yet. Explore the collection to begin.</p>
-    <a href="#" class="btn-gold" style="display:inline-block; width:auto; padding:14px 32px;">Browse the Catalog</a>
+     <a href="carCatalog.html" class="btn-gold" style="display:inline-block; width:auto; padding:14px 32px;">Browse the Catalog</a>
     `
 }
 
@@ -127,8 +127,8 @@ export const createOrderSummary = (container , price) => {
   const checkoutBtn = createElements('button', ['btn-gold'], 'Proceed to Checkout');
   checkoutBtn.type = 'button';
 
-  const continueLink = createElements('a', ['continue-link'], 'Continue Shopping');
-  continueLink.href = '#';
+   const continueLink = createElements('a', ['continue-link'], 'Continue Shopping');
+  continueLink.href = 'carCatalog.html';
 
   // Assemble everything
   container.append(

@@ -1,184 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aurelia Motors — Your Collection</title>
+  <meta name="description" content="Aurelia Motors — the 2026 private showroom floor. Hand-picked vehicles, each rendered in interactive 3D.">
+  <meta name="theme-color" content="#0c0d10">
+  <meta name="color-scheme" content="dark">
+  <title>Aurelia Motors — The 2026 Showroom Floor</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500&family=Manrope:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500;1,6..96,600&family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="./styles/global.css">
   <link rel="stylesheet" href="./styles/cars.css">
 </head>
-
 <body>
-
+  <!-- Scroll progress — pure CSS, scroll-timeline driven -->
+  <div class="scroll-progress" aria-hidden="true"></div>
   <!-- =========================================================
-     NAVBAR — authenticated
-========================================================== -->
+     NAVBAR — frosted glass, popover account menu, CSS-only burger
+  ========================================================== -->
   <input type="checkbox" id="burger-toggle" class="burger-toggle">
   <header class="navbar">
     <div class="nav-inner">
       <a href="#home" class="brand">Aurelia <span>Motors</span></a>
-
-      <nav>
+      <nav aria-label="Primary">
         <ul class="nav-links">
           <li><a href="#home">Home</a></li>
           <li><a href="#catalog" class="current">Catalog</a></li>
-          <li><a href="#orders">My Orders</a></li>
+          <li><a href="#assurance">Concierge</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a href="admin.html">Admin</a></li>
         </ul>
       </nav>
-
       <div class="nav-right">
-        <div class="search-field">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8B8E95" stroke-width="2">
+        <label class="search-field">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
-          <input type="text" placeholder="Search the collection">
-        </div>
-
-        <a href="cart" class="cart-icon" aria-label="Cart">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F3EFE7" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round">
+          <input type="text" placeholder="Search the collection" aria-label="Search the collection">
+        </label>
+        <a href="cart.html" class="cart-icon" aria-label="Open cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="9" cy="21" r="1" />
             <circle cx="20" cy="21" r="1" />
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
           <span class="cart-badge">3</span>
         </a>
-
-        <a href="#account" class="account">
+        <button class="account" type="button" popovertarget="account-menu" aria-label="Account menu">
           <span class="avatar">MB</span>
           <span class="account-name">Marcus B.</span>
-        </a>
-
+          <svg class="caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
         <button class="btn-logout" type="button">Logout</button>
-
-        <label for="burger-toggle" class="burger-label">
+        <label for="burger-toggle" class="burger-label" aria-label="Toggle menu">
           <span></span><span></span><span></span>
         </label>
       </div>
     </div>
-
     <div class="mobile-menu">
-      <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#catalog">Catalog</a></li>
-        <li><a href="#orders">My Orders</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <div class="mobile-search search-field">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8B8E95" stroke-width="2">
-          <circle cx="11" cy="11" r="7" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
-        <input type="text" placeholder="Search the collection">
-      </div>
-      <div class="mobile-account">
-        <div class="who">
-          <span class="avatar">MB</span>
-          <span class="account-name" style="display:inline;">Marcus B.</span>
+      <div class="mobile-menu-inner">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#catalog">Catalog</a></li>
+          <li><a href="#assurance">Concierge</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+        <div class="mobile-account">
+          <div class="who">
+            <span class="avatar">MB</span>
+            <span class="account-name">Marcus B.</span>
+          </div>
+          <button class="btn-logout" type="button">Logout</button>
         </div>
-        <button class="btn-logout" type="button">Logout</button>
       </div>
     </div>
   </header>
-
-  <!-- =========================================================
-     WELCOME STRIP — replaces marketing hero
-========================================================== -->
-  <section class="welcome-strip" id="home">
-    <div class="wrap welcome-inner">
-      <div class="welcome-text">
-        <span class="eyebrow">Your Showroom</span>
-        <h1>Welcome back, <em>Marcus.</em></h1>
-        <p>Here's what's currently on the floor. Three new arrivals since your last visit, and one saved favorite is now
-          sold out.</p>
-        <a href="#catalog" class="jump-link" style="margin-top:16px; display:inline-flex;">↓ Jump to catalog</a>
-      </div>
-
-      <div class="welcome-actions">
-        <div class="stat-chip">
-          <strong>9</strong>
-          <span>On the Floor</span>
-        </div>
-        <div class="stat-chip">
-          <strong>6</strong>
-          <span>Available Now</span>
-        </div>
-        <div class="stat-chip">
-          <strong>3</strong>
-          <span>In Your Cart</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================================
-     FILTER CHIPS
-========================================================== -->
-  <section class="filter-bar wrap" id="catalog">
-    <div class="section-head">
+  <!-- Account popover — native Popover API, light-dismiss, anchor-positioned -->
+  <div id="account-menu" popover>
+    <div class="menu-head">
+      <span class="avatar">MB</span>
       <div>
-        <h2>Browse the Collection</h2>
-        <p>Nine vehicles currently on the floor, updated daily.</p>
+        <strong>Marcus Bennett</strong>
+        <span>Collector since 2021 · Atelier Noir tier</span>
       </div>
     </div>
-    <div class="chip-row">
-      <span class="chip active">All</span>
-      <span class="chip">SUV</span>
-      <span class="chip">Sedan</span>
-      <span class="chip">Sport</span>
-      <span class="chip">Electric</span>
-    </div>
-  </section>
-
-  <!-- =========================================================
-     CATALOG GRID + CSS-ONLY LOAD MORE
-========================================================== -->
-  <section class="catalog wrap">
-
-
-    <div class="catalog-body">
-
-      <div class="card-grid">
-
-
+    <ul class="menu-links">
+      <li><a href="cart.html">My Cart &amp; Orders <span aria-hidden="true">→</span></a></li>
+      <li><a href="#catalog">Saved Favourites <span aria-hidden="true">→</span></a></li>
+      <li><a href="#assurance">Concierge Services <span aria-hidden="true">→</span></a></li>
+    </ul>
+    <p class="menu-foot">Private viewings available Mon–Sat, 9:00–19:00.</p>
+  </div>
+  <main>
+    <!-- =========================================================
+       HERO — 2026 floor welcome with ambient aurora + featured plate
+    ========================================================== -->
+    <section class="hero" id="home">
+      <div class="hero-fx" aria-hidden="true">
+        <div class="hero-aurora"></div>
+        <div class="hero-grid"></div>
       </div>
-
-      <div class="load-more-wrap">
-        <p class="count-indicator">Showing <span class="shown"></span> of 9 vehicles</p>
-        <button type="button" class="btn-load-more">Load More Vehicles</button>
-        <p class="all-shown-note">You've reached the end of the current floor.</p>
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <span class="eyebrow">Private Showroom · 2026 Floor</span>
+          <h1>Machines of consequence, <em>waiting on your floor.</em></h1>
+          <p class="lede">
+            Nine vehicles currently under the lights — inspected, hand-detailed and rendered in
+            interactive 3D. Three new arrivals since your last visit.
+          </p>
+          <div class="hero-cta">
+            <a class="btn-gold" href="#catalog">Descend to the floor <span aria-hidden="true">↓</span></a>
+            <a class="btn-line" href="#assurance">Concierge services</a>
+          </div>
+          <dl class="hero-stats">
+            <div class="stat-chip">
+              <dt>On the Floor</dt>
+              <dd>9</dd>
+            </div>
+            <div class="stat-chip">
+              <dt>Available Now</dt>
+              <dd>6</dd>
+            </div>
+            <div class="stat-chip">
+              <dt>Rendered in 3D</dt>
+              <dd>100<small>%</small></dd>
+            </div>
+          </dl>
+        </div>
+        <a class="plate-card" href="#catalog" aria-label="Featured arrival — Tempest GT Électrique">
+          <span class="plate-tag">Arrival of the Week</span>
+          <span class="plate-name">Tempest GT <em>Électrique</em></span>
+          <span class="plate-specs">
+            <span>560 <small>kW</small></span><i aria-hidden="true"></i>
+            <span>520 <small>km</small></span><i aria-hidden="true"></i>
+            <span>2.9<small>s 0–100</small></span>
+          </span>
+          <span class="plate-foot">
+            <span class="plate-price"><sup>DT</sup> 348,000</span>
+            <span class="plate-3d">3D Showcase</span>
+          </span>
+        </a>
       </div>
-
+      <span class="plate-word" aria-hidden="true">Aurelia</span>
+    </section>
+    <!-- =========================================================
+       MARQUEE — ambient brand strip
+    ========================================================== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Bespoke</span><b>✦</b><span>Electric</span><b>✦</b><span>Performance</span><b>✦</b><span>Heritage</span><b>✦</b><span>3D Showcase</span><b>✦</b><span>Hand-Finished</span><b>✦</b>
+        <span>Bespoke</span><b>✦</b><span>Electric</span><b>✦</b><span>Performance</span><b>✦</b><span>Heritage</span><b>✦</b><span>3D Showcase</span><b>✦</b><span>Hand-Finished</span><b>✦</b>
+      </div>
     </div>
-  </section>
-
+    <!-- =========================================================
+       FILTER BAR — section head, search landmark, radio chips
+    ========================================================== -->
+    <section class="filter-bar wrap" id="catalog">
+      <div class="section-head">
+        <div>
+          <h2>Browse the Collection</h2>
+          <p>Nine vehicles currently on the floor, updated daily.</p>
+        </div>
+        <search class="catalog-search">
+          <label class="search-field">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="search" placeholder="Marque, model, year…" aria-label="Filter the collection">
+          </label>
+        </search>
+      </div>
+      <div class="chip-row" role="radiogroup" aria-label="Filter by category">
+        <label class="chip"><input type="radio" name="category" value="all" checked><span>All</span></label>
+        <label class="chip"><input type="radio" name="category" value="suv"><span>SUV</span></label>
+        <label class="chip"><input type="radio" name="category" value="sedan"><span>Sedan</span></label>
+        <label class="chip"><input type="radio" name="category" value="sport"><span>Sport</span></label>
+        <label class="chip"><input type="radio" name="category" value="electric"><span>Electric</span></label>
+      </div>
+    </section>
+    <!-- =========================================================
+       CATALOG — JS-driven grid (do not rename .card-grid / .btn-load-more)
+    ========================================================== -->
+    <section class="catalog wrap">
+      <div class="catalog-body">
+        <div class="card-grid"></div>
+        <div class="load-more-wrap">
+          <p class="count-indicator">Hand-picked this week · <span class="shown">3 new arrivals</span></p>
+          <button type="button" class="btn-load-more">
+            Load More Vehicles
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 5v14m-7-7 7 7 7-7" />
+            </svg>
+          </button>
+          <p class="all-shown-note">You've reached the end of the current floor.</p>
+        </div>
+      </div>
+    </section>
+    <!-- =========================================================
+       CONCIERGE — exclusive <details> accordion, CSS-animated
+    ========================================================== -->
+    <section class="assurance wrap" id="assurance">
+      <div class="section-head">
+        <div>
+          <h2>The Concierge Standard</h2>
+          <p>Everything after the handshake, handled.</p>
+        </div>
+      </div>
+      <div class="accordion">
+        <details name="assurance" open>
+          <summary>
+            <span>White-glove delivery, worldwide</span>
+          </summary>
+          <div class="details-body">
+            <p>Every vehicle leaves the floor in enclosed, climate-controlled transport. Continental delivery
+              within 72 hours; plate registration, insurance liaison and first-charge setup included on request.</p>
+          </div>
+        </details>
+        <details name="assurance">
+          <summary>
+            <span>Provenance &amp; extended warranty</span>
+          </summary>
+          <div class="details-body">
+            <p>Full documented lineage — ownership chain, service history and paint meter readings —
+              sealed in a digital passport. Every purchase includes a 24-month Aurelia powertrain warranty.</p>
+          </div>
+        </details>
+        <details name="assurance">
+          <summary>
+            <span>Trade-in atelier</span>
+          </summary>
+          <div class="details-body">
+            <p>Your current vehicle is appraised on the floor while you browse. Certified valuations held for
+              14 days, deductible against any car in the collection — no obligation, no forms in triplicate.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
   <!-- =========================================================
      FOOTER
-========================================================== -->
+  ========================================================== -->
   <footer id="contact">
     <div class="wrap footer-inner">
       <p>&copy; 2026 Aurelia Motors. All vehicles subject to prior sale.</p>
       <ul class="footer-links">
         <li><a href="#home">Home</a></li>
         <li><a href="#catalog">Catalog</a></li>
-        <li><a href="#orders">My Orders</a></li>
+        <li><a href="#assurance">Concierge</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
+    <span class="footer-mark" aria-hidden="true">Aurelia</span>
   </footer>
-
 </body>
 <script type="module" src="../config/firebase/firebase.config.js"></script>
 <script type="module" src="../config/firebase/firestore.js"></script>
 <script type="module" src="../controllers/cars.controller.js"></script>
-
+<script type="module">
+  /* ── Progressive enhancement layer ───────────────────────────
+     Nothing here is required for the page to function — the app
+     controller above owns data and navigation. This layer only
+     adds pointer-driven tilt + spotlight to JS-rendered cards,
+     and forwards duplicate logout buttons to the bound primary. */
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(pointer: fine)').matches;
+  const grid = document.querySelector('.card-grid');
+  if (grid && finePointer && !reduceMotion) {
+    let frame = 0;
+    grid.addEventListener('pointermove', (e) => {
+      const card = e.target.closest('.car-card');
+      if (!card) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        card.style.setProperty('--mx', (px * 100).toFixed(2) + '%');
+        card.style.setProperty('--my', (py * 100).toFixed(2) + '%');
+        card.style.setProperty('--ry', ((px - 0.5) * 7).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', ((0.5 - py) * 7).toFixed(2) + 'deg');
+      });
+    });
+    grid.addEventListener('pointerout', (e) => {
+      const card = e.target.closest('.car-card');
+      if (card && !card.contains(e.relatedTarget)) {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      }
+    });
+  }
+  /* The controller binds only the first .btn-logout — forward the rest */
+  const logoutBtns = document.querySelectorAll('.btn-logout');
+  logoutBtns.forEach((btn, i) => {
+    if (i > 0) btn.addEventListener('click', () => logoutBtns[0].click());
+  });
+</script>
 </html>
