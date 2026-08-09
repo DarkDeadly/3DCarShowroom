@@ -7,11 +7,12 @@ const buildCarCard = (car) => {
   // ── Media ─────────────────────────────────────────
   const media = createElements('div', ['car-media']);
 
- const badgeAvailable = createElements(
+  const badgeAvailable = createElements(
     'span',
     car.availability ? ['badge', 'available'] : ['badge', 'sold'],
     car.availability ? "Available" : "Unavailable"
-  );  const img            = createImage(
+  );
+  const img            = createImage(
     car.image,
     car.model,
     []
@@ -71,6 +72,34 @@ export const appendCars = (cars , container) => {
 export const renderCars = (cars, container) => {
     container.innerHTML = "";
     appendCars(cars , container)
+}
+
+/**
+ * Zero-result state rendered INSIDE the grid (keeps load-more + chrome intact,
+ * unlike carEmptyState which replaces the whole catalog section).
+ * filtered=true means the user caused it (search/category) → offer a reset.
+ */
+export const renderNoResults = (container, { filtered = false } = {}) => {
+  container.innerHTML = `
+    <div class="empty-state grid-empty">
+      <div class="empty-icon">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C9A24B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <line x1="8.5" y1="8.5" x2="13.5" y2="13.5"/>
+          <line x1="13.5" y1="8.5" x2="8.5" y2="13.5"/>
+        </svg>
+      </div>
+      ${filtered
+        ? `<h3>Nothing on the floor matches</h3>
+           <p>No vehicle fits this combination of search and category. Loosen a filter — or reset the view to see the whole floor again.</p>
+           <div class="empty-actions">
+             <button type="button" class="btn-gold btn-reset-filters">Reset filters</button>
+           </div>`
+        : `<h3>The floor is momentarily empty</h3>
+           <p>Our inventory is being rotated right now. New arrivals land weekly — check back a little later.</p>`}
+    </div>
+  `
 }
 
 export const carEmptyState = (container) => {

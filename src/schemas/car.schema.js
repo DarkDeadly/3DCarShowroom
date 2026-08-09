@@ -9,6 +9,7 @@ export const carSchema = {
     image: { type: "string", required: true },
 
     model3D: { type: "string", required: false },
-
+    hasModel: { type: "boolean" , required: false} , 
+    searchName : { type: "string", required: false },
     availability: { type: "boolean", required: true },
 };
