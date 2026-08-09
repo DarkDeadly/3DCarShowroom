@@ -1,5 +1,9 @@
 let state = {
-    cart: [],
+    // Not persistence — the real cart lives in Firestore under
+    // users/{uid}/cart. This is just an in-page signal so any controller
+    // that mutates the cart can broadcast the new count and the navbar
+    // badge (or anything else subscribed) updates without a reload.
+    cartCount: 0,
     user: null,
     isAuthenticated: false,
     role: null

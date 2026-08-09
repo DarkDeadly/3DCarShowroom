@@ -50,7 +50,8 @@ export class CartController {
             }
             
             this.items = result.data;
-            
+            authStore.store.set({ cartCount: this.items.length });
+
             this._renderItems();
         } finally {
             this.isLoading = false;
@@ -85,6 +86,7 @@ export class CartController {
 
         this.items = this.items.filter(item => item.id !== carId);
         this._renderItems();
+        authStore.store.set({ cartCount: this.items.length });
 
         if (this.items.length === 0) {
             cartRender.cartEmptyState(this.emptyStateContainer);

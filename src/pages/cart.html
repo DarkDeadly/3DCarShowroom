@@ -44,11 +44,11 @@
             <circle cx="20" cy="21" r="1" />
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
-          <span class="cart-badge">3</span>
+          <span class="cart-badge"></span>
         </a>
         <button class="account" type="button" popovertarget="account-menu" aria-label="Account menu">
-          <span class="avatar">MB</span>
-          <span class="account-name">Marcus B.</span>
+          <span class="avatar"></span>
+          <span class="account-name"></span>
           <svg class="caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="m6 9 6 6 6-6" />
@@ -82,10 +82,9 @@
   <!-- Account popover — native Popover API, anchor-positioned -->
   <div id="account-menu" popover>
     <div class="menu-head">
-      <span class="avatar">MB</span>
+      <span class="avatar"></span>
       <div>
-        <strong>Marcus Bennett</strong>
-        <span>Collector since 2021 · Atelier Noir tier</span>
+        <strong></strong>
       </div>
     </div>
     <ul class="menu-links">
@@ -128,6 +127,8 @@
 <script type="module" src="/src/config/firebase/firebase.config.js"></script>
 <script type="module" src="/src/config/firebase/firestore.js"></script>
 <script type="module" src="../controllers/cart.controller.js"></script>
+<script type="module" src="../controllers/navbar.controller.js"></script>
+
 <script type="module">
   /* ── Progressive enhancement layer ───────────────────────────
      Optional polish only — cart.controller.js owns the data.

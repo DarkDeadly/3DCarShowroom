@@ -11,6 +11,18 @@ export const removeToCart = async (carId , userId) => {
 export const isInCart = async (userId , carId) => {
     return await cartRepo.isInCart(userId , carId)
 }
+
+/**
+ * Lightweight count for badges/UI chrome — reads only the cart subcollection,
+ * skipping the per-item car lookups that getCartCars does. Use this anywhere
+ * you just need "how many," not the enriched car objects.
+ */
+export const getCartCount = async (userId) => {
+    const result = await cartRepo.getCartItems(userId)
+    if (!result.success) return result
+    return returnContract.success(result.data.length)
+}
+
 export const getCartCars = async (userId) => {
     const cartResult = await cartRepo.getCartItems(userId)
     console.log("Cart items retrieved:", cartResult);
